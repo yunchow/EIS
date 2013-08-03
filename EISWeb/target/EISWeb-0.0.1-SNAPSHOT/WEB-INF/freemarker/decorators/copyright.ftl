@@ -1,0 +1,2 @@
+<p class="footer">${base} Copyright 2011 - 2020 www.suning.com All Rights Reserved. 演示项目:${appVersion} </p>
+<p class="footer">苏宁电器有限公司&nbsp;版权所有&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IBM全程咨询、技术支持</p>
