@@ -39,6 +39,54 @@
 			<version>${spring-framework.version}</version>
 		</dependency>
 
+		<dependency>
+		    <groupId>dom4j</groupId>
+		    <artifactId>dom4j</artifactId>
+		    <version>1.6</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>commons-jexl</groupId>
+		    <artifactId>commons-jexl</artifactId>
+		    <version>1.1</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>cglib</groupId>
+		    <artifactId>cglib</artifactId>
+		    <version>3.0</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-context-support</artifactId>
+		    <version>${spring-framework.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring-framework.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.mybatis</groupId>
+		    <artifactId>mybatis</artifactId>
+		    <version>3.2.2</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.mybatis</groupId>
+		    <artifactId>mybatis-spring</artifactId>
+		    <version>1.2.0</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		    <version>5.0.8</version>
+		</dependency>
+
 		<!-- Logging with SLF4J & LogBack -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -73,6 +121,22 @@
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
+		</dependency>
+		
+		<dependency>  
+		    <groupId>fireflow</groupId>  
+		    <artifactId>fireflow-model</artifactId>  
+		    <version>1.0</version>  
+		    <scope>system</scope>  
+		    <systemPath>${basedir}/lib/fireflow-model.jar</systemPath>  
+		</dependency>
+		
+		<dependency>  
+		    <groupId>fireflow</groupId>  
+		    <artifactId>fireflow-engine</artifactId>  
+		    <version>1.0</version>  
+		    <scope>system</scope>  
+		    <systemPath>${basedir}/lib/fireflow-engine.jar</systemPath>  
 		</dependency>
 
 	</dependencies>	
