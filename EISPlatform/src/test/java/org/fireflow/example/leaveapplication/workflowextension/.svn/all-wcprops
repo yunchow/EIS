@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/!svn/ver/321/trunk/java_version/examples/LeaveApplicationProcessTest/src/org/fireflow/example/leaveapplication/workflowextension
+END
+CurrentUserAssignmentHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 167
+/svn/!svn/ver/321/trunk/java_version/examples/LeaveApplicationProcessTest/src/org/fireflow/example/leaveapplication/workflowextension/CurrentUserAssignmentHandler.java
+END
+EmailSender.java
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/svn/!svn/ver/321/trunk/java_version/examples/LeaveApplicationProcessTest/src/org/fireflow/example/leaveapplication/workflowextension/EmailSender.java
+END
+RoleDepartmentBasedAssignmentHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 175
+/svn/!svn/ver/321/trunk/java_version/examples/LeaveApplicationProcessTest/src/org/fireflow/example/leaveapplication/workflowextension/RoleDepartmentBasedAssignmentHandler.java
+END
