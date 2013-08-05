@@ -44,6 +44,7 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
 
     protected RuntimeContext rtCtx = null;
 
+    @Autowired
     public void setRuntimeContext(RuntimeContext ctx) {
         this.rtCtx = ctx;
     }
