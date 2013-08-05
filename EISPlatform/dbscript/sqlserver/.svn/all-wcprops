@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/317/trunk/java_version/examples/FireflowExample/dbscript/sqlserver
+END
+2_example_tables.sql
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/317/trunk/java_version/examples/FireflowExample/dbscript/sqlserver/2_example_tables.sql
+END
+3_init_data.sql
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/317/trunk/java_version/examples/FireflowExample/dbscript/sqlserver/3_init_data.sql
+END
+1_fireflow-schema-export-4-sqlserver.sql
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/!svn/ver/317/trunk/java_version/examples/FireflowExample/dbscript/sqlserver/1_fireflow-schema-export-4-sqlserver.sql
+END

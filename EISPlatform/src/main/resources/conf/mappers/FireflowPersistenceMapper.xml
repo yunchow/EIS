@@ -12,7 +12,7 @@
 	
 	<update id="updateProcessInstance" parameterType="org.fireflow.engine.IProcessInstance">
 		update t_ff_rt_processinstance 
-		    set id = #{id}, process_id = #{processId}, version = #{version}, name = #{name}, display_name = #{displayName}, state = #{state}, created_time = #{createdTime}, 
+		    process_id = #{processId}, version = #{version}, name = #{name}, display_name = #{displayName}, state = #{state}, created_time = #{createdTime}, 
 		    started_time = #{startedTime}, expired_time = #{expiredTime}, end_time = #{endTime}, parent_processinstance_id = #{parentProcessInstanceId}, parent_taskinstance_id = #{parentTaskInstanceId} 
 		where 
 		    id = #{id}
@@ -27,7 +27,7 @@
 	
 	<update id="updateJoinPoint" parameterType="org.fireflow.kernel.impl.JoinPoint">
 		update t_ff_rt_joinpoint 
-		    set id = #{id}, synchronizer_id = #{synchronizerId}, value = #{value}, alive = #{alive}, processinstance_id = #{processInstanceId} 
+		    synchronizer_id = #{synchronizerId}, value = #{value}, alive = #{alive}, processinstance_id = #{processInstanceId} 
 		where 
 		    id = #{id}
 	</update>
@@ -41,7 +41,7 @@
 	
 	<update id="updateTaskInstance" parameterType="org.fireflow.engine.ITaskInstance">
 		update t_ff_rt_taskinstance 
-		    set id = #{id}, task_id = #{taskId}, activity_id = #{activityId}, name = #{name}, display_name = #{displayName}, state = #{state}, task_type = #{taskType}, created_time = #{createdTime}, 
+		    task_id = #{taskId}, activity_id = #{activityId}, name = #{name}, display_name = #{displayName}, state = #{state}, task_type = #{taskType}, created_time = #{createdTime}, 
 		    started_time = #{startedTime}, expired_time = #{expiredTime}, end_time = #{endTime}, assignment_strategy = #{assignmentStrategy}, processinstance_id = #{processInstanceId}, process_id = #{processId}, version = #{version} 
 		where 
 		    id = #{id}
@@ -56,7 +56,7 @@
 	
 	<update id="updateWorkItem" parameterType="org.fireflow.engine.IWorkItem">
 		update t_ff_rt_workitem 
-		    set id = #{id}, state = #{state}, created_time = #{createdTime}, signed_time = #{claimedTime}, end_time = #{endTime}, actor_id = #{actorId}, comments = #{comments}, taskinstance_id = #{taskInstance.id} 
+		    state = #{state}, created_time = #{createdTime}, signed_time = #{claimedTime}, end_time = #{endTime}, actor_id = #{actorId}, comments = #{comments}, taskinstance_id = #{taskInstance.id} 
 		where 
 		    id = #{id}
 	</update>
@@ -70,12 +70,12 @@
 	
 	<update id="updateToken" parameterType="org.fireflow.kernel.IToken">
 		update t_ff_rt_token 
-		    set id = #{id}, alive = #{alive}, value = #{value}, node_id = #{nodeId}, processinstance_id = #{processInstanceId} 
+		    alive = #{alive}, value = #{value}, node_id = #{nodeId}, processinstance_id = #{processInstanceId} 
 		where 
 		    id = #{id}
 	</update>
 	
-	<resultMap type="org.fireflow.kernel.IJoinPoint" id="joinPointMap">
+	<resultMap type="org.fireflow.kernel.impl.JoinPoint" id="joinPointMap">
 		<id column="id" property="id"/>
 	</resultMap>
 	
@@ -83,13 +83,13 @@
 		select * from t_ff_rt_joinpoint
 		<where>
 			processinstance_id = #{processInstanceId}
-			<if test="synchronizerId != null && synchronizerId != ''">
+			<if test="synchronizerId != null && synchronizerId != #{}">
 				and synchronizer_id = #{synchronizerId}
 			</if>
 		</where>
 	</select>
 	
-	<resultMap type="org.fireflow.engine.ITaskInstance" id="taskInstanceMap">
+	<resultMap type="org.fireflow.engine.impl.TaskInstance" id="taskInstanceMap">
 		<id column="id" property="id"/>
 	</resultMap>
 	
@@ -97,13 +97,13 @@
 		select * from t_ff_rt_taskinstance
 		<where>
 			processinstance_id = #{processInstanceId}
-			<if test="activityId != null && activityId != ''">
+			<if test="activityId != null && activityId != #{}">
 				and activity_id = #{activityId}
 			</if>
 		</where>
 	</select>
 	
-	<resultMap type="org.fireflow.kernel.IToken" id="tokenMap">
+	<resultMap type="org.fireflow.kernel.impl.Token" id="tokenMap">
 		<id column="id" property="id"/>
 	</resultMap>
 	
@@ -111,15 +111,17 @@
 		select * from t_ff_rt_token
 		<where>
 			processinstance_id = #{processInstanceId}
-			<if test="nodeId != null && nodeId != ''">
+			<if test="nodeId != null && nodeId != #{}">
 				and node_id = #{nodeId}
 			</if>
 		</where>
 	</select>
 	
-	<resultMap type="org.fireflow.engine.IWorkItem" id="workItemMap">
+	<resultMap type="org.fireflow.engine.impl.WorkItem" id="workItemMap">
 		<id column="id" property="id"/>
-		<association property=""></association>
+		<association property="taskInstance" javaType="org.fireflow.engine.impl.TaskInstance">
+			<id property="id" column="taskinstance_id"/>
+		</association>
 	</resultMap>
 	
 	<select id="findWorkItemById" parameterType="String" resultMap="workItemMap">
@@ -138,7 +140,342 @@
 	</select>
 	
 	<select id="findWorkItemsForTaskInstance" parameterType="String" resultMap="workItemMap">
-		select * from 
+		select w.*, t.* from t_ff_rt_workitem w 
+		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
+		where w.taskinstance_id = #{taskInstanceId}
+	</select> 
+	
+	<select id="findWorkItemForTask" parameterType="String" resultMap="workItemMap">
+		select w.*, t.* from t_ff_rt_workitem w 
+		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
+		where t.task_id = #{taskId}
 	</select>
 	
+	<resultMap type="org.fireflow.engine.impl.ProcessInstance" id="processInstanceMap">
+		<id property="id" column="id"/>
+		<collection property="processInstanceVariables" ofType="hashmap">
+			<result column="processinstance_id" property="processInstanceId"/>
+			<result column="name" property="name"/>
+			<result column="value" property="value"/>
+		</collection>
+	</resultMap>
+	
+	<select id="findProcessInstanceByProcessId" parameterType="String" resultMap="processInstanceMap">
+		select p.*, v.* from t_ff_rt_processinstance p
+		left outer join t_ff_rt_procinst_var v on p.id = v.processinstance_id
+		where p.process_id = #{processId}
+	</select>
+	
+	<select id="findProcessInstanceById" parameterType="String" resultMap="processInstanceMap">
+		select p.*, v.* from t_ff_rt_processinstance p
+		left outer join t_ff_rt_procinst_var v on p.id = v.processinstance_id
+		where p.id = #{id}
+	</select>
+	
+	<insert id="insertWorkFlowDef" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="org.fireflow.engine.definition.WorkflowDefinition">
+		insert into t_ff_df_workflowdef 
+	    	(id, process_id, name, display_name, description, version, process_content, published, publisher, publish_time) 
+	    values 
+	    	(#{id}, #{processId}, #{name}, #{displayName}, #{description}, #{version}, #{processContent}, #{published}, #{publisher}, #{publishTime})
+	</insert>
+	
+	<update id="updateWorkFlowDef" parameterType="org.fireflow.engine.definition.WorkflowDefinition">
+		update t_ff_df_workflowdef 
+		    process_id = #{processId}, name = #{name}, display_name = #{displayName}, description = #{description}, version = #{version}, 
+		    process_content = #{processContent}, published = #{published}, publisher = #{publisher}, publish_time = #{publishTime} 
+		where 
+		    id = #{id}
+	</update>
+	
+	<resultMap type="org.fireflow.engine.definition.WorkflowDefinition" id="workflowDefinitionMap">
+		<id property="id" column="id"/>
+	</resultMap>
+	
+	<select id="findWorkflowDefinitionById" parameterType="String" resultMap="workflowDefinitionMap">
+		select * from t_ff_df_workflowdef
+		where id = #{id}
+	</select>
+	
+	<select id="findWorkflowDefinitionByProcessIdAndVersion" parameterType="hashmap" resultMap="workflowDefinitionMap">
+		select * from t_ff_df_workflowdef
+		where process_id = #{processId} and version = #{version}
+	</select>
+	
+	<select id="findWorkflowDefinitionByProcessId" parameterType="String" resultMap="workflowDefinitionMap">
+		select * from t_ff_df_workflowdef
+		where process_id = #{processId}
+	</select>
+	
+	<select id="findAllProcessIdOfWorkflowDef" resultType="String" lang="raw">
+		select model.process_id from t_ff_df_workflowdef model group by process_id
+	</select>
+	
+	<select id="findTodoWorkItems" parameterType="hashmap" resultMap="workItemMap">
+		select w.*, t.* from t_ff_rt_workitem w 
+		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
+		<where>
+			w.state in (0, 1)
+			<if test="actorId != null && actorId != #{}">
+				and w.actor_id = #{actorId}
+			</if>
+			<if test="processInstanceId != null && processInstanceId != #{}">
+				and t.processinstance_id = #{processInstanceId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findTodoWorkItemsFor" parameterType="hashmap" resultMap="workItemMap">
+		select w.*, t.* from t_ff_rt_workitem w 
+		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
+		<where>
+			w.state in (0, 1)
+			<if test="actorId != null && actorId != #{}">
+				and w.actor_id = #{actorId}
+			</if>
+			<if test="processId != null && processId != #{}">
+				and t.process_id = #{processId}
+			</if>
+			<if test="taskId != null && taskId != #{}">
+				and t.task_id = #{taskId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findHaveDoneWorkItems" parameterType="hashmap" resultMap="workItemMap">
+		select w.*, t.* from t_ff_rt_workitem w 
+		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
+		<where>
+			w.state in (7, 9)
+			<if test="actorId != null && actorId != #{}">
+				and w.actor_id = #{actorId}
+			</if>
+			<if test="processInstanceId != null && processInstanceId != #{}">
+				and t.processinstance_id = #{processInstanceId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findHaveDoneWorkItemsFor" parameterType="hashmap" resultMap="workItemMap">
+		select w.*, t.* from t_ff_rt_workitem w 
+		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
+		<where>
+			w.state in (7, 9)
+			<if test="actorId != null && actorId != #{}">
+				and w.actor_id = #{actorId}
+			</if>
+			<if test="processId != null && processId != #{}">
+				and t.process_id = #{processId}
+			</if>
+			<if test="taskId != null && taskId != #{}">
+				and t.task_id = #{taskId}
+			</if>
+		</where>
+	</select>
+	
+	<delete id="deleteWorkItemsInInitializedState" parameterType="String">
+		delete from t_ff_rt_workitem model
+		where model.taskinstance_id = #{taskInstanceId} and model.state = 0
+	</delete>
+	
+	<select id="getAliveTokenCountForNode" parameterType="hashmap" resultType="int">
+		select count(*) from t_ff_rt_token
+		where processinstance_id = #processInstanceId}
+			and node_id = #{nodeId}
+			and alive = #{alive}
+	</select>
+	
+	<select id="getCompletedTaskInstanceCountForTask" parameterType="hashmap" resultType="int">
+		select count(*) from t_ff_rt_taskinstance
+		where task_id = #{taskId} and processinstance_id = #{processInstanceId} and state = #{state}
+	</select>
+	
+	<select id="getAliveTaskInstanceCountForActivity" parameterType="hashmap" resultType="int">
+		select count(*) from t_ff_rt_taskinstance
+		where activity_id = #{activityId} and processinstance_id = #{processInstanceId} and state in (0, 1)
+	</select>
+	
+	<select id="findTaskInstancesForProcessInstanceByStepNumber" parameterType="hashmap" resultMap="taskInstanceMap">
+		select * from t_ff_rt_taskinstance
+		<where>
+			processinstance_id = #{processInstanceId}
+			<if test="stepNumber != null">
+				and step_number = #{stepNumber}
+			</if>
+		</where>
+	</select>
+	
+	<select id="lockTaskInstance" parameterType="String">
+		select * from t_ff_rt_taskinstance
+		where id = #{taskInstanceId} for update
+	</select>
+	
+	<select id="findTokenById" parameterType="String" resultMap="tokenMap">
+		select * from t_ff_rt_token
+		where id = #{id}
+	</select>
+	
+	<delete id="deleteTokensForNodes" parameterType="hashmap">
+		delete from t_ff_rt_token
+		<where>
+			processinstance_id = #{processInstanceId}
+			and node_id in
+			<foreach collection="nodeIds" item="nodeId" separator="," open="(" close=")">
+				#{nodeId}
+			</foreach>
+		</where> 
+	</delete>
+	
+	<delete id="deleteTokensForNode" parameterType="hashmap">
+		delete from t_ff_rt_token
+		<where>
+			processinstance_id = #{processInstanceId}
+			and node_id = #{nodeId}
+		</where> 
+	</delete>
+	
+	<delete id="deleteToken" parameterType="hashmap">
+		delete from t_ff_rt_token
+		where id = #{id}
+	</delete>
+	
+	<select id="findAliveTaskInstanceById" parameterType="String" resultMap="taskInstanceMap">
+		select * from t_ff_rt_taskinstance
+		where id = #{id} and state in (0, 1)
+	</select>
+	
+	<update id="updateWorkItemForAbortTaskInstance" parameterType="org.fireflow.engine.impl.TaskInstance">
+		update t_ff_rt_workitem 
+		    set state = #{state}, end_time = #{endTime} 
+		where 
+		    state in (0, 1) and taskinstance_id = #{taskInstanceId}
+	</update>
+	
+	<select id="getAliveWorkItemCountForTaskInstance" parameterType="String" resultType="int">
+		select count(*) from t_ff_rt_workitem
+		where state in (0, 1, 3) and taskinstance_id = #{taskInstanceId}
+	</select>
+	
+	<select id="findCompletedWorkItemsForTaskInstance" parameterType="String" resultMap="workItemMap">
+		select w.*, t.* from t_ff_rt_workitem w 
+		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
+		where w.taskinstance_id = #{taskInstanceId} and state = 7
+	</select>
+	
+	<select id="findProcessInstancesByProcessIdAndVersion" parameterType="hashmap" resultMap="processInstanceMap">
+		select p.*, v.* from t_ff_rt_processinstance p
+		left outer join t_ff_rt_procinst_var v on p.id = v.processinstance_id
+		where p.version = #{version} and p.process_id = #{processId}
+		order by created_time asc
+	</select>
+	
+	<select id="findAliveProcessInstanceById" parameterType="String" resultMap="processInstanceMap">
+		select p.*, v.* from t_ff_rt_processinstance p
+		left outer join t_ff_rt_procinst_var v on p.id = v.processinstance_id
+		where p.id = #{id} and state in (0, 1)
+	</select>
+	
+	<select id="findTheLatestVersionNumberIgnoreState" parameterType="String" resultType="int">
+		select max(m.version) from t_ff_df_workflowdef m
+		where m.process_id = #{processId}
+	</select>
+	
+	<select id="getAliveProcessInstanceCountForParentTaskInstance" parameterType="String" resultType="int">
+		select p.*, v.* from t_ff_rt_processinstance p
+		left outer join t_ff_rt_procinst_var v on p.id = v.processinstance_id
+		where p.parent_taskinstance_id = #{taskInstanceId} and state in (0, 1)
+	</select>
+	
+	<update id="suspendProcessInstance" parameterType="String">
+		update t_ff_rt_taskinstance
+			set suspended = true
+		where processinstance_id = #{processInstanceId} and state in(0, 1)
+	</update>
+	
+	<update id="restoreProcessInstance" parameterType="String">
+		update t_ff_rt_taskinstance
+			set suspended = false
+		where processinstance_id = #{processInstanceId} and state in(0, 1)
+	</update>
+	
+	<insert id="insertProcessInstanceTrace" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="org.fireflow.engine.impl.ProcessInstanceTrace">
+		insert into t_ff_hist_trace 
+		    (id, processinstance_id, step_number, minor_number, type, edge_id, from_node_id, to_node_id) 
+		values 
+		    (#{id}, #{processInstanceId}, #{stepNumber}, #{minorNumber}, #{type}, #{edgeId}, #{fromNodeId}, #{toNodeId})
+	</insert>
+	
+	<update id="updateProcessInstanceTrace" parameterType="org.fireflow.engine.impl.ProcessInstanceTrace">
+		update t_ff_hist_trace 
+		    processinstance_id = #{processInstanceId}, step_number = #{stepNumber}, minor_number = #{minorNumber}, type = #{type}, edge_id = #{edgeId}, from_node_id = #{fromNodeId}, to_node_id = #{toNodeId} 
+		where 
+		    id = #{id}
+	</update>
+	
+	<resultMap type="org.fireflow.engine.impl.ProcessInstanceTrace" id="processInstanceTraceMap">
+		<id property="id" column="id"/>
+	</resultMap>
+	
+	<select id="findProcessInstanceTraces" parameterType="String" resultMap="processInstanceTraceMap">
+		select id, processinstance_id, step_number, minor_number, type, edge_id, from_node_id, to_node_id 
+		from t_ff_hist_trace
+		where processinstance_id = #{processInstanceId}
+		order by step_number, minor_number
+	</select>
+	
+	<select id="findProcessInstancesByProcessId" parameterType="String" resultMap="processInstanceMap">
+		select p.*, v.* from t_ff_rt_processinstance p
+		left outer join t_ff_rt_procinst_var v on p.id = v.processinstance_id
+		where p.process_id = #{processId}
+		order by createdTime asc
+	</select>
+	
+	<select id="findWorkItemsForTask" parameterType="String" resultMap="workItemMap">
+		select w.*, t.* from t_ff_rt_workitem w 
+		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
+		where t.task_id = #{taskid}
+	</select>
+	
+	<resultMap type="org.fireflow.engine.definition.WorkflowDefinition" id="workDefMap">
+		<id property="id" column="id"/>
+	</resultMap>
+	
+	<select parameterType="org.fireflow.engine.definition.WorkflowDefinition" resultMap="workDefMap" id="findWorkflowDefinitionByProcessIdAndVersionNumber">
+		select 
+		    id, definition_type, process_id, name, display_name, description, version, state, upload_user, upload_time, publish_user, publish_time, process_content 
+		from t_ff_df_workflowdef
+		where process_id = #{processId} and version = #{version}
+	</select>
+	
+	<select parameterType="String" resultMap="workDefMap" id="findWorkflowDefinitionsByProcessId">
+		select 
+		    id, definition_type, process_id, name, display_name, description, version, state, upload_user, upload_time, publish_user, publish_time, process_content 
+		from t_ff_df_workflowdef
+		where process_id = #{processId}
+	</select>
+	
+	<select id="findTheLatestVersionNumber" parameterType="String" resultType="int">
+		select max(m.version) from t_ff_df_workflowdef m
+		where m.process_id = #{processId} and state = true
+	</select>
+	
+	<update id="abortProcessInstanceForTask" parameterType="hashmap">
+		update t_ff_rt_taskinstance 
+			set state = #{state}, end_time = #{endTime}, can_be_withdrawn = false
+		where processinstance_id = #{processInstanceId} and state in (0, 1)
+	</update>
+	
+	<update id="abortProcessInstanceForWorkItem" parameterType="hashmap">
+		update t_ff_rt_workitem 
+		    set state = #{state}, end_time = #{endTime} 
+		where 
+		    taskinstance_id in (select id from t_ff_rt_taskinstance
+		    					where processinstance_id = #{processInstanceId} and state in (0, 1))
+	</update>
+	
+	<delete id="deleteTokenByProcessInstanceId" parameterType="String">
+		delete from t_ff_rt_token
+		where processinstance_id = #{processInstanceId}
+	</delete>
+	
 </mapper>
+

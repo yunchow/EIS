@@ -6,31 +6,25 @@
  */
 package com.eis.platform.workflow.persistence;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.fireflow.engine.IProcessInstance;
 import org.fireflow.engine.ITaskInstance;
 import org.fireflow.engine.IWorkItem;
+import org.fireflow.engine.RuntimeContext;
 import org.fireflow.engine.definition.WorkflowDefinition;
 import org.fireflow.engine.impl.ProcessInstance;
+import org.fireflow.engine.impl.ProcessInstanceTrace;
 import org.fireflow.engine.impl.TaskInstance;
-import org.fireflow.engine.impl.WorkItem;
 import org.fireflow.engine.persistence.IPersistenceService;
 import org.fireflow.kernel.IJoinPoint;
 import org.fireflow.kernel.IToken;
 import org.fireflow.kernel.impl.JoinPoint;
-import org.fireflow.kernel.impl.Token;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Expression;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -47,19 +41,24 @@ import org.springframework.util.StringUtils;
  */
 @Repository
 public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPersistenceService {
-	
-	@Autowired
+
+    protected RuntimeContext rtCtx = null;
+
+    public void setRuntimeContext(RuntimeContext ctx) {
+        this.rtCtx = ctx;
+    }
+
+    public RuntimeContext getRuntimeContext() {
+        return this.rtCtx;
+    }
+    
+    @Autowired
 	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
 		super.setSqlSessionFactory(sqlSessionFactory);
 	}
 
-	/**
-	 * Save processInstance
-	 * 
-	 * @param processInstance
-	 */
-	// FIXME if need to save process instance variables
-	public void saveOrUpdateProcessInstance(IProcessInstance processInstance) {
+    // FIXME if need to save process instance variables
+    public void saveOrUpdateProcessInstance(IProcessInstance processInstance) {
 		Assert.notNull(processInstance);
 		if (StringUtils.hasLength(processInstance.getId())) {
 			getSqlSession().update("FireflowPersistence.updateProcessInstance", processInstance);
@@ -69,11 +68,7 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
 		
 	}
 
-	/**
-	 * Save joinpoint
-	 * 
-	 * @param joinPoint
-	 */
+	@Deprecated
 	public void saveOrUpdateJoinPoint(IJoinPoint joinPoint) {
 		Assert.notNull(joinPoint);
 		JoinPoint joinPointLocal = (JoinPoint) joinPoint;
@@ -92,7 +87,7 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
 			getSqlSession().insert("FireflowPersistence.insertTaskInstance", taskInstance);
 		}
 	}
-
+	
 	public void saveOrUpdateWorkItem(IWorkItem workitem) {
 		Assert.notNull(workitem);
 		if (StringUtils.hasLength(workitem.getId())) {
@@ -111,22 +106,81 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
 		}
 	}
 
+	@Deprecated
 	public List<IJoinPoint> findJoinPointsForProcessInstance(final String processInstanceId, final String synchronizerId) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+		Map<String, String> paramMap = new HashMap<String, String>(2);
 		paramMap.put("processInstanceId", processInstanceId);
 		paramMap.put("synchronizerId", synchronizerId);
 		return getSqlSession().selectList("FireflowPersistence.findJoinPointsForProcessInstance", paramMap);
 	}
 
-	public List<ITaskInstance> findTaskInstancesForProcessInstance(final String processInstanceId, final String activityId) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+    public Integer getAliveTokenCountForNode(final String processInstanceId, final String nodeId) {
+    	Map<String, Object> paramMap = new HashMap<String, Object>(3);
+		paramMap.put("processInstanceId", processInstanceId);
+		paramMap.put("nodeId", nodeId);
+		paramMap.put("alive", true);
+    	return getSqlSession().selectOne("FireflowPersistence.getAliveTokenCountForNode", paramMap);
+    }
+
+    public Integer getCompletedTaskInstanceCountForTask(final String processInstanceId, final String taskId) {
+    	Map<String, Object> paramMap = new HashMap<String, Object>(3);
+		paramMap.put("processInstanceId", processInstanceId);
+		paramMap.put("taskId", taskId);
+		paramMap.put("state", ITaskInstance.COMPLETED);
+    	return getSqlSession().selectOne("FireflowPersistence.getCompletedTaskInstanceCountForTask", paramMap);
+    }
+
+    public Integer getAliveTaskInstanceCountForActivity(final String processInstanceId, final String activityId) {
+    	Map<String, Object> paramMap = new HashMap<String, Object>(3);
+		paramMap.put("processInstanceId", processInstanceId);
+		paramMap.put("activityId", activityId);
+    	return getSqlSession().selectOne("FireflowPersistence.getAliveTaskInstanceCountForActivity", paramMap);
+    }
+
+    public List<ITaskInstance> findTaskInstancesForProcessInstance(final String processInstanceId, final String activityId) {
+		Map<String, String> paramMap = new HashMap<String, String>(2);
 		paramMap.put("processInstanceId", processInstanceId);
 		paramMap.put("activityId", activityId);
 		return getSqlSession().selectList("FireflowPersistence.findTaskInstancesForProcessInstance", paramMap);
 	}
 
+    public List<ITaskInstance> findTaskInstancesForProcessInstanceByStepNumber(final String processInstanceId, final Integer stepNumber) {
+    	Map<String, Object> paramMap = new HashMap<String, Object>(2);
+		paramMap.put("processInstanceId", processInstanceId);
+		paramMap.put("stepNumber", stepNumber);
+		return getSqlSession().selectList("FireflowPersistence.findTaskInstancesForProcessInstanceByStepNumber", paramMap);
+    }
+    
+    // FIXME 是否会有性能问题，待优化
+    public void lockTaskInstance(String taskInstanceId){
+    	getSqlSession().selectOne("FireflowPersistence.lockTaskInstance", taskInstanceId);
+    }
+   
+    public IToken findTokenById(String id) {
+    	return getSqlSession().selectOne("FireflowPersistence.findTokenById", id);
+    }
+
+    public void deleteTokensForNodes(final String processInstanceId, @SuppressWarnings("rawtypes") final List nodeIds) {
+    	Map<String, Object> paramMap = new HashMap<String, Object>(2);
+		paramMap.put("processInstanceId", processInstanceId);
+		paramMap.put("nodeIds", nodeIds);
+		getSqlSession().delete("FireflowPersistence.deleteTokensForNodes", paramMap);
+    }
+
+    public void deleteTokensForNode(final String processInstanceId, final String nodeId) {
+    	Map<String, Object> paramMap = new HashMap<String, Object>(2);
+		paramMap.put("processInstanceId", processInstanceId);
+		paramMap.put("nodeId", nodeId);
+		getSqlSession().delete("FireflowPersistence.deleteTokensForNode", paramMap);
+    }
+
+    public void deleteToken(IToken token) {
+    	Assert.notNull(token);
+        getSqlSession().delete("FireflowPersistence.deleteToken", token.getId());
+    }
+
 	public List<IToken> findTokensForProcessInstance(final String processInstanceId, final String nodeId) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+		Map<String, String> paramMap = new HashMap<String, String>(2);
 		paramMap.put("processInstanceId", processInstanceId);
 		paramMap.put("nodeId", nodeId);
 		return getSqlSession().selectList("FireflowPersistence.findTokensForProcessInstance", paramMap);
@@ -136,346 +190,226 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
 		return getSqlSession().selectOne("FireflowPersistence.findWorkItemById", id);
 	}
 
-	public ITaskInstance findTaskInstanceById(String id) {
+    public ITaskInstance findAliveTaskInstanceById(final String id) {
+        return getSqlSession().selectOne("FireflowPersistence.findAliveTaskInstanceById", id);
+    }
+
+    public ITaskInstance findTaskInstanceById(String id) {
 		return getSqlSession().selectOne("FireflowPersistence.findTaskInstanceById", id);
 	}
 
-	public List<IWorkItem> findWorkItemsForTaskInstance(
-			final String taskInstanceId) {
-		List result = (List) this.getHibernateTemplate().execute(
-				new HibernateCallback() {
+    public void abortTaskInstance(final TaskInstance taskInstance) {
+    	Assert.notNull(taskInstance);
+    	Date now = rtCtx.getCalendarService().getSysDate();
+    	taskInstance.setState(ITaskInstance.CANCELED);
+        taskInstance.setEndTime(now);
+        taskInstance.setCanBeWithdrawn(Boolean.FALSE);
+        this.saveOrUpdateTaskInstance(taskInstance);
 
-					public Object doInHibernate(Session arg0)
-							throws HibernateException, SQLException {
-						Criteria criteria = arg0.createCriteria(WorkItem.class);
-						criteria.add(Expression.eq("taskInstance.id",
-								taskInstanceId));
-						List<IWorkItem> _result = criteria.list();
+        Map<String, Object> paramMap = new HashMap<String, Object>(3);
+		paramMap.put("state", IWorkItem.CANCELED);
+		paramMap.put("endTime", now);
+		paramMap.put("taskInstanceId", taskInstance.getId());
+        getSqlSession().update("FireflowPersistence.updateWorkItemForAbortTaskInstance", paramMap);
+    }
 
-						return _result;
-					}
-				});
-		return result;
+    public Integer getAliveWorkItemCountForTaskInstance(final String taskInstanceId) {
+        return getSqlSession().selectOne("FireflowPersistence.getAliveWorkItemCountForTaskInstance", taskInstanceId);
+    }
 
+    public List<IWorkItem> findCompletedWorkItemsForTaskInstance(final String taskInstanceId) {
+        return getSqlSession().selectList("FireflowPersistence.findCompletedWorkItemsForTaskInstance", taskInstanceId);
+    }
+    
+    public List<IWorkItem> findWorkItemsForTaskInstance(final String taskInstanceId) {
+		return getSqlSession().selectList("FireflowPersistence.findWorkItemsForTaskInstance", taskInstanceId);
 	}
 
-	public List<IWorkItem> findWorkItemForTask(final String taskid) {
-		List result = (List) this.getHibernateTemplate().execute(
-				new HibernateCallback() {
-
-					public Object doInHibernate(Session arg0)
-							throws HibernateException, SQLException {
-						Criteria criteria = arg0.createCriteria(WorkItem.class);
-						criteria.add(Expression.eq("taskInstance.taskId",
-								taskid));
-						List<IWorkItem> _result = criteria.list();
-
-						return _result;
-					}
-				});
-		return result;
+    public List<IWorkItem> findWorkItemForTask(final String taskid) {
+		return getSqlSession().selectList("FireflowPersistence.findWorkItemForTask", taskid);
 	}
 
-	public List<IProcessInstance> findProcessInstanceByProcessId(
-			final String processId) {
-		List result = (List) this.getHibernateTemplate().execute(
-				new HibernateCallback() {
-
-					public Object doInHibernate(Session arg0)
-							throws HibernateException, SQLException {
-						Criteria criteria = arg0
-								.createCriteria(ProcessInstance.class);
-
-						criteria.add(Expression.eq("processId", processId));
-						List<IProcessInstance> _result = criteria.list();
-
-						return _result;
-					}
-				});
-		return result;
+    public List<IProcessInstance> findProcessInstanceByProcessId(final String processId) {
+		return getSqlSession().selectList("FireflowPersistence.findProcessInstanceByProcessId", processId);
 	}
 
-	public IProcessInstance findProcessInstanceById(String id) {
-		return (IProcessInstance) this.getHibernateTemplate().get(
-				ProcessInstance.class, id);
+    public List<IProcessInstance> findProcessInstancesByProcessIdAndVersion(final String processId, final Integer version) {
+    	Map<String, Object> paramMap = new HashMap<String, Object>(2);
+		paramMap.put("processId", processId);
+		paramMap.put("version", version);
+        return getSqlSession().selectList("FireflowPersistence.findProcessInstancesByProcessIdAndVersion", paramMap);
+    }
+
+    public IProcessInstance findProcessInstanceById(String id) {
+		return getSqlSession().selectOne("FireflowPersistence.findProcessInstanceById", id);
 	}
 
-	public IJoinPoint findJoinPointById(String id) {
-		return getSqlSession().selectOne("FireflowPersistence.findJoinPointById", id);
-	}
+    public IProcessInstance findAliveProcessInstanceById(final String id) {
+        return getSqlSession().selectOne("FireflowPersistence.findAliveProcessInstanceById", id);
+    }
 
 	public void saveOrUpdateWorkflowDefinition(WorkflowDefinition workflowDef) {
-		if (workflowDef.getId() == null || workflowDef.getId().equals("")) {
-			Integer latestVersion = findTheLatestVersionOfWorkflowDefinition(workflowDef
-					.getProcessId());
+		Assert.notNull(workflowDef);
+		if (!StringUtils.hasLength(workflowDef.getId())) {
+			Integer latestVersion = findTheLatestVersionNumberIgnoreState(workflowDef.getProcessId());
 			if (latestVersion != null) {
-				workflowDef
-						.setVersion(new Integer(latestVersion.intValue() + 1));
+				workflowDef.setVersion(new Integer(latestVersion.intValue() + 1));
 			} else {
 				workflowDef.setVersion(new Integer(1));
 			}
+			getSqlSession().insert("FireflowPersistence.insertWorkFlowDef", workflowDef);
+		} else {
+			getSqlSession().update("FireflowPersistence.updateWorkFlowDef", workflowDef);
 		}
-		this.getHibernateTemplate().saveOrUpdate(workflowDef);
 	}
 
-	public Integer findTheLatestVersionOfWorkflowDefinition(
-			final String processId) {
-		// 鍙栧緱褰撳墠鏈�澶х殑version鍊�
-		Integer result = (Integer) this.getHibernateTemplate().execute(
-				new HibernateCallback() {
+    public Integer findTheLatestVersionNumberIgnoreState(final String processId){
+        return getSqlSession().selectOne("FireflowPersistence.findTheLatestVersionNumberIgnoreState", processId);  	
+    }
 
-					public Object doInHibernate(Session arg0)
-							throws HibernateException, SQLException {
-						Query q = arg0
-								.createQuery("select max(m.version) from WorkflowDefinition m");
-						Object obj = q.uniqueResult();
-						if (obj != null) {
-							Integer latestVersion = (Integer) obj;
-							return latestVersion;
-						} else {
-							return null;
-						}
-					}
-				});
-		return result;
+    public WorkflowDefinition findWorkflowDefinitionById(String id) {
+		return getSqlSession().selectOne("FireflowPersistence.findWorkflowDefinitionById", id);
 	}
 
-	public WorkflowDefinition findWorkflowDefinitionById(String id) {
-		return (WorkflowDefinition) this.getHibernateTemplate().get(
-				WorkflowDefinition.class, id);
+    public WorkflowDefinition findWorkflowDefinitionByProcessIdAndVersion(final String processId, final int version) {
+		Map<String, Object> param = new HashMap<String, Object>(2);
+		param.put("processId", processId);
+		param.put("version", version);
+		return getSqlSession().selectOne("FireflowPersistence.findWorkflowDefinitionByProcessIdAndVersion", param);
 	}
 
-	public WorkflowDefinition findWorkflowDefinitionByProcessIdAndVersion(
-			final String processId, final int version) {
-		WorkflowDefinition workflowDef = (WorkflowDefinition) this
-				.getHibernateTemplate().execute(new HibernateCallback() {
+    public WorkflowDefinition findTheLatestVersionOfWorkflowDefinitionByProcessId(String processId) {
+        Integer latestVersion = this.findTheLatestVersionNumber(processId);
+        return this.findWorkflowDefinitionByProcessIdAndVersionNumber(processId, latestVersion);
+    }
 
-					public Object doInHibernate(Session arg0)
-							throws HibernateException, SQLException {
-						Criteria c = arg0
-								.createCriteria(WorkflowDefinition.class);
-						c.add(Expression.eq("processId", processId));
-						c.add(Expression.eq("version", version));
-						return (WorkflowDefinition) c.uniqueResult();
-					}
-				});
-		return workflowDef;
+    public List<WorkflowDefinition> findWorkflowDefinitionByProcessId(final String processId) {
+		return getSqlSession().selectList("FireflowPersistence.findWorkflowDefinitionByProcessId", processId);
 	}
 
-	public WorkflowDefinition findLatestVersionOfWorkflowDefinitionByProcessId(
-			String processId) {
-		Integer latestVersion = this
-				.findTheLatestVersionOfWorkflowDefinition(processId);
-		return this.findWorkflowDefinitionByProcessIdAndVersion(processId,
-				latestVersion);
+    public List<IWorkItem> findTodoWorkItems(final String actorId) {
+        return findTodoWorkItems(actorId, null);
+    }
+
+    public List<IWorkItem> findTodoWorkItems(final String actorId, final String processInstanceId) {
+		Map<String, String> param = new HashMap<String, String>(2);
+		param.put("actorId", actorId);
+		param.put("processInstanceId", processInstanceId);
+		return getSqlSession().selectList("FireflowPersistence.findTodoWorkItems", param);
 	}
 
-	public List<WorkflowDefinition> findWorkflowDefinitionByProcessId(
-			final String processId) {
-		List result = (List) this.getHibernateTemplate().execute(
-				new HibernateCallback() {
-
-					public Object doInHibernate(Session arg0)
-							throws HibernateException, SQLException {
-						Criteria c = arg0
-								.createCriteria(WorkflowDefinition.class);
-						c.add(Expression.eq("processId", processId));
-						return c.list();
-					}
-				});
-
-		return result;
+    public List<IWorkItem> findTodoWorkItems(final String actorId, final String processId, final String taskId) {
+		Map<String, String> param = new HashMap<String, String>(3);
+		param.put("actorId", actorId);
+		param.put("processId", processId);
+		param.put("taskId", taskId);
+		return getSqlSession().selectList("FireflowPersistence.findTodoWorkItemsFor", param);
 	}
 
-	public List<WorkflowDefinition> findAllLatestVersionOfWorkflowDefinition() {
-		List result = (List) this.getHibernateTemplate().execute(
-				new HibernateCallback() {
+    public List<IWorkItem> findHaveDoneWorkItems(final String actorId) {
+        return findHaveDoneWorkItems(actorId, null);
+    }
 
-					public Object doInHibernate(Session arg0)
-							throws HibernateException, SQLException {
-						String hql = "select distinct model.processId from WorkflowDefinition model ";
-						Query query = arg0.createQuery(hql);
-						List processIdList = query.list();
-						List _result = new Vector<WorkflowDefinition>();
-						for (int i = 0; i < processIdList.size(); i++) {
-							WorkflowDefinition wfDef = findLatestVersionOfWorkflowDefinitionByProcessId((String) processIdList
-									.get(i));
-							_result.add(wfDef);
-						}
-						return _result;
-					}
-				});
-		return result;
+    public List<IWorkItem> findHaveDoneWorkItems(final String actorId, final String processInstanceId) {
+		Map<String, String> param = new HashMap<String, String>(2);
+		param.put("actorId", actorId);
+		param.put("processInstanceId", processInstanceId);
+		return getSqlSession().selectList("FireflowPersistence.findHaveDoneWorkItems", param);
 	}
 
-	public List<IWorkItem> findTodoWorkItems(final String actorId) {
-		return findTodoWorkItems(actorId, null);
+    public List<IWorkItem> findHaveDoneWorkItems(final String actorId, final String processId, final String taskId) {
+		Map<String, String> param = new HashMap<String, String>(3);
+		param.put("actorId", actorId);
+		param.put("processId", processId);
+		param.put("taskId", taskId);
+		return getSqlSession().selectList("FireflowPersistence.findHaveDoneWorkItemsFor", param);
 	}
 
-	public List<IWorkItem> findTodoWorkItems(final String actorId,
-			final String processInstanceId) {
-
-		List result = (List) this.getHibernateTemplate().execute(
-				new HibernateCallback() {
-
-					public Object doInHibernate(Session arg0)
-							throws HibernateException, SQLException {
-						Criteria criteria = arg0.createCriteria(WorkItem.class);
-
-						Criterion cri1 = Expression.eq("state", new Integer(0));
-						Criterion cri2 = Expression.eq("state", new Integer(1));
-						Criterion cri_or = Expression.or(cri1, cri2);
-
-						if (actorId != null && !actorId.trim().equals("")) {
-							Criterion cri0 = Expression.eq("actorId", actorId);
-							Criterion cri_and = Expression.and(cri0, cri_or);
-							criteria.add(cri_and);
-						} else {
-							criteria.add(cri_or);
-						}
-
-						criteria.createAlias("taskInstance", "taskInstance");
-						if (processInstanceId != null
-								&& !processInstanceId.trim().equals("")) {
-							criteria.add(Expression.eq(
-									"taskInstance.processInstanceId",
-									processInstanceId));
-						}
-
-						return criteria.list();
-					}
-				});
-		return result;
+    public void deleteWorkItemsInInitializedState(final String taskInstanceId) {
+		getSqlSession().delete("FireflowPersistence.deleteWorkItemsInInitializedState", taskInstanceId);
 	}
 
-	public List<IWorkItem> findTodoWorkItems(final String actorId,
-			final String processId, final String taskId) {
-		List result = (List) this.getHibernateTemplate().execute(
-				new HibernateCallback() {
+    public Integer getAliveProcessInstanceCountForParentTaskInstance(final String taskInstanceId) {
+        return getSqlSession().selectOne("FireflowPersistence.getAliveProcessInstanceCountForParentTaskInstance", taskInstanceId);
+    }
 
-					public Object doInHibernate(Session arg0)
-							throws HibernateException, SQLException {
-						Criteria criteria = arg0.createCriteria(WorkItem.class);
+    public void suspendProcessInstance(final ProcessInstance processInstance) {
+        processInstance.setSuspended(Boolean.TRUE);
+        this.saveOrUpdateProcessInstance(processInstance);
+        getSqlSession().update("FireflowPersistence.suspendProcessInstance", processInstance.getId());
+    }
 
-						Criterion cri1 = Expression.eq("state", new Integer(0));
-						Criterion cri2 = Expression.eq("state", new Integer(1));
-						Criterion cri_or = Expression.or(cri1, cri2);
+    public void restoreProcessInstance(final ProcessInstance processInstance) {
+        processInstance.setSuspended(Boolean.FALSE);
+        this.saveOrUpdateProcessInstance(processInstance);
+        getSqlSession().update("FireflowPersistence.restoreProcessInstance", processInstance.getId());
+    }
 
-						if (actorId != null && !actorId.trim().equals("")) {
-							Criterion cri0 = Expression.eq("actorId", actorId);
-							Criterion cri_and = Expression.and(cri0, cri_or);
-							criteria.add(cri_and);
-						} else {
-							criteria.add(cri_or);
-						}
+    public void abortProcessInstance(final ProcessInstance processInstance) {
+        Assert.notNull(processInstance);
+        Date now = rtCtx.getCalendarService().getSysDate();
+        processInstance.setState(IProcessInstance.CANCELED);
+        processInstance.setEndTime(now);
+        this.saveOrUpdateProcessInstance(processInstance);
+        
+        Map<String, Object> param = new HashMap<String, Object>();
+		param.put("state", IWorkItem.CANCELED);
+		param.put("endTime", now);
+		param.put("processInstanceId", processInstance.getId());
+		
+		// FIXME 这里的更新顺序与框架实现不一样，应该是先更新workItem，再更新taskInstance
+		// 否则对workItem的更新将不会生效
+		getSqlSession().update("FireflowPersistence.abortProcessInstanceForWorkItem", param);
+		getSqlSession().update("FireflowPersistence.abortProcessInstanceForTask", param);
+		getSqlSession().delete("FireflowPersistence.deleteTokenByProcessInstanceId", processInstance.getId());
+    }
 
-						criteria.createAlias("taskInstance", "taskInstance");
-						if (processId != null && !processId.trim().equals("")) {
-							criteria.add(Expression.eq(
-									"taskInstance.processId", processId));
-						}
+    public void saveOrUpdateProcessInstanceTrace(ProcessInstanceTrace processInstanceTrace) {
+        Assert.notNull(processInstanceTrace);
+        if (StringUtils.hasLength(processInstanceTrace.getId())) {
+        	getSqlSession().update("FireflowPersistence.updateProcessInstanceTrace", processInstanceTrace);
+        } else {
+        	getSqlSession().insert("FireflowPersistence.insertProcessInstanceTrace", processInstanceTrace);
+        }
+    }
+    
+    @SuppressWarnings("rawtypes")
+	public List findProcessInstanceTraces(final String processInstanceId){
+		return getSqlSession().selectList("FireflowPersistence.findProcessInstanceTraces", processInstanceId);
+    }
 
-						if (taskId != null && !taskId.trim().equals("")) {
-							criteria.add(Expression.eq("taskInstance.taskId",
-									taskId));
-						}
-						return criteria.list();
+    public List<IProcessInstance> findProcessInstancesByProcessId(final String processId) {
+        return getSqlSession().selectList("FireflowPersistence.findProcessInstancesByProcessId", processId);
+    }
 
-					}
-				});
-		return result;
+    public List<IWorkItem> findWorkItemsForTask(final String taskid) {
+        return getSqlSession().selectList("FireflowPersistence.findWorkItemsForTask", taskid);
+    }
+
+    public WorkflowDefinition findWorkflowDefinitionByProcessIdAndVersionNumber(final String processId, final int version) {
+        Map<String, Object> param = new HashMap<String, Object>(2);
+		param.put("version", version);
+		param.put("processId", processId);
+		return getSqlSession().selectOne("FireflowPersistence.findWorkflowDefinitionByProcessIdAndVersionNumber", param);
+    }
+    
+    public List<WorkflowDefinition> findWorkflowDefinitionsByProcessId(final String processId) {
+        return getSqlSession().selectList("FireflowPersistence.findWorkflowDefinitionsByProcessId", processId);
+    }
+
+    public List<WorkflowDefinition> findAllTheLatestVersionsOfWorkflowDefinition() {
+		List<String> processIdList = getSqlSession().selectList("FireflowPersistence.findAllProcessIdOfWorkflowDef");
+		Assert.notNull(processIdList, "processIdList must not be null");
+		List<WorkflowDefinition> workflowDefinitionList = new ArrayList<WorkflowDefinition>(processIdList.size());
+		for (String processId : processIdList) {
+			WorkflowDefinition wfDef = findTheLatestVersionOfWorkflowDefinitionByProcessId(processId);
+			workflowDefinitionList.add(wfDef);
+		}
+		return workflowDefinitionList;
 	}
 
-	public List<IWorkItem> findHaveDoneWorkItems(final String actorId) {
-		return findHaveDoneWorkItems(actorId, null);
-	}
-
-	public List<IWorkItem> findHaveDoneWorkItems(final String actorId,
-			final String processInstanceId) {
-
-		List result = (List) this.getHibernateTemplate().execute(
-				new HibernateCallback() {
-
-					public Object doInHibernate(Session arg0)
-							throws HibernateException, SQLException {
-						Criteria criteria = arg0.createCriteria(WorkItem.class);
-
-						Criterion cri1 = Expression.eq("state", new Integer(2));
-						Criterion cri2 = Expression
-								.eq("state", new Integer(-1));
-						Criterion cri_or = Expression.or(cri1, cri2);
-
-						if (actorId != null && !actorId.trim().equals("")) {
-							Criterion cri0 = Expression.eq("actorId", actorId);
-							Criterion cri_and = Expression.and(cri0, cri_or);
-							criteria.add(cri_and);
-						} else {
-							criteria.add(cri_or);
-						}
-
-						criteria.createAlias("taskInstance", "taskInstance");
-						if (processInstanceId != null
-								&& !processInstanceId.trim().equals("")) {
-							criteria.add(Expression.eq(
-									"taskInstance.processInstanceId",
-									processInstanceId));
-						}
-
-						return criteria.list();
-					}
-				});
-		return result;
-	}
-
-	public List<IWorkItem> findHaveDoneWorkItems(final String actorId,
-			final String processId, final String taskId) {
-		List result = (List) this.getHibernateTemplate().execute(
-				new HibernateCallback() {
-
-					public Object doInHibernate(Session arg0)
-							throws HibernateException, SQLException {
-						Criteria criteria = arg0.createCriteria(WorkItem.class);
-
-						Criterion cri1 = Expression.eq("state", new Integer(2));
-						Criterion cri2 = Expression
-								.eq("state", new Integer(-1));
-						Criterion cri_or = Expression.or(cri1, cri2);
-
-						if (actorId != null && !actorId.trim().equals("")) {
-							Criterion cri0 = Expression.eq("actorId", actorId);
-							Criterion cri_and = Expression.and(cri0, cri_or);
-							criteria.add(cri_and);
-						} else {
-							criteria.add(cri_or);
-						}
-
-						criteria.createAlias("taskInstance", "taskInstance");
-						if (processId != null && !processId.trim().equals("")) {
-							criteria.add(Expression.eq(
-									"taskInstance.processId", processId));
-						}
-
-						if (taskId != null && !taskId.trim().equals("")) {
-							criteria.add(Expression.eq("taskInstance.taskId",
-									taskId));
-						}
-						return criteria.list();
-
-					}
-				});
-		return result;
-	}
-
-	public void deleteWorkItemsInInitializedState(final String taskInstanceId) {
-		this.getHibernateTemplate().execute(new HibernateCallback() {
-
-			public Object doInHibernate(Session arg0)
-					throws HibernateException, SQLException {
-				String hql = "delete from org.fireflow.engine.impl.WorkItem as model where model.taskInstance.id=? and model.state=0";
-				Query query = arg0.createQuery(hql);
-				query.setString(0, taskInstanceId);
-				return query.executeUpdate();
-			}
-		});
-	}
+    public Integer findTheLatestVersionNumber(final String processId) {
+        return getSqlSession().selectOne("FireflowPersistence.findTheLatestVersionNumber");
+    }
+    
 }

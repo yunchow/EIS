@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/317/trunk/java_version/examples/FireflowExample/dbscript/mysql
+END
+2_example_tables.sql
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/317/trunk/java_version/examples/FireflowExample/dbscript/mysql/2_example_tables.sql
+END
+3_init_data.sql
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/317/trunk/java_version/examples/FireflowExample/dbscript/mysql/3_init_data.sql
+END
+1_fireflow-schema-export-4-mysql.sql
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/317/trunk/java_version/examples/FireflowExample/dbscript/mysql/1_fireflow-schema-export-4-mysql.sql
+END
