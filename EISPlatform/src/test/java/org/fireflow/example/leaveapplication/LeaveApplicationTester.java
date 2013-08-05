@@ -16,8 +16,12 @@ import org.fireflow.example.leaveapplication.misc.FireWorkflowHelperDao;
 import org.fireflow.example.leaveapplication.workflowextension.CurrentUserAssignmentHandler;
 import org.fireflow.example.leaveapplication.workflowextension.RoleDepartmentBasedAssignmentHandler;
 import org.fireflow.kernel.KernelException;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -29,11 +33,13 @@ import org.springframework.transaction.support.TransactionTemplate;
  * @author 非也
  * 
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:conf/beans-*.xml")
 public class LeaveApplicationTester {
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+	
+	
+	@Test
+	public void testLeaveWorkFlow() {
 		try {
 			// 初始化测试环境，
 			setUpClass();

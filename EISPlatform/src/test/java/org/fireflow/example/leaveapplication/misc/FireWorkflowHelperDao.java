@@ -17,14 +17,6 @@
 
 package org.fireflow.example.leaveapplication.misc;
 
-import java.sql.SQLException;
-import java.util.List;
-import org.fireflow.engine.IProcessInstance;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  *
@@ -32,42 +24,11 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  * @version 1.0
  * Created on Mar 11, 2009
  */
-public class FireWorkflowHelperDao extends HibernateDaoSupport{
+public class FireWorkflowHelperDao {
     /**
      * 测试之前删除所有表中的数据
      */
     public void clearAllTables(){
-        this.getHibernateTemplate().execute(new HibernateCallback(){
-
-            public Object doInHibernate(Session arg0) throws HibernateException, SQLException {
-                String selectHql4ProcessInstance = "from org.fireflow.engine.impl.ProcessInstance";
-//                String deleteHql4ProcessInstance = "delete from org.fireflow.engine.impl.ProcessInstance";
-                String deleteHql4TaskInstance = "delete from org.fireflow.engine.impl.TaskInstance";
-                String deleteHql4WorkItem = "delete from org.fireflow.engine.impl.WorkItem";
-                String deleteHql4Token = "delete from org.fireflow.kernel.impl.Token";
-
-                Query query4ProcessInstance = arg0.createQuery(selectHql4ProcessInstance);
-                List processInstanceList = query4ProcessInstance.list();
-                for (int i=0;processInstanceList!=null && i<processInstanceList.size();i++){
-                    IProcessInstance procInst = (IProcessInstance)processInstanceList.get(i);
-                    arg0.delete(procInst);
-                }
-//                Query query4ProcessInstance = arg0.createQuery(deleteHql4ProcessInstance);
-//                query4ProcessInstance.executeUpdate();
-
-               Query query4WorkItem = arg0.createQuery(deleteHql4WorkItem);
-                query4WorkItem.executeUpdate();
-
-                Query query4TaskInstance = arg0.createQuery(deleteHql4TaskInstance);
-                query4TaskInstance.executeUpdate();
- 
-
-                Query query4Token = arg0.createQuery(deleteHql4Token);
-                query4Token.executeUpdate();
-
-                return null;
-            }
-
-        });
+     
     }
 }
