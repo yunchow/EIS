@@ -358,7 +358,7 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
 		param.put("endTime", now);
 		param.put("processInstanceId", processInstance.getId());
 		
-		// FIXME 这里的更新顺序与框架实现不一样，应该是先更新workItem，再更新taskInstance
+		// FIXME 这里的更新顺序与FireFlow默认实现不一样，应该是先更新workItem，再更新taskInstance
 		// 否则对workItem的更新将不会生效
 		getSqlSession().update("FireflowPersistence.abortProcessInstanceForWorkItem", param);
 		getSqlSession().update("FireflowPersistence.abortProcessInstanceForTask", param);
