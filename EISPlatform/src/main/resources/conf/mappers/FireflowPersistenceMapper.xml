@@ -1,25 +1,144 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="FireflowPersistence">
-	<cache></cache>
-	<select id="findAll" resultType="Employee">
-		select * from employee
-	</select>
+	<cache/>
 	
-	<select id="findById" resultType="Employee">
-		select * from employee where employeeId=#{employeeId}
-	</select>
-	
-	<insert id="add" parameterType="Employee">
-		insert into employee(no, name, gender) values(#{no}, #{name}, #{gender})
+	<insert id="insertProcessInstance" keyProperty="id" keyColumn="id" useGeneratedKeys="true" parameterType="org.fireflow.engine.IProcessInstance">
+		insert into t_ff_rt_processinstance 
+		    (id, process_id, version, name, display_name, state, created_time, started_time, expired_time, end_time, parent_processinstance_id, parent_taskinstance_id) 
+		values 
+		    (#{id}, #{processId}, #{version}, #{name}, #{displayName}, #{state}, #{createdTime}, #{startedTime}, #{expiredTime}, #{endTime}, #{parentProcessInstanceId}, #{parentTaskInstanceId})
 	</insert>
 	
-	<update id="update" parameterType="Employee">
-		update employee set name=#{name}, gender=#{gender} where employeeId=#{employeeId}
+	<update id="updateProcessInstance" parameterType="org.fireflow.engine.IProcessInstance">
+		update t_ff_rt_processinstance 
+		    set id = #{id}, process_id = #{processId}, version = #{version}, name = #{name}, display_name = #{displayName}, state = #{state}, created_time = #{createdTime}, 
+		    started_time = #{startedTime}, expired_time = #{expiredTime}, end_time = #{endTime}, parent_processinstance_id = #{parentProcessInstanceId}, parent_taskinstance_id = #{parentTaskInstanceId} 
+		where 
+		    id = #{id}
 	</update>
 	
-	<delete id="delete" parameterType="int">
-		delete from employee where employeeId=#{employeeId}
-	</delete>
-
+	<insert id="insertJoinPoint" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="org.fireflow.kernel.impl.JoinPoint">
+		insert into t_ff_rt_joinpoint 
+		    (id, synchronizer_id, value, alive, processinstance_id) 
+		values 
+		    (#{id}, #{synchronizerId}, #{value}, #{alive}, #{processInstanceId})
+	</insert>
+	
+	<update id="updateJoinPoint" parameterType="org.fireflow.kernel.impl.JoinPoint">
+		update t_ff_rt_joinpoint 
+		    set id = #{id}, synchronizer_id = #{synchronizerId}, value = #{value}, alive = #{alive}, processinstance_id = #{processInstanceId} 
+		where 
+		    id = #{id}
+	</update>
+	
+	<insert id="insertTaskInstance" keyProperty="id" keyColumn="id" useGeneratedKeys="true" parameterType="org.fireflow.engine.ITaskInstance">
+		insert into t_ff_rt_taskinstance 
+		    (id, biz_type, task_id, activity_id, name, display_name, state, task_type, created_time, started_time, expired_time, end_time, assignment_strategy, processinstance_id, process_id, version) 
+		values 
+		    (#{id}, #{}, #{taskId}, #{activityId}, #{name}, #{displayName}, #{state}, #{taskType}, #{createdTime}, #{startedTime}, #{expiredTime}, #{endTime}, #{assignmentStrategy}, #{processInstanceId}, #{processId}, #{version})
+	</insert>
+	
+	<update id="updateTaskInstance" parameterType="org.fireflow.engine.ITaskInstance">
+		update t_ff_rt_taskinstance 
+		    set id = #{id}, task_id = #{taskId}, activity_id = #{activityId}, name = #{name}, display_name = #{displayName}, state = #{state}, task_type = #{taskType}, created_time = #{createdTime}, 
+		    started_time = #{startedTime}, expired_time = #{expiredTime}, end_time = #{endTime}, assignment_strategy = #{assignmentStrategy}, processinstance_id = #{processInstanceId}, process_id = #{processId}, version = #{version} 
+		where 
+		    id = #{id}
+	</update>
+	
+	<insert id="insertWorkItem" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="org.fireflow.engine.IWorkItem">
+		insert into t_ff_rt_workitem 
+			(id, state, created_time, signed_time, end_time, actor_id, comments, taskinstance_id) 
+		values 
+			(#{id}, #{state}, #{createdTime}, #{claimedTime}, #{endTime}, #{actorId}, #{comments}, #{taskInstance.id})
+	</insert>
+	
+	<update id="updateWorkItem" parameterType="org.fireflow.engine.IWorkItem">
+		update t_ff_rt_workitem 
+		    set id = #{id}, state = #{state}, created_time = #{createdTime}, signed_time = #{claimedTime}, end_time = #{endTime}, actor_id = #{actorId}, comments = #{comments}, taskinstance_id = #{taskInstance.id} 
+		where 
+		    id = #{id}
+	</update>
+	
+	<insert id="insertToken" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="org.fireflow.kernel.IToken">
+		insert into t_ff_rt_token
+			(id, alive, value, node_id, processinstance_id) 
+		values 
+			(#{id}, #{alive}, #{value}, #{nodeId}, #{processInstanceId})
+	</insert>
+	
+	<update id="updateToken" parameterType="org.fireflow.kernel.IToken">
+		update t_ff_rt_token 
+		    set id = #{id}, alive = #{alive}, value = #{value}, node_id = #{nodeId}, processinstance_id = #{processInstanceId} 
+		where 
+		    id = #{id}
+	</update>
+	
+	<resultMap type="org.fireflow.kernel.IJoinPoint" id="joinPointMap">
+		<id column="id" property="id"/>
+	</resultMap>
+	
+	<select id="findJoinPointsForProcessInstance" resultMap="joinPointMap" parameterType="hashmap">
+		select * from t_ff_rt_joinpoint
+		<where>
+			processinstance_id = #{processInstanceId}
+			<if test="synchronizerId != null && synchronizerId != ''">
+				and synchronizer_id = #{synchronizerId}
+			</if>
+		</where>
+	</select>
+	
+	<resultMap type="org.fireflow.engine.ITaskInstance" id="taskInstanceMap">
+		<id column="id" property="id"/>
+	</resultMap>
+	
+	<select id="findTaskInstancesForProcessInstance" parameterType="hashmap" resultMap="taskInstanceMap">
+		select * from t_ff_rt_taskinstance
+		<where>
+			processinstance_id = #{processInstanceId}
+			<if test="activityId != null && activityId != ''">
+				and activity_id = #{activityId}
+			</if>
+		</where>
+	</select>
+	
+	<resultMap type="org.fireflow.kernel.IToken" id="tokenMap">
+		<id column="id" property="id"/>
+	</resultMap>
+	
+	<select id="findTokensForProcessInstance" parameterType="hashmap" resultMap="tokenMap">
+		select * from t_ff_rt_token
+		<where>
+			processinstance_id = #{processInstanceId}
+			<if test="nodeId != null && nodeId != ''">
+				and node_id = #{nodeId}
+			</if>
+		</where>
+	</select>
+	
+	<resultMap type="org.fireflow.engine.IWorkItem" id="workItemMap">
+		<id column="id" property="id"/>
+		<association property=""></association>
+	</resultMap>
+	
+	<select id="findWorkItemById" parameterType="String" resultMap="workItemMap">
+		select * from t_ff_rt_workitem
+		where id = #{id}
+	</select>
+	
+	<select id="findTaskInstanceById" parameterType="String" resultMap="taskInstanceMap">
+		select * from t_ff_rt_taskinstance
+		where id = #{id}
+	</select>
+	
+	<select id="findJoinPointById" parameterType="String" resultMap="joinPointMap">
+		select * from t_ff_rt_joinpoint
+		where id = #{id}
+	</select>
+	
+	<select id="findWorkItemsForTaskInstance" parameterType="String" resultMap="workItemMap">
+		select * from 
+	</select>
+	
 </mapper>
