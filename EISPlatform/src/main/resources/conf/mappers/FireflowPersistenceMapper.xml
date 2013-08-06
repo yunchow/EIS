@@ -25,6 +25,24 @@
 		    id = #{id}
 	</update>
 	
+	<insert id="insertProcessVars" parameterType="hashmap">
+		insert into t_ff_rt_procinst_var 
+		    (processinstance_id, value, name) 
+		 values
+		 	(#{processInstanceId}, #{value}, #{name})
+	</insert>
+	
+	<delete id="deleteProcessVarByProcessInstanceId" parameterType="String">
+		delete from t_ff_rt_procinst_var where processinstance_id = #{processInstanceId}
+	</delete>
+	
+	<update id="updateProcessVars" parameterType="hashmap">
+		update t_ff_rt_procinst_var set value = #{value}
+		where 
+		    processinstance_id = #{processInstanceId}
+		    and name = #{name}
+	</update>
+	
 	<insert id="insertJoinPoint" keyColumn="id" keyProperty="id" parameterType="org.fireflow.kernel.impl.JoinPoint">
 		insert into t_ff_rt_joinpoint 
 		    (id, synchronizer_id, value, alive, processinstance_id) 
@@ -41,29 +59,30 @@
 	
 	<insert id="insertTaskInstance" keyProperty="id" keyColumn="id" parameterType="org.fireflow.engine.ITaskInstance">
 		insert into t_ff_rt_taskinstance 
-		    (id, biz_type, task_id, activity_id, name, display_name, state, task_type, created_time, started_time, expired_time, end_time, assignment_strategy, processinstance_id, process_id, version) 
+		    (id, biz_type, task_id, activity_id, name, display_name, state, suspended, task_type, created_time, started_time, expired_time, end_time, assignment_strategy, processinstance_id, process_id, version, target_activity_id, from_activity_id, step_number, can_be_withdrawn) 
 		values 
-		    (#{id}, 'NA', #{taskId}, #{activityId}, #{name}, #{displayName}, #{state}, #{taskType}, #{createdTime}, #{startedTime}, #{expiredTime}, #{endTime}, #{assignmentStrategy}, #{processInstanceId}, #{processId}, #{version})
+		    (#{id}, 'NA', #{taskId}, #{activityId}, #{name}, #{displayName}, #{state}, #{suspended}, #{taskType}, #{createdTime}, #{startedTime}, #{expiredTime}, #{endTime}, #{assignmentStrategy}, #{processInstanceId}, #{processId}, #{version}, #{targetActivityId}, #{fromActivityId}, #{stepNumber}, #{canBeWithdrawn})
 	</insert>
 	
 	<update id="updateTaskInstance" parameterType="org.fireflow.engine.ITaskInstance">
 		update t_ff_rt_taskinstance set
-		    task_id = #{taskId}, activity_id = #{activityId}, name = #{name}, display_name = #{displayName}, state = #{state}, task_type = #{taskType}, created_time = #{createdTime}, 
-		    started_time = #{startedTime}, expired_time = #{expiredTime}, end_time = #{endTime}, assignment_strategy = #{assignmentStrategy}, processinstance_id = #{processInstanceId}, process_id = #{processId}, version = #{version} 
+		    task_id = #{taskId}, activity_id = #{activityId}, name = #{name}, display_name = #{displayName}, state = #{state}, suspended = #{suspended}, task_type = #{taskType}, created_time = #{createdTime}, 
+		    started_time = #{startedTime}, expired_time = #{expiredTime}, end_time = #{endTime}, assignment_strategy = #{assignmentStrategy}, processinstance_id = #{processInstanceId}, process_id = #{processId}, version = #{version},
+		    target_activity_id = #{targetActivityId}, from_activity_id = #{fromActivityId}, step_number = #{stepNumber}, can_be_withdrawn = #{canBeWithdrawn}
 		where 
 		    id = #{id}
 	</update>
 	
 	<insert id="insertWorkItem" keyColumn="id" keyProperty="id" parameterType="org.fireflow.engine.IWorkItem">
 		insert into t_ff_rt_workitem 
-			(id, state, created_time, signed_time, end_time, actor_id, comments, taskinstance_id) 
+			(id, state, created_time, claimed_time, end_time, actor_id, comments, taskinstance_id) 
 		values 
 			(#{id}, #{state}, #{createdTime}, #{claimedTime}, #{endTime}, #{actorId}, #{comments}, #{taskInstance.id})
 	</insert>
 	
 	<update id="updateWorkItem" parameterType="org.fireflow.engine.IWorkItem">
 		update t_ff_rt_workitem set
-		    state = #{state}, created_time = #{createdTime}, signed_time = #{claimedTime}, end_time = #{endTime}, actor_id = #{actorId}, comments = #{comments}, taskinstance_id = #{taskInstance.id} 
+		    state = #{state}, created_time = #{createdTime}, claimed_time = #{claimedTime}, end_time = #{endTime}, actor_id = #{actorId}, comments = #{comments}, taskinstance_id = #{taskInstance.id} 
 		where 
 		    id = #{id}
 	</update>
@@ -125,15 +144,26 @@
 	</select>
 	
 	<resultMap type="org.fireflow.engine.impl.WorkItem" id="workItemMap">
-		<id column="id" property="id"/>
+		<id column="wid" property="id"/>
+		<result column="wstate" property="state"/>
+		<result column="wcreated_time" property="createdTime"/>
+		<result column="wclaimed_time" property="claimedTime"/>
+		<result column="wend_time" property="endTime"/>
+		<result column="wactor_id" property="actorId"/>
+		<result column="wcomments" property="comments"/>
 		<association property="taskInstance" javaType="org.fireflow.engine.impl.TaskInstance">
-			<id property="id" column="taskinstance_id"/>
+			<id property="id" column="id"/>
 		</association>
 	</resultMap>
 	
 	<select id="findWorkItemById" parameterType="String" resultMap="workItemMap">
-		select * from t_ff_rt_workitem
-		where id = #{id}
+		select 
+			w.id wid, w.state wstate, w.created_time wcreated_time, w.claimed_time wclaimed_time, w.end_time wend_time, 
+			w.actor_id wactor_id, w.comments wcomments, w.taskinstance_id wtaskinstance_id,
+			t.* 
+		from t_ff_rt_workitem w 
+		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
+		where w.id = #{id}
 	</select>
 	
 	<select id="findTaskInstanceById" parameterType="String" resultMap="taskInstanceMap">
@@ -147,13 +177,21 @@
 	</select>
 	
 	<select id="findWorkItemsForTaskInstance" parameterType="String" resultMap="workItemMap">
-		select w.*, t.* from t_ff_rt_workitem w 
+		select
+			w.id wid, w.state wstate, w.created_time wcreated_time, w.claimed_time wclaimed_time, w.end_time wend_time, 
+			w.actor_id wactor_id, w.comments wcomments, w.taskinstance_id wtaskinstance_id,
+			t.* 
+		from t_ff_rt_workitem w 
 		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
 		where w.taskinstance_id = #{taskInstanceId}
 	</select> 
 	
 	<select id="findWorkItemForTask" parameterType="String" resultMap="workItemMap">
-		select w.*, t.* from t_ff_rt_workitem w 
+		select
+			w.id wid, w.state wstate, w.created_time wcreated_time, w.claimed_time wclaimed_time, w.end_time wend_time, 
+			w.actor_id wactor_id, w.comments wcomments, w.taskinstance_id wtaskinstance_id,
+			t.* 
+		from t_ff_rt_workitem w 
 		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
 		where t.task_id = #{taskId}
 	</select>
@@ -218,7 +256,11 @@
 	</select>
 	
 	<select id="findTodoWorkItems" parameterType="hashmap" resultMap="workItemMap">
-		select w.*, t.* from t_ff_rt_workitem w 
+		select
+			w.id wid, w.state wstate, w.created_time wcreated_time, w.claimed_time wclaimed_time, w.end_time wend_time, 
+			w.actor_id wactor_id, w.comments wcomments, w.taskinstance_id wtaskinstance_id,
+			t.* 
+		from t_ff_rt_workitem w 
 		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
 		<where>
 			w.state in (0, 1)
@@ -232,7 +274,11 @@
 	</select>
 	
 	<select id="findTodoWorkItemsFor" parameterType="hashmap" resultMap="workItemMap">
-		select w.*, t.* from t_ff_rt_workitem w 
+		select
+			w.id wid, w.state wstate, w.created_time wcreated_time, w.claimed_time wclaimed_time, w.end_time wend_time, 
+			w.actor_id wactor_id, w.comments wcomments, w.taskinstance_id wtaskinstance_id,
+			t.* 
+		from t_ff_rt_workitem w 
 		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
 		<where>
 			w.state in (0, 1)
@@ -249,7 +295,11 @@
 	</select>
 	
 	<select id="findHaveDoneWorkItems" parameterType="hashmap" resultMap="workItemMap">
-		select w.*, t.* from t_ff_rt_workitem w 
+		select
+			w.id wid, w.state wstate, w.created_time wcreated_time, w.claimed_time wclaimed_time, w.end_time wend_time, 
+			w.actor_id wactor_id, w.comments wcomments, w.taskinstance_id wtaskinstance_id,
+			t.* 
+		from t_ff_rt_workitem w 
 		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
 		<where>
 			w.state in (7, 9)
@@ -263,7 +313,11 @@
 	</select>
 	
 	<select id="findHaveDoneWorkItemsFor" parameterType="hashmap" resultMap="workItemMap">
-		select w.*, t.* from t_ff_rt_workitem w 
+		select
+			w.id wid, w.state wstate, w.created_time wcreated_time, w.claimed_time wclaimed_time, w.end_time wend_time, 
+			w.actor_id wactor_id, w.comments wcomments, w.taskinstance_id wtaskinstance_id,
+			t.*  
+		from t_ff_rt_workitem w 
 		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
 		<where>
 			w.state in (7, 9)
@@ -280,8 +334,8 @@
 	</select>
 	
 	<delete id="deleteWorkItemsInInitializedState" parameterType="String">
-		delete from t_ff_rt_workitem model
-		where model.taskinstance_id = #{taskInstanceId} and model.state = 0
+		delete from t_ff_rt_workitem
+		where taskinstance_id = #{taskInstanceId} and state = 0
 	</delete>
 	
 	<select id="getAliveTokenCountForNode" parameterType="hashmap" resultType="int">
@@ -363,7 +417,11 @@
 	</select>
 	
 	<select id="findCompletedWorkItemsForTaskInstance" parameterType="String" resultMap="workItemMap">
-		select w.*, t.* from t_ff_rt_workitem w 
+		select
+			w.id wid, w.state wstate, w.created_time wcreated_time, w.claimed_time wclaimed_time, w.end_time wend_time, 
+			w.actor_id wactor_id, w.comments wcomments, w.taskinstance_id wtaskinstance_id,
+			t.* 
+		from t_ff_rt_workitem w 
 		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
 		where w.taskinstance_id = #{taskInstanceId} and state = 7
 	</select>
@@ -437,7 +495,11 @@
 	</select>
 	
 	<select id="findWorkItemsForTask" parameterType="String" resultMap="workItemMap">
-		select w.*, t.* from t_ff_rt_workitem w 
+		select
+			w.id wid, w.state wstate, w.created_time wcreated_time, w.claimed_time wclaimed_time, w.end_time wend_time, 
+			w.actor_id wactor_id, w.comments wcomments, w.taskinstance_id wtaskinstance_id,
+			t.* 
+		from t_ff_rt_workitem w 
 		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
 		where t.task_id = #{taskid}
 	</select>

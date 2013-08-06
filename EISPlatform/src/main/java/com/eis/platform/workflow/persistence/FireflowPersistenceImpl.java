@@ -62,14 +62,34 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
     // FIXME if need to save process instance variables
     public void saveOrUpdateProcessInstance(IProcessInstance processInstance) {
 		Assert.notNull(processInstance);
+		@SuppressWarnings("unchecked")
+		Map<String, Object> processInstanceVars = processInstance.getProcessInstanceVariables();
 		if (StringUtils.hasLength(processInstance.getId())) {
 			getSqlSession().update("FireflowPersistence.updateProcessInstance", processInstance);
 		} else {
 			((ProcessInstance)processInstance).setId(PKFactory.uuid());
 			getSqlSession().insert("FireflowPersistence.insertProcessInstance", processInstance);
 		}
-		
+		if (processInstanceVars != null && processInstanceVars.size() > 0) {
+			this.saveProcessInstanceVars(processInstanceVars, processInstance.getId());
+		}
 	}
+    
+    /**
+     * 保存/修改流程变量
+     * @param processInstanceVars
+     * @param processInstanceId
+     */
+    public void saveProcessInstanceVars(Map<String, Object> processInstanceVars, String processInstanceId) {
+    	getSqlSession().update("FireflowPersistence.deleteProcessVarByProcessInstanceId", processInstanceId);
+    	Map<String, Object> paramMap = new HashMap<String, Object>(3);
+    	paramMap.put("processInstanceId", processInstanceId);
+    	for (Map.Entry<String, Object> var : processInstanceVars.entrySet()) {
+    		paramMap.put("name", var.getKey());
+    		paramMap.put("value", var.getValue());
+    		getSqlSession().insert("FireflowPersistence.insertProcessVars", paramMap);
+    	}
+    }
 
 	@Deprecated
 	public void saveOrUpdateJoinPoint(IJoinPoint joinPoint) {
@@ -160,7 +180,7 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
     
     // FIXME 是否会有性能问题，待优化
     public void lockTaskInstance(String taskInstanceId){
-    	getSqlSession().selectOne("FireflowPersistence.lockTaskInstance", taskInstanceId);
+    	getSqlSession().update("FireflowPersistence.lockTaskInstance", taskInstanceId);
     }
    
     public IToken findTokenById(String id) {

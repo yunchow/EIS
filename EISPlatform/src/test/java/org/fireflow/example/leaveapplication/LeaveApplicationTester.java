@@ -16,6 +16,7 @@ import org.fireflow.example.leaveapplication.misc.FireWorkflowHelperDao;
 import org.fireflow.example.leaveapplication.workflowextension.CurrentUserAssignmentHandler;
 import org.fireflow.example.leaveapplication.workflowextension.RoleDepartmentBasedAssignmentHandler;
 import org.fireflow.kernel.KernelException;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.BeanFactory;
@@ -38,6 +39,7 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:conf/beans-*.xml")
+@SuppressWarnings({ "unchecked", "deprecation","rawtypes", "unused" })
 public class LeaveApplicationTester {
 	
 	
@@ -66,7 +68,7 @@ public class LeaveApplicationTester {
 			
 			if (reply==JOptionPane.NO_OPTION){
 				return;
-			}			
+			}	
 			
 			//部门经理签收工单，填入审批意见，结束工单
 			//结束工单的操作会触发流程向下一个环节流转。在本案例中，下一个环节的含有一个ToolTask，
@@ -122,10 +124,16 @@ public class LeaveApplicationTester {
                     IWorkflowSession workflowSession = runtimeContext.getWorkflowSession();
                     
                     List myWorkItemsList = workflowSession.findMyTodoWorkItems(CurrentUserAssignmentHandler.APPLICANT);
-                    System.out.println("我(zhang)的待办workitem列表如下：");
+                    System.out.println("############## 我(zhang)的待办workitem列表如下：");
+                    Assert.assertNotNull(myWorkItemsList);
+                    Assert.assertTrue(myWorkItemsList.size() > 0);
                     for (int i=0;myWorkItemsList!=null && i<myWorkItemsList.size();i++){
                     	IWorkItem wi = (IWorkItem)myWorkItemsList.get(i);
-                    	System.out.println("序号:"+i+"; id="+wi.getId()+"; name="+wi.getTaskInstance().getDisplayName()+"; actorId="+wi.getActorId()+"; state="+wi.getState());
+                    	Assert.assertNotNull(wi.getTaskInstance());
+                    	Assert.assertNotNull(wi.getTaskInstance().getDisplayName());
+                    	System.out.println("################ 序号:"+i+"; id="+wi.getId()+"; name="+wi.getTaskInstance().getDisplayName()+"; actorId="+wi.getActorId()+"; state="+wi.getState());
+                    	Assert.assertNotNull(wi.getId());
+                    	Assert.assertNotNull(wi.getState());
                     }
                     
                     //选择第一个workitem进行操作
