@@ -3,12 +3,7 @@
 <mapper namespace="FireflowPersistence">
 	<cache/>
 	
-	<parameterMap type="org.fireflow.engine.impl.ProcessInstance" id="rocessInstanceParamMap">
-		<parameter property="suspended" javaType="boolean" jdbcType="BIT"/>
-		<parameter property="id" />
-	</parameterMap>
-	
-	<insert id="insertProcessInstance" keyProperty="id" keyColumn="ID" parameterMap="rocessInstanceParamMap">
+	<insert id="insertProcessInstance" keyProperty="id" keyColumn="ID" parameterType="org.fireflow.engine.impl.ProcessInstance">
 		insert into t_ff_rt_processinstance 
 		    (id, process_id, version, name, display_name, state, suspended, creator_id, created_time, started_time, expired_time, end_time, parent_processinstance_id, parent_taskinstance_id) 
 		values 
