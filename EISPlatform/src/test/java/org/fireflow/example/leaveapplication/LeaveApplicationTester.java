@@ -52,23 +52,23 @@ public class LeaveApplicationTester {
 			//启动流程实例
 			testStartNewProcess();
 			
-			int reply = JOptionPane.showConfirmDialog(null, "流程实例启动成功，请从后台数据库观察WorkItem,TaskInstance,ProcessInstance,流程变量等信息。\n" +
+			/*int reply = JOptionPane.showConfirmDialog(null, "流程实例启动成功，请从后台数据库观察WorkItem,TaskInstance,ProcessInstance,流程变量等信息。\n" +
 					"下一步：申请人签收工单，填入请假天数，结束工单，是否继续？","提示信息" ,JOptionPane.YES_NO_OPTION);
 			
 			if (reply==JOptionPane.NO_OPTION){
 				return;
-			}
+			}*/
 			
 			//申请人签收工单，填入请假天数，结束工单。
 			//结束工单的操作（即WorkItem.complete())会触发流程实例向下一个环节流转
 			testClaimAndCompleteSubmitApplication();
 			
-			reply = JOptionPane.showConfirmDialog(null, "申请人操作完毕，请从后台数据库观察WorkItem,TaskInstance,ProcessInstance,流程变量等信息。\n" +
+			/*reply = JOptionPane.showConfirmDialog(null, "申请人操作完毕，请从后台数据库观察WorkItem,TaskInstance,ProcessInstance,流程变量等信息。\n" +
 					"下一步：部门经理签收工单，填入审批意见，结束工单，是否继续？","提示信息" ,JOptionPane.YES_NO_OPTION);
 			
 			if (reply==JOptionPane.NO_OPTION){
 				return;
-			}	
+			}*/	
 			
 			//部门经理签收工单，填入审批意见，结束工单
 			//结束工单的操作会触发流程向下一个环节流转。在本案例中，下一个环节的含有一个ToolTask，
@@ -198,6 +198,8 @@ public class LeaveApplicationTester {
                     		((TaskInstance)wi.getTaskInstance()).getAliveProcessInstance();
                     	processInstance.setProcessInstanceVariable("approvalFlag", 
                     			APPROVAL_FLAG);//审批意见
+                    	
+                    	processInstance.setProcessInstanceVariable("中文", "中国字，哈哈。。。");
                     	
                     	//3、结束WorkItem
                     	//结束workItem会触发流程实例向下一个环节流转，
