@@ -46,12 +46,6 @@
 		</dependency>
 
 		<dependency>
-		    <groupId>dom4j</groupId>
-		    <artifactId>dom4j</artifactId>
-		    <version>1.6</version>
-		</dependency>
-		
-		<dependency>
 		    <groupId>commons-jexl</groupId>
 		    <artifactId>commons-jexl</artifactId>
 		    <version>1.1</version>
@@ -129,6 +123,7 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!-- 
 		<dependency>  
 		    <groupId>fireflow</groupId>  
 		    <artifactId>fireflow-model</artifactId>  
@@ -144,7 +139,7 @@
 		    <scope>system</scope>  
 		    <systemPath>${basedir}/lib/fireflow-engine.jar</systemPath>  
 		</dependency>
-
+		 -->
 	</dependencies>	
 	
 	<build>

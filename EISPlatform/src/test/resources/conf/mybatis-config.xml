@@ -11,14 +11,13 @@
 		<setting name="defaultExecutorType" value="SIMPLE" />
 		<setting name="defaultStatementTimeout" value="25" />
 		<setting name="safeRowBoundsEnabled" value="false" />
-		<setting name="mapUnderscoreToCamelCase" value="false" />
+		<setting name="mapUnderscoreToCamelCase" value="true" />
 		<setting name="localCacheScope" value="SESSION" />
 		<setting name="jdbcTypeForNull" value="OTHER" />
 		<setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString" />
 	</settings>
 	
 	<typeAliases>
-		<typeAlias alias="Employee" type="com.eis.domain.entity.Employee"/>
 		<package name="com.eis.domain.entity"/>
 	</typeAliases>
 	

@@ -3,22 +3,29 @@
 <mapper namespace="FireflowPersistence">
 	<cache/>
 	
-	<insert id="insertProcessInstance" keyProperty="id" keyColumn="id" useGeneratedKeys="true" parameterType="org.fireflow.engine.IProcessInstance">
+	<parameterMap type="org.fireflow.engine.impl.ProcessInstance" id="rocessInstanceParamMap">
+		<parameter property="suspended" javaType="boolean" jdbcType="BIT"/>
+		<parameter property="id" />
+	</parameterMap>
+	
+	<insert id="insertProcessInstance" keyProperty="id" keyColumn="ID" parameterMap="rocessInstanceParamMap">
 		insert into t_ff_rt_processinstance 
-		    (id, process_id, version, name, display_name, state, created_time, started_time, expired_time, end_time, parent_processinstance_id, parent_taskinstance_id) 
+		    (id, process_id, version, name, display_name, state, suspended, creator_id, created_time, started_time, expired_time, end_time, parent_processinstance_id, parent_taskinstance_id) 
 		values 
-		    (#{id}, #{processId}, #{version}, #{name}, #{displayName}, #{state}, #{createdTime}, #{startedTime}, #{expiredTime}, #{endTime}, #{parentProcessInstanceId}, #{parentTaskInstanceId})
+		    (#{id}, #{processId}, #{version}, #{name}, #{displayName}, #{state}, #{suspended}, #{creatorId}, #{createdTime}, #{startedTime}, #{expiredTime}, #{endTime}, #{parentProcessInstanceId}, #{parentTaskInstanceId})
 	</insert>
 	
 	<update id="updateProcessInstance" parameterType="org.fireflow.engine.IProcessInstance">
 		update t_ff_rt_processinstance 
-		    process_id = #{processId}, version = #{version}, name = #{name}, display_name = #{displayName}, state = #{state}, created_time = #{createdTime}, 
+		<set>
+		    process_id = #{processId}, version = #{version}, name = #{name}, display_name = #{displayName}, state = #{state}, suspended = #{suspended}, creator_id = #{creatorId}, created_time = #{createdTime}, 
 		    started_time = #{startedTime}, expired_time = #{expiredTime}, end_time = #{endTime}, parent_processinstance_id = #{parentProcessInstanceId}, parent_taskinstance_id = #{parentTaskInstanceId} 
+		</set>
 		where 
 		    id = #{id}
 	</update>
 	
-	<insert id="insertJoinPoint" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="org.fireflow.kernel.impl.JoinPoint">
+	<insert id="insertJoinPoint" keyColumn="id" keyProperty="id" parameterType="org.fireflow.kernel.impl.JoinPoint">
 		insert into t_ff_rt_joinpoint 
 		    (id, synchronizer_id, value, alive, processinstance_id) 
 		values 
@@ -26,28 +33,28 @@
 	</insert>
 	
 	<update id="updateJoinPoint" parameterType="org.fireflow.kernel.impl.JoinPoint">
-		update t_ff_rt_joinpoint 
+		update t_ff_rt_joinpoint set
 		    synchronizer_id = #{synchronizerId}, value = #{value}, alive = #{alive}, processinstance_id = #{processInstanceId} 
 		where 
 		    id = #{id}
 	</update>
 	
-	<insert id="insertTaskInstance" keyProperty="id" keyColumn="id" useGeneratedKeys="true" parameterType="org.fireflow.engine.ITaskInstance">
+	<insert id="insertTaskInstance" keyProperty="id" keyColumn="id" parameterType="org.fireflow.engine.ITaskInstance">
 		insert into t_ff_rt_taskinstance 
 		    (id, biz_type, task_id, activity_id, name, display_name, state, task_type, created_time, started_time, expired_time, end_time, assignment_strategy, processinstance_id, process_id, version) 
 		values 
-		    (#{id}, #{}, #{taskId}, #{activityId}, #{name}, #{displayName}, #{state}, #{taskType}, #{createdTime}, #{startedTime}, #{expiredTime}, #{endTime}, #{assignmentStrategy}, #{processInstanceId}, #{processId}, #{version})
+		    (#{id}, 'NA', #{taskId}, #{activityId}, #{name}, #{displayName}, #{state}, #{taskType}, #{createdTime}, #{startedTime}, #{expiredTime}, #{endTime}, #{assignmentStrategy}, #{processInstanceId}, #{processId}, #{version})
 	</insert>
 	
 	<update id="updateTaskInstance" parameterType="org.fireflow.engine.ITaskInstance">
-		update t_ff_rt_taskinstance 
+		update t_ff_rt_taskinstance set
 		    task_id = #{taskId}, activity_id = #{activityId}, name = #{name}, display_name = #{displayName}, state = #{state}, task_type = #{taskType}, created_time = #{createdTime}, 
 		    started_time = #{startedTime}, expired_time = #{expiredTime}, end_time = #{endTime}, assignment_strategy = #{assignmentStrategy}, processinstance_id = #{processInstanceId}, process_id = #{processId}, version = #{version} 
 		where 
 		    id = #{id}
 	</update>
 	
-	<insert id="insertWorkItem" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="org.fireflow.engine.IWorkItem">
+	<insert id="insertWorkItem" keyColumn="id" keyProperty="id" parameterType="org.fireflow.engine.IWorkItem">
 		insert into t_ff_rt_workitem 
 			(id, state, created_time, signed_time, end_time, actor_id, comments, taskinstance_id) 
 		values 
@@ -55,22 +62,22 @@
 	</insert>
 	
 	<update id="updateWorkItem" parameterType="org.fireflow.engine.IWorkItem">
-		update t_ff_rt_workitem 
+		update t_ff_rt_workitem set
 		    state = #{state}, created_time = #{createdTime}, signed_time = #{claimedTime}, end_time = #{endTime}, actor_id = #{actorId}, comments = #{comments}, taskinstance_id = #{taskInstance.id} 
 		where 
 		    id = #{id}
 	</update>
 	
-	<insert id="insertToken" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="org.fireflow.kernel.IToken">
+	<insert id="insertToken" keyColumn="id" keyProperty="id" parameterType="org.fireflow.kernel.IToken">
 		insert into t_ff_rt_token
-			(id, alive, value, node_id, processinstance_id) 
+			(id, alive, value, node_id, step_number, processinstance_id) 
 		values 
-			(#{id}, #{alive}, #{value}, #{nodeId}, #{processInstanceId})
+			(#{id}, #{alive}, #{value}, #{nodeId}, #{stepNumber}, #{processInstanceId})
 	</insert>
 	
 	<update id="updateToken" parameterType="org.fireflow.kernel.IToken">
-		update t_ff_rt_token 
-		    alive = #{alive}, value = #{value}, node_id = #{nodeId}, processinstance_id = #{processInstanceId} 
+		update t_ff_rt_token set
+		    alive = #{alive}, value = #{value}, step_number = #{stepNumber}, node_id = #{nodeId}, processinstance_id = #{processInstanceId} 
 		where 
 		    id = #{id}
 	</update>
@@ -83,7 +90,7 @@
 		select * from t_ff_rt_joinpoint
 		<where>
 			processinstance_id = #{processInstanceId}
-			<if test="synchronizerId != null && synchronizerId != #{}">
+			<if test="synchronizerId != null &amp;&amp; synchronizerId != ''">
 				and synchronizer_id = #{synchronizerId}
 			</if>
 		</where>
@@ -97,7 +104,7 @@
 		select * from t_ff_rt_taskinstance
 		<where>
 			processinstance_id = #{processInstanceId}
-			<if test="activityId != null && activityId != #{}">
+			<if test="activityId != null &amp;&amp; activityId != ''">
 				and activity_id = #{activityId}
 			</if>
 		</where>
@@ -111,7 +118,7 @@
 		select * from t_ff_rt_token
 		<where>
 			processinstance_id = #{processInstanceId}
-			<if test="nodeId != null && nodeId != #{}">
+			<if test="nodeId != null &amp;&amp; nodeId != ''">
 				and node_id = #{nodeId}
 			</if>
 		</where>
@@ -172,7 +179,7 @@
 		where p.id = #{id}
 	</select>
 	
-	<insert id="insertWorkFlowDef" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="org.fireflow.engine.definition.WorkflowDefinition">
+	<insert id="insertWorkFlowDef" keyColumn="id" keyProperty="id" parameterType="org.fireflow.engine.definition.WorkflowDefinition">
 		insert into t_ff_df_workflowdef 
 	    	(id, process_id, name, display_name, description, version, process_content, published, publisher, publish_time) 
 	    values 
@@ -180,7 +187,7 @@
 	</insert>
 	
 	<update id="updateWorkFlowDef" parameterType="org.fireflow.engine.definition.WorkflowDefinition">
-		update t_ff_df_workflowdef 
+		update t_ff_df_workflowdef set
 		    process_id = #{processId}, name = #{name}, display_name = #{displayName}, description = #{description}, version = #{version}, 
 		    process_content = #{processContent}, published = #{published}, publisher = #{publisher}, publish_time = #{publishTime} 
 		where 
@@ -215,10 +222,10 @@
 		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
 		<where>
 			w.state in (0, 1)
-			<if test="actorId != null && actorId != #{}">
+			<if test="actorId != null &amp;&amp; actorId != ''">
 				and w.actor_id = #{actorId}
 			</if>
-			<if test="processInstanceId != null && processInstanceId != #{}">
+			<if test="processInstanceId != null &amp;&amp; processInstanceId != ''">
 				and t.processinstance_id = #{processInstanceId}
 			</if>
 		</where>
@@ -229,13 +236,13 @@
 		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
 		<where>
 			w.state in (0, 1)
-			<if test="actorId != null && actorId != #{}">
+			<if test="actorId != null &amp;&amp; actorId != ''">
 				and w.actor_id = #{actorId}
 			</if>
-			<if test="processId != null && processId != #{}">
+			<if test="processId != null &amp;&amp; processId != ''">
 				and t.process_id = #{processId}
 			</if>
-			<if test="taskId != null && taskId != #{}">
+			<if test="taskId != null &amp;&amp; taskId != ''">
 				and t.task_id = #{taskId}
 			</if>
 		</where>
@@ -246,10 +253,10 @@
 		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
 		<where>
 			w.state in (7, 9)
-			<if test="actorId != null && actorId != #{}">
+			<if test="actorId != null &amp;&amp; actorId != ''">
 				and w.actor_id = #{actorId}
 			</if>
-			<if test="processInstanceId != null && processInstanceId != #{}">
+			<if test="processInstanceId != null &amp;&amp; processInstanceId != ''">
 				and t.processinstance_id = #{processInstanceId}
 			</if>
 		</where>
@@ -260,13 +267,13 @@
 		left outer join t_ff_rt_taskinstance t on w.taskinstance_id = t.id
 		<where>
 			w.state in (7, 9)
-			<if test="actorId != null && actorId != #{}">
+			<if test="actorId != null &amp;&amp; actorId != ''">
 				and w.actor_id = #{actorId}
 			</if>
-			<if test="processId != null && processId != #{}">
+			<if test="processId != null &amp;&amp; processId != ''">
 				and t.process_id = #{processId}
 			</if>
-			<if test="taskId != null && taskId != #{}">
+			<if test="taskId != null &amp;&amp; taskId != ''">
 				and t.task_id = #{taskId}
 			</if>
 		</where>
@@ -397,7 +404,7 @@
 		where processinstance_id = #{processInstanceId} and state in(0, 1)
 	</update>
 	
-	<insert id="insertProcessInstanceTrace" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="org.fireflow.engine.impl.ProcessInstanceTrace">
+	<insert id="insertProcessInstanceTrace" keyColumn="id" keyProperty="id" parameterType="org.fireflow.engine.impl.ProcessInstanceTrace">
 		insert into t_ff_hist_trace 
 		    (id, processinstance_id, step_number, minor_number, type, edge_id, from_node_id, to_node_id) 
 		values 
@@ -405,7 +412,7 @@
 	</insert>
 	
 	<update id="updateProcessInstanceTrace" parameterType="org.fireflow.engine.impl.ProcessInstanceTrace">
-		update t_ff_hist_trace 
+		update t_ff_hist_trace set
 		    processinstance_id = #{processInstanceId}, step_number = #{stepNumber}, minor_number = #{minorNumber}, type = #{type}, edge_id = #{edgeId}, from_node_id = #{fromNodeId}, to_node_id = #{toNodeId} 
 		where 
 		    id = #{id}

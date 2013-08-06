@@ -38,5 +38,12 @@
 	</bean>
 	
 	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<bean id="transactionTemplate"
+		class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+	</bean>
 
 </beans>

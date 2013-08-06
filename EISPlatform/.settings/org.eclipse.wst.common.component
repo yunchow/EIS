@@ -2,5 +2,11 @@
     <wb-module deploy-name="EISPlatform">
         <wb-resource deploy-path="/" source-path="/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/src/main/resources"/>
+        <dependent-module archiveName="fireflow-engine.jar" deploy-path="/" handle="module:/classpath/lib/EISPlatform/lib/fireflow-engine.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="fireflow-model.jar" deploy-path="/" handle="module:/classpath/lib/EISPlatform/lib/fireflow-model.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
     </wb-module>
 </project-modules>

@@ -21,6 +21,7 @@ import org.fireflow.engine.definition.WorkflowDefinition;
 import org.fireflow.engine.impl.ProcessInstance;
 import org.fireflow.engine.impl.ProcessInstanceTrace;
 import org.fireflow.engine.impl.TaskInstance;
+import org.fireflow.engine.impl.WorkItem;
 import org.fireflow.engine.persistence.IPersistenceService;
 import org.fireflow.kernel.IJoinPoint;
 import org.fireflow.kernel.IToken;
@@ -64,6 +65,7 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
 		if (StringUtils.hasLength(processInstance.getId())) {
 			getSqlSession().update("FireflowPersistence.updateProcessInstance", processInstance);
 		} else {
+			((ProcessInstance)processInstance).setId(PKFactory.uuid());
 			getSqlSession().insert("FireflowPersistence.insertProcessInstance", processInstance);
 		}
 		
@@ -76,6 +78,7 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
 		if (StringUtils.hasLength(joinPointLocal.getId())) {
 			getSqlSession().update("FireflowPersistence.updateJoinPoint", joinPointLocal);
 		} else {
+			joinPointLocal.setId(PKFactory.uuid());
 			getSqlSession().insert("FireflowPersistence.insertJoinPoint", joinPointLocal);
 		}
 	}
@@ -85,6 +88,7 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
 		if (StringUtils.hasLength(taskInstance.getId())) {
 			getSqlSession().update("FireflowPersistence.updateTaskInstance", taskInstance);
 		} else {
+			((TaskInstance)taskInstance).setId(PKFactory.uuid());
 			getSqlSession().insert("FireflowPersistence.insertTaskInstance", taskInstance);
 		}
 	}
@@ -94,6 +98,7 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
 		if (StringUtils.hasLength(workitem.getId())) {
 			getSqlSession().update("FireflowPersistence.updateWorkItem", workitem);
 		} else {
+			((WorkItem)workitem).setId(PKFactory.uuid());
 			getSqlSession().insert("FireflowPersistence.insertWorkItem", workitem);
 		}
 	}
@@ -103,6 +108,7 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
 		if (StringUtils.hasLength(token.getId())) {
 			getSqlSession().update("FireflowPersistence.updateToken", token);
 		} else {
+			token.setId(PKFactory.uuid());
 			getSqlSession().insert("FireflowPersistence.insertToken", token);
 		}
 	}
@@ -258,6 +264,7 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
 			} else {
 				workflowDef.setVersion(new Integer(1));
 			}
+			workflowDef.setId(PKFactory.uuid());
 			getSqlSession().insert("FireflowPersistence.insertWorkFlowDef", workflowDef);
 		} else {
 			getSqlSession().update("FireflowPersistence.updateWorkFlowDef", workflowDef);
@@ -370,6 +377,7 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
         if (StringUtils.hasLength(processInstanceTrace.getId())) {
         	getSqlSession().update("FireflowPersistence.updateProcessInstanceTrace", processInstanceTrace);
         } else {
+        	processInstanceTrace.setId(PKFactory.uuid());
         	getSqlSession().insert("FireflowPersistence.insertProcessInstanceTrace", processInstanceTrace);
         }
     }
@@ -412,5 +420,5 @@ public class FireflowPersistenceImpl extends SqlSessionDaoSupport implements IPe
     public Integer findTheLatestVersionNumber(final String processId) {
         return getSqlSession().selectOne("FireflowPersistence.findTheLatestVersionNumber");
     }
-    
+
 }

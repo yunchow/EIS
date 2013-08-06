@@ -18,7 +18,10 @@ import org.fireflow.example.leaveapplication.workflowextension.RoleDepartmentBas
 import org.fireflow.kernel.KernelException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -78,7 +81,7 @@ public class LeaveApplicationTester {
 	/**
 	 * 创建流程实例，并执行实例的run方法启动之。 实例启动后自动实例化第一个环节和他的Task，并分配相关的WorkItem
 	 */
-	public static void testStartNewProcess() {
+	public  void testStartNewProcess() {
 		System.out.println("\n\n=========启动流程实例开始.......");
         currentProcessInstance = (IProcessInstance) transactionTemplate.execute(new TransactionCallback() {
 
@@ -108,7 +111,7 @@ public class LeaveApplicationTester {
         System.out.println("===========启动流程实例结束============");
 	}
 
-	public static void testClaimAndCompleteSubmitApplication() {
+	public  void testClaimAndCompleteSubmitApplication() {
 		System.out.println("\n\n=========申请人签收工单、填入请假天数等信息、结束工单开始.....");
 		
 		transactionTemplate.execute(new TransactionCallback() {
@@ -158,7 +161,7 @@ public class LeaveApplicationTester {
         System.out.println("==========申请人操作结束============");
 	}
 
-	public static void testClaimAndCompleteApproveApplication() {
+	public  void testClaimAndCompleteApproveApplication() {
 		System.out.println("\n\n=========部门经理签收工单、填入审批意见等信息、结束工单开始.....");
 		
 		transactionTemplate.execute(new TransactionCallback() {
@@ -207,12 +210,9 @@ public class LeaveApplicationTester {
         System.out.println("============部门经理操作结束=========");		
 	}
 
-	public static void setUpClass() throws Exception {
+	public  void setUpClass() throws Exception {
 		System.out.println("=========初始化环境开始.....");		
-		resource = new ClassPathResource(springConfigFile);
-		beanFactory = new XmlBeanFactory(resource);
-		transactionTemplate = (TransactionTemplate) beanFactory
-				.getBean("transactionTemplate");
+		transactionTemplate = (TransactionTemplate) beanFactory.getBean("transactionTemplate");
 		runtimeContext = (RuntimeContext) beanFactory.getBean("runtimeContext");
 
 		// 首先将表中的数据清除
@@ -220,23 +220,35 @@ public class LeaveApplicationTester {
 
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus arg0) {
-				FireWorkflowHelperDao helperDao = (FireWorkflowHelperDao) beanFactory
-						.getBean("FireWorkflowHelperDao");
-				helperDao.clearAllTables();
+				
 			}
 		});
 		System.out.println("============初始化环境结束=================");
 	}
 	
-	private final static String springConfigFile = "spring_config/applicationContext.xml";
-	private static ClassPathResource resource = null;
-	private static XmlBeanFactory beanFactory = null;// spring bean factory
-	private static TransactionTemplate transactionTemplate = null;
-	private static RuntimeContext runtimeContext = null;
+	
+	
+	private final  String springConfigFile = "spring_config/applicationContext.xml";
+	private  ClassPathResource resource = null;
+	
+	@Autowired
+	private ApplicationContext beanFactory;// spring bean factory
+	
+	
+	public void setBeanFactory(ApplicationContext beanFactory) {
+		this.beanFactory = beanFactory;
+	}
 
-    static IProcessInstance currentProcessInstance = null;
+	public  BeanFactory getBeanFactory() {
+		return beanFactory;
+	}
+
+	private  TransactionTemplate transactionTemplate = null;
+	private  RuntimeContext runtimeContext = null;
+
+     IProcessInstance currentProcessInstance = null;
     
-    private static final Integer LEAVE_DAYS = 3;//请假天数，
-    private static final Boolean APPROVAL_FLAG = true;//审批意见，true表示同意，false表示不同意。
+    private  final Integer LEAVE_DAYS = 3;//请假天数，
+    private  final Boolean APPROVAL_FLAG = true;//审批意见，true表示同意，false表示不同意。
 		
 }
