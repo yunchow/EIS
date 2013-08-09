@@ -36,12 +36,15 @@
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
 		<!--<property name="cache" value="true"/> -->
 		<property name="order" value="1" />
+		<!--  
 		<property name="viewNames">
 			<array>
 				<value>*.ftl</value>
 			</array>
 		</property>
-		<!-- <property name="suffix" value=".ftl" /> -->
+		-->
+		<property name="prefix" value="classpath*:freemarker/" />
+		<property name="suffix" value=".ftl" />
 		<property name="requestContextAttribute" value="request" />
 		<property name="exposeSpringMacroHelpers" value="true" />
 		<property name="exposeRequestAttributes" value="true" />
