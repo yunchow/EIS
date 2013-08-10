@@ -17,8 +17,4 @@
 		<setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString" />
 	</settings>
 	
-	<typeAliases>
-		<package name="com.eis.domain.entity"/>
-	</typeAliases>
-	
 </configuration>

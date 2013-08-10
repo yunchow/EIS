@@ -30,7 +30,7 @@
 	</properties>
 	
 	<dependencies>
-		
+
 		<!-- Activiti -->
 		<dependency>
 			<groupId>org.activiti</groupId>
@@ -129,7 +129,7 @@
 		<dependency>
 			<groupId>org.vaadin.addons</groupId>
 			<artifactId>dcharts-widget</artifactId>
-			<version>0.10.0</version>
+			<version>1.7.0</version>
 			<scope>compile</scope>
 		</dependency>
 
