@@ -69,7 +69,7 @@ function submit()
 	});
 	if (submit) {
 		hideTop();
-		loading('核实中..', 1);
+		loading('登录中..', 1);
 		setTimeout("unloading()", 1000);
 		setTimeout("Login()", 1000);
 	}
