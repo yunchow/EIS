@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>Please comment here</p>
@@ -23,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date: 2013年8月3日
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:conf/spring/beans-*.xml")
+@ContextConfiguration(locations = "classpath*:conf/beans-*.xml")
 public class EmployeeTestXXX {
 
 	@Autowired
@@ -41,10 +40,11 @@ public class EmployeeTestXXX {
 	}
 	
 	@Test
-	@Transactional
 	public void add() {
+		employee.setEmployeeId(1);
 		employee.setNo("1002");
 		employee.setName("nick");
+		employee.setGender("XX");
 		employee.add();
 	}
 
