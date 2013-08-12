@@ -23,7 +23,8 @@
     <script type="text/javascript" src="plugins/tools/dataformat.js"></script>
     <script type="text/javascript" src="plugins/easyui/jquery.easyui.min.1.3.2.js"></script>
     <script type="text/javascript" src="plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
-    <script type="text/javascript" src="resources/accordion/js/leftmenu.js"></script>
+    <script type="text/javascript" src="resources/js/core.js"></script>
+    <script type="text/javascript" src="resources/js/app.js"></script>
 </head>
 <body  class="easyui-layout" style="overflow-y:hidden" scroll="no">
     <div data-options="region:'north',border:false" style="height:60px;width:100%;margin:0px;padding:0px;overflow:hidden;">
@@ -55,7 +56,7 @@
             <div title="业务输" data-options="iconCls:'folder'" style="padding:0px;">
                 <ul>
                 	<li>
-						<div url="userController.do?user" title="用户管理" onclick="addTab('用户管理','http://www.baidu.com','pencil')">
+						<div url="userController.do?user" title="用户管理" onclick="app.addTab('用户管理','http://www.baidu.com','pencil')">
 							<a href="#">
 								<span class="icon pencil">&nbsp;</span>
 								<span class="nav">用户管理</span>
@@ -63,7 +64,7 @@
 						</div>
 					</li>
 					<li>
-						<div url="userController.do?user" title="用户管理" onclick="addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
+						<div url="userController.do?user" title="用户管理" onclick="app.addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
 							<a href="#">
 								<span class="icon pencil">&nbsp;</span>
 								<span class="nav">用户管理</span>
@@ -71,7 +72,7 @@
 						</div>
 					</li>
 					<li>
-						<div url="userController.do?user" title="用户管理" onclick="addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
+						<div url="userController.do?user" title="用户管理" onclick="app.addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
 							<a href="#">
 								<span class="icon pencil">&nbsp;</span>
 								<span class="nav">用户管理</span>
@@ -83,7 +84,7 @@
             <div title="系统管理" data-options="iconCls:'folder'" style="padding:0px">
                 <ul>
                 	<li>
-						<div data-options="iconCls:'pencil'" url="userController.do?user" title="用户管理" onclick="addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
+						<div data-options="iconCls:'pencil'" url="userController.do?user" title="用户管理" onclick="app.addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
 							<a href="#">
 								<span class="icon pencil">&nbsp;</span>
 								<span class="nav">用户管理</span>
@@ -91,7 +92,7 @@
 						</div>
 					</li>
 					<li>
-						<div data-options="iconCls:'pencil'" url="userController.do?user" title="用户管理" onclick="addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
+						<div data-options="iconCls:'pencil'" url="userController.do?user" title="用户管理" onclick="app.addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
 							<a href="#">
 								<span class="icon pencil">&nbsp;</span>
 								<span class="nav">用户管理</span>
@@ -99,7 +100,7 @@
 						</div>
 					</li>
 					<li>
-						<div data-options="iconCls:'pencil'" url="userController.do?user" title="用户管理" onclick="addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
+						<div data-options="iconCls:'pencil'" url="userController.do?user" title="用户管理" onclick="app.addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
 							<a href="#">
 								<span class="icon pencil">&nbsp;</span>
 								<span class="nav">用户管理</span>
@@ -166,13 +167,7 @@
 		    alert(item.name);
 		}
 		$(function(){
-		    $(".tabs li").bind('contextmenu',function(e){
-		        e.preventDefault();
-		        $('#mm').menu('show', {
-		            left: e.pageX,
-		            top: e.pageY
-		        });
-		    });
+			app.ready();
 		});
     </script>
 </body>

@@ -83,7 +83,6 @@ function addTab(subtitle, url, icon) {
 
 	// $('#homeTabBar').tabs('select',subtitle);
 	tabClose();
-
 }
 var title_now;
 function addLeftOneTab(subtitle, url, icon) {
