@@ -58,10 +58,6 @@ function getIcon(menuid) {
 
 function addTab(subtitle, url, icon) {
 	rowid="";
-	/*$.messager.progress({
-		text : '页面加载中....',
-		interval : 200
-	});*/
 	if (!$('#homeTabBar').tabs('exists', subtitle)) {
 		//判断是否进行iframe方式打开tab，默认为href方式
 		if(url.indexOf('isIframe') != -1){
@@ -78,7 +74,6 @@ function addTab(subtitle, url, icon) {
 				closable : true,
 				icon : icon
 			});			
-			
 		}
 
 	} else {
