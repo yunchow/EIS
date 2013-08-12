@@ -17,7 +17,7 @@
 		}
 	});
 	
-	  $('#maintabs').tabs({ onSelect : function(title) {
+	  $('#homeTabBar').tabs({ onSelect : function(title) {
 	  	rowid="";
 	  } });
 	
@@ -58,25 +58,21 @@ function getIcon(menuid) {
 
 function addTab(subtitle, url, icon) {
 	rowid="";
-	$.messager.progress({
+	/*$.messager.progress({
 		text : '页面加载中....',
 		interval : 200
-	});
-	if (!$('#maintabs').tabs('exists', subtitle)) {
+	});*/
+	if (!$('#homeTabBar').tabs('exists', subtitle)) {
 		//判断是否进行iframe方式打开tab，默认为href方式
 		if(url.indexOf('isIframe') != -1){
-			$('#maintabs').tabs('add', {
+			$('#homeTabBar').tabs('add', {
 				title : subtitle,
-				//----------------------------------------------------------------
-				//update-begin--Author:songsw  Date:20130325 for：数据源监控
 				content : '<iframe src="' + url + '" frameborder="0" style="border:0;width:100%;height:99.4%;"></iframe>',
-				//update-end--Author:songsw  Date:20130325 for：数据源监控
-				//----------------------------------------------------------------
 				closable : true,
 				icon : icon
 			});			
 		}else{
-			$('#maintabs').tabs('add', {
+			$('#homeTabBar').tabs('add', {
 				title : subtitle,
 				href : url,
 				closable : true,
@@ -86,24 +82,24 @@ function addTab(subtitle, url, icon) {
 		}
 
 	} else {
-		$('#maintabs').tabs('select', subtitle);
+		$('#homeTabBar').tabs('select', subtitle);
 		$.messager.progress('close');
 	}
 
-	// $('#maintabs').tabs('select',subtitle);
+	// $('#homeTabBar').tabs('select',subtitle);
 	tabClose();
 
 }
 var title_now;
 function addLeftOneTab(subtitle, url, icon) {
 	rowid="";
-	if ($('#maintabs').tabs('exists', title_now)) {
-		$('#maintabs').tabs('select', title_now);
+	if ($('#homeTabBar').tabs('exists', title_now)) {
+		$('#homeTabBar').tabs('select', title_now);
 			if(title_now!=subtitle)
 			{
 			addmask();
-			$('#maintabs').tabs('update', {
-				tab : $('#maintabs').tabs('getSelected'),
+			$('#homeTabBar').tabs('update', {
+				tab : $('#homeTabBar').tabs('getSelected'),
 				options : {
 					title : subtitle,
 					href : url,
@@ -115,7 +111,7 @@ function addLeftOneTab(subtitle, url, icon) {
 		}
 	} else {
 		addmask();
-		$('#maintabs').tabs('add', {
+		$('#homeTabBar').tabs('add', {
 			title : subtitle,
 			href : url,
 			closable : false,
@@ -126,7 +122,7 @@ function addLeftOneTab(subtitle, url, icon) {
 		CollectGarbage();
 	}
 	title_now = subtitle;
-	// $('#maintabs').tabs('select',subtitle);
+	// $('#homeTabBar').tabs('select',subtitle);
 	// tabClose();
 
 }
@@ -145,7 +141,7 @@ function tabClose() {
 	/* 双击关闭TAB选项卡 */
 	$(".tabs-inner").dblclick(function() {
 		var subtitle = $(this).children(".tabs-closable").text();
-		$('#tabs').tabs('close', subtitle);
+		$('#homeTabBar').tabs('close', subtitle);
 	})
 	/* 为选项卡绑定右键 */
 	$(".tabs-inner").bind('contextmenu', function(e) {
@@ -157,7 +153,7 @@ function tabClose() {
 		var subtitle = $(this).children(".tabs-closable").text();
 
 		$('#mm').data("currtab", subtitle);
-		// $('#maintabs').tabs('select',subtitle);
+		// $('#homeTabBar').tabs('select',subtitle);
 		return false;
 	});
 }
@@ -165,9 +161,9 @@ function tabClose() {
 function tabCloseEven() {
 	// 刷新
 	$('#mm-tabupdate').click(function() {
-		var currTab = $('#maintabs').tabs('getSelected');
+		var currTab = $('#homeTabBar').tabs('getSelected');
 		var url = $(currTab.panel('options').content).attr('src');
-		$('#maintabs').tabs('update', {
+		$('#homeTabBar').tabs('update', {
 			tab : currTab,
 			options : {
 				content : createFrame(url)
@@ -177,13 +173,13 @@ function tabCloseEven() {
 	// 关闭当前
 	$('#mm-tabclose').click(function() {
 		var currtab_title = $('#mm').data("currtab");
-		$('#maintabs').tabs('close', currtab_title);
+		$('#homeTabBar').tabs('close', currtab_title);
 	})
 	// 全部关闭
 	$('#mm-tabcloseall').click(function() {
 		$('.tabs-inner span').each(function(i, n) {
 			var t = $(n).text();
-			$('#maintabs').tabs('close', t);
+			$('#homeTabBar').tabs('close', t);
 		});
 	});
 	// 关闭除当前之外的TAB
@@ -195,13 +191,12 @@ function tabCloseEven() {
 	$('#mm-tabcloseright').click(function() {
 		var nextall = $('.tabs-selected').nextAll();
 		if (nextall.length == 0) {
-			// msgShow('系统提示','后边没有啦~~','error');
-			alert('后边没有啦~~');
+			//alert('后边没有啦~~');
 			return false;
 		}
 		nextall.each(function(i, n) {
 			var t = $('a:eq(0) span', $(n)).text();
-			$('#maintabs').tabs('close', t);
+			$('#homeTabBar').tabs('close', t);
 		});
 		return false;
 	});
@@ -209,12 +204,12 @@ function tabCloseEven() {
 	$('#mm-tabcloseleft').click(function() {
 		var prevall = $('.tabs-selected').prevAll();
 		if (prevall.length == 0) {
-			alert('到头了，前边没有啦~~');
+			//alert('到头了，前边没有啦~~');
 			return false;
 		}
 		prevall.each(function(i, n) {
 			var t = $('a:eq(0) span', $(n)).text();
-			$('#maintabs').tabs('close', t);
+			$('#homeTabBar').tabs('close', t);
 		});
 		return false;
 	});

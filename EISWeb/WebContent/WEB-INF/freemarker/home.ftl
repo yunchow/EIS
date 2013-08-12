@@ -14,17 +14,21 @@
 			text-decoration: none;
 		}
     </style>
-    <link rel="stylesheet" type="text/css" href="plugins/easyui/themes/bootstrap/easyui.css">
+    <link rel="stylesheet" type="text/css" href="plugins/easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="plugins/easyui/themes/icon.css">
-    <link rel="stylesheet" type="text/css" href="plugins/accordion/css/accordion.css">
+    <link rel="stylesheet" type="text/css" href="resources/accordion/css/accordion.css">
+    <link rel="stylesheet" type="text/css" href="resources/accordion/css/icons.css">
+	<link rel="stylesheet  type="text/css" href="resources/accordion/css/accordion.css">
     <script type="text/javascript" src="plugins/jquery/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="plugins/tools/dataformat.js"></script>
     <script type="text/javascript" src="plugins/easyui/jquery.easyui.min.1.3.2.js"></script>
     <script type="text/javascript" src="plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="resources/accordion/js/leftmenu.js"></script>
 </head>
 <body  class="easyui-layout" style="overflow-y:hidden" scroll="no">
     <div data-options="region:'north',border:false" style="height:60px;width:100%;margin:0px;padding:0px;overflow:hidden;">
-    	<img src="plugins/login/images/toplogo-main.png" >
+    	<!--<img src="plugins/login/images/toplogo-main.png" >-->
+    	XXXX系统
     	<div style="float:right;padding-right:10px;">
     		<dl>
     			<dd>
@@ -46,22 +50,69 @@
 		</div>
     </div>
     
-    <div data-options="region:'west',split:true"  title="导航菜单" style="width:180px;padding:1px;">
+    <div data-options="region:'west',split:true"  title="导航菜单" style="width:150px;padding:1px;">
         <div class="easyui-accordion" data-options="fit:true,border:false">
-            <div title="Title1" style="padding:10px;">
-                content1
+            <div title="业务输" data-options="iconCls:'folder'" style="padding:0px;">
+                <ul>
+                	<li>
+						<div url="userController.do?user" title="用户管理" onclick="addTab('用户管理','http://www.baidu.com','pencil')">
+							<a href="#">
+								<span class="icon pencil">&nbsp;</span>
+								<span class="nav">用户管理</span>
+							</a>
+						</div>
+					</li>
+					<li>
+						<div url="userController.do?user" title="用户管理" onclick="addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
+							<a href="#">
+								<span class="icon pencil">&nbsp;</span>
+								<span class="nav">用户管理</span>
+							</a>
+						</div>
+					</li>
+					<li>
+						<div url="userController.do?user" title="用户管理" onclick="addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
+							<a href="#">
+								<span class="icon pencil">&nbsp;</span>
+								<span class="nav">用户管理</span>
+							</a>
+						</div>
+					</li>
+                </ul>
             </div>
-            <div title="Title2" data-options="selected:true" style="padding:10px;">
-                content2
-            </div>
-            <div title="Title3" style="padding:10px">
-                content3
+            <div title="系统管理" data-options="iconCls:'folder'" style="padding:0px">
+                <ul>
+                	<li>
+						<div data-options="iconCls:'pencil'" url="userController.do?user" title="用户管理" onclick="addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
+							<a href="#">
+								<span class="icon pencil">&nbsp;</span>
+								<span class="nav">用户管理</span>
+							</a>
+						</div>
+					</li>
+					<li>
+						<div data-options="iconCls:'pencil'" url="userController.do?user" title="用户管理" onclick="addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
+							<a href="#">
+								<span class="icon pencil">&nbsp;</span>
+								<span class="nav">用户管理</span>
+							</a>
+						</div>
+					</li>
+					<li>
+						<div data-options="iconCls:'pencil'" url="userController.do?user" title="用户管理" onclick="addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
+							<a href="#">
+								<span class="icon pencil">&nbsp;</span>
+								<span class="nav">用户管理</span>
+							</a>
+						</div>
+					</li>
+                </ul>
             </div>
         </div>
     </div>
     
     <div data-options="region:'center'" style="overflow: hidden;">
-        <div id="homeTabMenueBar" class="easyui-tabs" data-options="border:false,fit:true" style="width:700px;height:250px">
+        <div id="homeTabBar" class="easyui-tabs" data-options="border:false,fit:true" style="width:700px;height:250px">
 	        <div class="centerTabButton" data-options="closable:true" title="About" style="padding:10px">
 	            <p style="font-size:14px">jQuery EasyUI framework help you build your web page easily.</p>
 	            <ul>
@@ -82,7 +133,7 @@
 	    </div>
     </div>
     
-    <div data-options="region:'east',split:false,iconCls:'icon-reload',collapsed:true" title="辅助工具" style="width:190px;">
+    <div data-options="region:'east',split:false,iconCls:'icon-reload',collapsed:false" title="辅助工具" style="width:185px;overflow:hidden;">
         <div class="easyui-tabs" data-options="border:false" style="height:220px;">
         	<div title="日历" style="padding:0px;">
         		<div class="easyui-calendar" data-options="border:false"></div>
