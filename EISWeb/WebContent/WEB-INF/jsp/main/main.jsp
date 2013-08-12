@@ -5,7 +5,16 @@
 <html>
  <head>
   <title>JEECG_v3.1 Simple版本</title>
-  <t:base type="jquery,easyui,tools,DatePicker"></t:base>
+  <script type="text/javascript" src="plugins/jquery/jquery-1.8.3.min.js"></script>
+  <script type="text/javascript" src="plugins/tools/dataformat.js"></script>
+  <link id="easyuiTheme" rel="stylesheet" href="plugins/easyui/themes/default/easyui.css" type="text/css"></link>
+  <link rel="stylesheet" href="plugins/easyui/themes/icon.css" type="text/css"></link>
+  <link rel="stylesheet" type="text/css" href="plugins/accordion/css/accordion.css">
+  <script type="text/javascript" src="plugins/easyui/jquery.easyui.min.1.3.2.js"></script>
+  <script type="text/javascript" src="plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+  <script type="text/javascript" src="plugins/tools/syUtil.js"></script>
+  <script type="text/javascript" src="plugins/My97DatePicker/WdatePicker.js"></script>
+  <script type="text/javascript" src="plugins/lhgDialog/lhgdialog.min.js?skin=iblue"></script>
   <link rel="shortcut icon" href="images/favicon.ico">
   <style type="text/css">
 a {
