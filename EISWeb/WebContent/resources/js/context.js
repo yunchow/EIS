@@ -1,13 +1,13 @@
 /**
- * Title: app.js
+ * Title: context.js
  * @author: nick chow
  * @date: 2013-8-12
  * @copyright: Nick All Rights Reserved
  */
 
-jQuery.ns("app");
+jQuery.ns("context");
 
-jQuery.extend(app, {
+jQuery.define(context, {
 	
 	/**
 	 * 初始化
@@ -16,12 +16,19 @@ jQuery.extend(app, {
 		this.enableHomeTabRightClickMenue();
 		this.bindHomeTabsMenueRightEvent();
 	},
-	
+	log: function(message) {
+		try {
+			console.log(message);
+		} catch (error) {
+			// do nothing when javascript error occurs
+		}
+	},
 	/**
 	 * copyright declare
 	 */
-	copyright: function() {
-		alert("Nick Chow All Rights Reserverd");
+	copyright: "Nick Chow All Rights Reserverd",
+	echo: function() {
+		alert(this.copyright);
 	},
 	/**
 	 * create new tab
@@ -46,12 +53,9 @@ jQuery.extend(app, {
 					icon : icon
 				});			
 			}
-
 		} else {
 			$('#homeTabBar').tabs('select', subtitle);
-			$.messager.progress('close');
 		}
-
 		this.enableHomeTabRightClickMenue();
 	},
 	
@@ -59,12 +63,10 @@ jQuery.extend(app, {
 	 * 主页tabs右击菜单
 	 */
 	enableHomeTabRightClickMenue: function() {
-		/* 双击关闭TAB选项卡 */
 		$(".tabs-inner").dblclick(function() {
 			var subtitle = $(this).children(".tabs-closable").text();
 			$('#homeTabBar').tabs('close', subtitle);
 		})
-		/* 为选项卡绑定右键 */
 		$(".tabs-inner").bind('contextmenu', function(e) {
 			$('#mm').menu('show', {
 				left : e.pageX,
