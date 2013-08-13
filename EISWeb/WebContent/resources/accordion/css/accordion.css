@@ -13,3 +13,4 @@ a:hover{ color:blue; text-decoration:none;}
 .easyui-accordion ul li div.selected a{color:#416AA3;text-decoration: none; font-weight:bold;}
 .icon{width:18px; line-height:18px; display:inline-block;}
 .deafult{background:url('../images/folder.png') no-repeat;}
+.nav{color:#333;}

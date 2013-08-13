@@ -22,10 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ApplicationController {
 	
 	@RequestMapping("/home")
-	public String login() {
+	public String homeUI() {
 		return "home.ftl";
 	}
 
-	
+	@RequestMapping("/menu")
+	public String menuUI() {
+		return "system/menu.ftl";
+	}
 	
 }
