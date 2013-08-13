@@ -56,7 +56,7 @@
             <div title="业务输" data-options="iconCls:'folder'" style="padding:0px;">
                 <ul>
                 	<li>
-						<div url="userController.do?user" title="用户管理" onclick="app.addTab('用户管理','http://www.baidu.com','pencil')">
+						<div url="userController.do?user" title="用户管理" onclick="context.addTab('用户管理','http://www.baidu.com','pencil')">
 							<a href="#">
 								<span class="icon pencil">&nbsp;</span>
 								<span class="nav">用户管理</span>
@@ -64,7 +64,7 @@
 						</div>
 					</li>
 					<li>
-						<div url="userController.do?user" title="用户管理" onclick="app.addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
+						<div url="userController.do?user" title="用户管理" onclick="context.addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
 							<a href="#">
 								<span class="icon pencil">&nbsp;</span>
 								<span class="nav">用户管理</span>
@@ -72,7 +72,7 @@
 						</div>
 					</li>
 					<li>
-						<div url="userController.do?user" title="用户管理" onclick="app.addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
+						<div url="userController.do?user" title="用户管理" onclick="context.addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
 							<a href="#">
 								<span class="icon pencil">&nbsp;</span>
 								<span class="nav">用户管理</span>
@@ -84,7 +84,7 @@
             <div title="系统管理" data-options="iconCls:'folder'" style="padding:0px">
                 <ul>
                 	<li>
-						<div data-options="iconCls:'pencil'" url="userController.do?user" title="用户管理" onclick="app.addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
+						<div data-options="iconCls:'pencil'" url="userController.do?user" title="用户管理" onclick="context.addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
 							<a href="#">
 								<span class="icon pencil">&nbsp;</span>
 								<span class="nav">用户管理</span>
@@ -92,7 +92,7 @@
 						</div>
 					</li>
 					<li>
-						<div data-options="iconCls:'pencil'" url="userController.do?user" title="用户管理" onclick="app.addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
+						<div data-options="iconCls:'pencil'" url="userController.do?user" title="用户管理" onclick="context.addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
 							<a href="#">
 								<span class="icon pencil">&nbsp;</span>
 								<span class="nav">用户管理</span>
@@ -100,7 +100,7 @@
 						</div>
 					</li>
 					<li>
-						<div data-options="iconCls:'pencil'" url="userController.do?user" title="用户管理" onclick="app.addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
+						<div data-options="iconCls:'pencil'" url="userController.do?user" title="用户管理" onclick="context.addTab('用户管理','userController.do?user&clickFunctionId=28','pencil')">
 							<a href="#">
 								<span class="icon pencil">&nbsp;</span>
 								<span class="nav">用户管理</span>
@@ -118,7 +118,7 @@
 	            <p style="font-size:14px">jQuery EasyUI framework help you build your web page easily.</p>
 	            <ul>
 	                <li>easyui is a collection of user-interface plugin based on jQuery.</li>
-	                <li>easyui provides essential functionality for building modem, interactive, javascript applications.</li>
+	                <li>easyui provides essential functionality for building modem, interactive, javascript contextlications.</li>
 	                <li>using easyui you don't need to write many javascript code, you usually defines user-interface by writing some HTML markup.</li>
 	                <li>complete framework for HTML5 web page.</li>
 	                <li>easyui save your time and scales while developing your products.</li>

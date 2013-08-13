@@ -16,6 +16,11 @@ jQuery.define(context, {
 		this.enableHomeTabRightClickMenue();
 		this.bindHomeTabsMenueRightEvent();
 	},
+	
+	/**
+	 * 记录日志
+	 * @param message
+	 */
 	log: function(message) {
 		try {
 			console.log(message);
