@@ -26,9 +26,4 @@ public class ApplicationController {
 		return "home.ftl";
 	}
 
-	@RequestMapping("/system/manage/menu")
-	public String menuUI() {
-		return "system_manage/menuSetting.ftl";
-	}
-	
 }

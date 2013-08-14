@@ -26,13 +26,18 @@ import com.eis.base.domain.repository.MenuRepository;
  * @date: Aug 13, 2013
  */
 @Controller
-@RequestMapping("/menu")
+@RequestMapping("/sysmanage/menu")
 public class MenuController {
 	
 	@Autowired
 	private MenuRepository menuRepository;
 
-	@RequestMapping("/list")
+	@RequestMapping("/page")
+	public String menuUI() {
+		return "sysmanage/menu_setting.ftl";
+	}
+	
+	@RequestMapping("/json")
 	@ResponseBody
 	public List<Menu> findAll() {
 		return menuRepository.findAll();

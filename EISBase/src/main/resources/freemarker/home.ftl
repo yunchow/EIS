@@ -75,7 +75,7 @@
             <div title="系统管理" data-options="iconCls:'group_add'" style="padding:0px">
                 <ul>
                 	<li>
-						<div data-options="iconCls:'pencil'" onclick="context.addTab('菜单管理','system/manage/menu.htm','pencil')">
+						<div data-options="iconCls:'pencil'" onclick="context.addTab('菜单管理','sysmanage/menu/page.htm','pencil')">
 							<a href="javascript:;">
 								<span class="icon pencil">&nbsp;</span>
 								<span class="nav">菜单管理</span>
