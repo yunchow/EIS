@@ -17,6 +17,10 @@
 		<property name="processEngineConfiguration" ref="processEngineConfiguration" />
 	</bean>
 
+	<bean id="activitiRule" class="org.activiti.engine.test.ActivitiRule">
+		<property name="processEngine" ref="processEngine" />
+	</bean>
+
 	<bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService" />
 	<bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService" />
 	<bean id="taskService" factory-bean="processEngine" factory-method="getTaskService" />

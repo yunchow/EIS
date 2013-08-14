@@ -1,0 +1,80 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.eis.base.domain.repository.MenuRepository">
+	<cache />
+	
+	<resultMap type="com.eis.base.domain.entity.Menu" id="menuMap">
+		<id property="id" column="pid"/>
+		<result property="name" column="pname"/>
+		<result property="url" column="purl"/>
+		<result property="icon" column="picon"/>
+		<result property="comment" column="pcomment"/>
+		<collection property="children" ofType="com.eis.base.domain.entity.Menu">
+			<id property="id" column="cid"/>
+			<result property="name" column="cname"/>
+			<result property="url" column="curl"/>
+			<result property="icon" column="cicon"/>
+			<result property="comment" column="ccomment"/>
+			<association property="parent" javaType="com.eis.base.domain.entity.Menu">
+				<id property="id" column="pid"/>
+			</association>
+		</collection>
+	</resultMap>
+	
+	<select id="findAll" resultMap="menuMap">
+		select
+			p.id pid,
+			p.name pname,
+			p.url purl,
+			p.icon picon,
+			p.comment pcomment,
+			p.pid ppid,
+			c.id cid,
+			c.name cname,
+			c.url curl,
+			c.icon cicon,
+			c.comment ccomment,
+			c.pid cpid
+		from menuitem p
+		left outer join menuitem c on c.pid = p.id
+		where p.pid is null
+	</select>
+	
+	<select id="findById" parameterType="String" resultMap="menuMap">
+		select
+			p.id pid,
+			p.name pname,
+			p.url purl,
+			p.icon picon,
+			p.comment pcomment,
+			p.pid ppid,
+			c.id cid,
+			c.name cname,
+			c.url curl,
+			c.icon cicon,
+			c.comment ccomment,
+			c.pid cpid
+		from menuitem p
+		left outer join menuitem c on c.pid = p.id
+		where p.pid is null and id = #{id}
+	</select>
+	
+	<insert id="add" parameterType="com.eis.base.domain.entity.Menu">
+		insert into menuitem 
+			(id, name, url, icon, pid, comment) 
+		values 
+		    (#{id}, #{name}, #{url}, #{icon}, #{parent.id}, #{comment})
+	</insert>
+	
+	<update id="update" parameterType="com.eis.base.domain.entity.Menu">
+		update menuitem 
+		    set name = #{name}, url = #{url}, icon = #{icon}, pid = #{parent.id}, comment = #{comment} 
+		where 
+		    id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		delete from menuitem where id=#{id}
+	</delete>
+
+</mapper>

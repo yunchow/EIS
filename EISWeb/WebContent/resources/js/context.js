@@ -13,8 +13,23 @@ jQuery.define(context, {
 	 * 初始化
 	 */
 	ready: function() {
+		$("#mmCenterMainTab").bind('contextmenu',function(e){
+            e.preventDefault();
+        });
 		this.enableHomeTabRightClickMenue();
 		this.bindHomeTabsMenueRightEvent();
+	},
+	
+	/**
+	 * 修改主题
+	 */
+	onChangeTheme: function(theme) {
+		if (theme =='dark-hive') {
+			$(".nav").css("color", "#FFF");
+		} else {
+			$(".nav").css("color", "#333");
+		}
+		$("link:first").attr('href', 'plugins/easyui/themes/'+ theme +'/easyui.css');
 	},
 	
 	/**
@@ -65,6 +80,21 @@ jQuery.define(context, {
 	},
 	
 	/**
+	 * 主页面tab右键菜单
+	 */
+	onMainTabContextMenu: function(e) {
+		context.log("主页面tab右键菜单Fired");
+		e.preventDefault();
+        $('#mmCenterMainTab').menu('show',{
+            left: e.pageX,
+            top: e.pageY
+        });
+        var subtitle = $(this).children(".tabs-closable").text();
+		$('#mmCenterMainTab').data("currtab", subtitle);
+        return false;
+	},
+	
+	/**
 	 * 主页tabs右击菜单
 	 */
 	enableHomeTabRightClickMenue: function() {
@@ -72,15 +102,14 @@ jQuery.define(context, {
 			var subtitle = $(this).children(".tabs-closable").text();
 			$('#homeTabBar').tabs('close', subtitle);
 		})
-		$(".tabs-inner").bind('contextmenu', function(e) {
-			$('#mm').menu('show', {
+		/*$(".tabs-inner").bind('contextmenu', function(e) {
+			e.preventDefault();
+			$('#mmCenterMainTab').menu('show', {
 				left : e.pageX,
 				top : e.pageY
 			});
-			var subtitle = $(this).children(".tabs-closable").text();
-			$('#mm').data("currtab", subtitle);
 			return false;
-		});
+		});*/
 	},
 	
 	/**
@@ -99,7 +128,8 @@ jQuery.define(context, {
 		})
 		// 关闭当前
 		$('#mm-tabclose').click(function() {
-			var currtab_title = $('#mm').data("currtab");
+			var currtab_title = $('#mmCenterMainTab').data("currtab");
+			alert(currtab_title);
 			$('#homeTabBar').tabs('close', currtab_title);
 		})
 		// 全部关闭
@@ -141,7 +171,7 @@ jQuery.define(context, {
 
 		// 退出
 		$("#mm-exit").click(function() {
-			$('#mm').menu('hide');
+			$('#mmCenterMainTab').menu('hide');
 		});
 	}
 });

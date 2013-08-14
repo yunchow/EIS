@@ -13,6 +13,7 @@
 			color: black;
 			text-decoration: none;
 		}
+		
     </style>
     <link rel="stylesheet" type="text/css" href="plugins/easyui/themes/metro/easyui.css">
     <link rel="stylesheet" type="text/css" href="plugins/easyui/themes/icon.css">
@@ -36,7 +37,7 @@
     				<span style="color: #369">当前用户:</span><span style="color: #666633">张三&nbsp;&nbsp;</span>
     				<span style="color: #369">职务</span>:<span style="color: #666633">管理员&nbsp;&nbsp;</span>
     				<span style="color: #369">主题</span>:
-    				<select class="easyui-combobox" data-options="editable:false,panelHeight:'auto',onChange:onChangeTheme">
+    				<select class="easyui-combobox" data-options="editable:false,panelHeight:'auto',onChange:context.onChangeTheme">
     					<option value="metro">Win8</option>
     					<option value="metro-blue">蓝色</option>
     					<option value="metro-gray">深灰</option>
@@ -100,7 +101,7 @@
     </div>
     
     <div data-options="region:'center'" style="overflow: hidden;">
-        <div id="homeTabBar" class="easyui-tabs" data-options="border:false,fit:true" style="width:700px;height:250px">
+        <div id="homeTabBar" class="easyui-tabs" data-options="border:false,fit:true,onContextMenu:context.onMainTabContextMenu" style="width:700px;height:250px">
 	        <div class="centerTabButton" data-options="closable:true,iconCls:'icon-ok'" title="About" style="padding:10px">
 	            <p style="font-size:14px">jQuery EasyUI framework help you build your web page easily.</p>
 	            <ul>
@@ -134,7 +135,7 @@
 		</div>
     </div>
     
-    <div id="mm" class="easyui-menu" style="width:150px;">
+    <div id="mmCenterMainTab" class="easyui-menu" style="width:150px;">
         <div id="mm-tabclose">关闭</div>
         <div id="mm-tabcloseall">全部关闭</div>
         <div id="mm-tabcloseother">除此之外全部关闭</div>
@@ -147,14 +148,6 @@
 		$(function(){
 			context.ready();
 		});
-		function onChangeTheme(theme) {
-			if (theme =='dark-hive') {
-				$(".nav").css("color", "#FFF");
-			} else {
-				$(".nav").css("color", "#333");
-			}
-			$("link:first").attr('href', 'plugins/easyui/themes/'+ theme +'/easyui.css');
-		}
     </script>
 </body>
 </html>

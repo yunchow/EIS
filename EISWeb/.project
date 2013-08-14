@@ -50,4 +50,26 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>base_java</name>
+			<type>2</type>
+			<location>C:/EIS/Workspaces/Git/EISBase/src/main/java</location>
+		</link>
+		<link>
+			<name>base_resources</name>
+			<type>2</type>
+			<location>C:/EIS/Workspaces/Git/EISBase/src/main/resources</location>
+		</link>
+		<link>
+			<name>platform_java</name>
+			<type>2</type>
+			<location>C:/EIS/Workspaces/Git/EISPlatform/src/main/java</location>
+		</link>
+		<link>
+			<name>platform_resources</name>
+			<type>2</type>
+			<location>C:/EIS/Workspaces/Git/EISPlatform/src/main/resources</location>
+		</link>
+	</linkedResources>
 </projectDescription>

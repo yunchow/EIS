@@ -1,4 +1,4 @@
-package org.activiti.designer.test;
+/*package org.activiti.designer.test;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -31,7 +31,6 @@ public class TestProcessTestMyProcess {
 	@Autowired
 	private TaskService taskService;
 
-	@Autowired
 	@Rule
 	public ActivitiRule activitiSpringRule;
 
@@ -59,4 +58,4 @@ public class TestProcessTestMyProcess {
 		Assert.assertEquals(0, runtimeService.createProcessInstanceQuery().count());
 		System.out.println("Go through LeaveProcess.bpm sucessfully.");
 	}
-}
+}*/

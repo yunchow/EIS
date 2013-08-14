@@ -13,7 +13,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:conf/beans-*.xml</param-value>
+        <param-value>classpath*:conf/beans-*.xml</param-value>
     </context-param>
 
     <listener>
@@ -56,7 +56,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>dispatcherServlet</servlet-name>
 	</filter-mapping>
 	
-	<error-page>
+	<!-- <error-page>
 		<exception-type>java.lang.Throwable</exception-type>
 		<location>/WEB-INF/freemarker/error.ftl</location>
 	</error-page>
@@ -74,5 +74,5 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<error-page>
 		<error-code>403</error-code>
 		<location>/WEB-INF/freemarker/error.ftl</location>
-	</error-page>	
+	</error-page>	 -->
 </web-app>

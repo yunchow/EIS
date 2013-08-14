@@ -6,7 +6,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<context:component-scan base-package="com.eis.web" />
+	<context:component-scan base-package="com.eis.**.web" />
 
 	<mvc:annotation-driven conversion-service="conversionService">
 		<mvc:message-converters>
@@ -29,12 +29,12 @@
 		</property>
 	</bean>
 
-	<bean id="jsltViewResolver" parent="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+	<!-- <bean id="jsltViewResolver" parent="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
 		<property name="order" value="2" />
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
 		<property name="prefix" value="/WEB-INF/jsp/" />
 		<property name="suffix" value=".jsp" />
-	</bean>
+	</bean> -->
 
 	<bean id="freemarkerResolver" parent="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
 		<!--<property name="cache" value="true"/> -->
@@ -92,9 +92,9 @@
 		<!-- 模板加载路径 -->
 		<property name="templateLoaderPaths">
 			<list>
-				<value>/WEB-INF/freemarker/</value>
-				<value>/</value>
-				<!-- <value>classpath:modules</value> <value>classpath:org/springframework/web/servlet/view/freemarker</value> -->
+				<!-- <value>/WEB-INF/freemarker/</value> -->
+				<value>classpath:freemarker/</value>
+				<value>classpath*:freemarker/</value>
 			</list>
 		</property>
 		<property name="configLocation">
