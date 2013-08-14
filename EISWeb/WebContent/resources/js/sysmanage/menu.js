@@ -4,7 +4,6 @@
 jQuery.ns("sysmanage.menu");
 
 jQuery.define(sysmanage.menu, {
-	editIndex: undefined,
 	
 	ready: function() {
 		$("#mmMenuGrid").bind('contextmenu',function(e){
@@ -30,10 +29,10 @@ jQuery.define(sysmanage.menu, {
 	},
 	
 	editingId: undefined,
+	newId: undefined,
 	
 	editMenuItem: function(){
-        if (sysmanage.menu.editingId != undefined){
-            $('#tgMenuSetting').treegrid('select', sysmanage.menu.editingId);
+		if (sysmanage.menu.isEditing()){
             return;
         }
         var row = $('#tgMenuSetting').treegrid('getSelected');
@@ -47,17 +46,11 @@ jQuery.define(sysmanage.menu, {
             var t = $('#tgMenuSetting');
             t.treegrid('endEdit', sysmanage.menu.editingId);
             sysmanage.menu.editingId = undefined;
-            var persons = 0;
-            var rows = t.treegrid('getChildren');
-            for(var i=0; i<rows.length; i++){
-                var p = parseInt(rows[i].persons);
-                if (!isNaN(p)){
-                    persons += p;
-                }
-            }
-            var frow = t.treegrid('getFooterRows')[0];
-            frow.persons = persons;
-            t.treegrid('reloadFooter');
+        }
+        else if (sysmanage.menu.newId != undefined){
+            var t = $('#tgMenuSetting');
+            t.treegrid('endEdit', sysmanage.menu.newId);
+            sysmanage.menu.newId = undefined;
         }
     },
     cancel: function(){
@@ -65,32 +58,56 @@ jQuery.define(sysmanage.menu, {
             $('#tgMenuSetting').treegrid('cancelEdit', sysmanage.menu.editingId);
             sysmanage.menu.editingId = undefined;
         }
+        else if (sysmanage.menu.newId != undefined) {
+        	 $('#tgMenuSetting').treegrid('remove', sysmanage.menu.newId);
+        	 sysmanage.menu.newId = undefined;
+        }
+        else {
+        	var row = $('#tgMenuSetting').treegrid('getSelected');
+            if (row){
+            	$('#tgMenuSetting').treegrid('unselect', row.id);
+            }
+        }
     },
     
     /*******************************************************
      * onContextMenu methods
      ******************************************************/
     
-    idIndex: 150,
+    isEditing: function() {
+    	if (sysmanage.menu.editingId){
+            $('#tgMenuSetting').treegrid('select', sysmanage.menu.editingId);
+            return true;
+        }
+        if (sysmanage.menu.newId != undefined){
+            $('#tgMenuSetting').treegrid('select', sysmanage.menu.newId);
+            return true;
+        }
+    },
     
     appendMenu: function(){
-        sysmanage.menu.idIndex++;
-        var d1 = new Date();
-        var d2 = new Date();
-        d2.setMonth(d2.getMonth()+1);
+    	if (sysmanage.menu.isEditing()){
+            return;
+        }
+    	var id = new Date().getTime();
         var node = $('#tgMenuSetting').treegrid('getSelected');
         $('#tgMenuSetting').treegrid('append',{
             parent: node.id,
             data: [{
-//                id: sysmanage.menu.idIndex,
-//                name: 'New Task' + sysmanage.menu.idIndex,
-//                url: 'xxx',
-//                icon: 'pencil',
-//                comment: ''
+                id: id,
+                name: '',
+                url: '',
+                icon: 'pencil',
+                comment: ''
             }]
-        })
+        });
+        $('#tgMenuSetting').treegrid('beginEdit', id);
+        sysmanage.menu.newId = id;
     },
     onRemoveMenu: function(){
+    	if (sysmanage.menu.isEditing()){
+            return;
+        }
         var node = $('#tgMenuSetting').treegrid('getSelected');
         if (node){
             $('#tgMenuSetting').treegrid('remove', node.id);
@@ -113,57 +130,59 @@ jQuery.define(sysmanage.menu, {
      * Toolbar methods
      ******************************************************/
 	endEditing: function(){
-        if (sysmanage.menu.editIndex == undefined) {
+        if (sysmanage.menu.editingId == undefined) {
         	return true;
         }
-        if ($('#tgMenuSetting').datagrid('validateRow', sysmanage.menu.editIndex)){
-            var ed = $('#tgMenuSetting').datagrid('getEditor', {index:sysmanage.menu.editIndex,field:'productid'});
+        if ($('#tgMenuSetting').datagrid('validateRow', sysmanage.menu.editingId)){
+            var ed = $('#tgMenuSetting').datagrid('getEditor', {index:sysmanage.menu.editingId,field:'productid'});
             var productname = $(ed.target).combobox('getText');
-            $('#tgMenuSetting').datagrid('getRows')[sysmanage.menu.editIndex]['productname'] = productname;
-            $('#tgMenuSetting').datagrid('endEdit', sysmanage.menu.editIndex);
-            sysmanage.menu.editIndex = undefined;
+            $('#tgMenuSetting').datagrid('getRows')[sysmanage.menu.editingId]['productname'] = productname;
+            $('#tgMenuSetting').datagrid('endEdit', sysmanage.menu.editingId);
+            sysmanage.menu.editingId = undefined;
             return true;
         } else {
             return false;
         }
     },
     onClickRow: function(index, rowData){
-        if (sysmanage.menu.editIndex != index){
+        if (sysmanage.menu.editingId != index){
             if (sysmanage.menu.endEditing()){
                 $('#tgMenuSetting').datagrid('selectRow', index)
                         .datagrid('beginEdit', index);
-                sysmanage.menu.editIndex = index;
+                sysmanage.menu.editingId = index;
             } else {
-                $('#tgMenuSetting').datagrid('selectRow', sysmanage.menu.editIndex);
+                $('#tgMenuSetting').datagrid('selectRow', sysmanage.menu.editingId);
             }
         }
     },
     append: function(){
-        if (sysmanage.menu.endEditing()){
-            $('#tgMenuSetting').datagrid('appendRow',{status:'P'});
-            sysmanage.menu.editIndex = $('#tgMenuSetting').datagrid('getRows').length-1;
-            $('#tgMenuSetting').datagrid('selectRow', sysmanage.menu.editIndex)
-                    .datagrid('beginEdit', sysmanage.menu.editIndex);
+    	if (sysmanage.menu.editingId){
+            $('#tgMenuSetting').treegrid('select', sysmanage.menu.editingId);
+            return;
         }
-    },
-    removeit: function(){
-        if (sysmanage.menu.editIndex == undefined){return}
-        $('#tgMenuSetting').datagrid('cancelEdit', sysmanage.menu.editIndex)
-                .datagrid('deleteRow', sysmanage.menu.editIndex);
-        sysmanage.menu.editIndex = undefined;
-    },
-    accept: function(){
-        if (sysmanage.menu.endEditing()){
-            $('#tgMenuSetting').datagrid('acceptChanges');
+        if (sysmanage.menu.newId != undefined){
+            $('#tgMenuSetting').treegrid('select', sysmanage.menu.newId);
+            return;
         }
-    },
-    reject: function(){
-        $('#tgMenuSetting').datagrid('rejectChanges');
-        sysmanage.menu.editIndex = undefined;
-    },
-    getChanges: function(){
-        var rows = $('#tgMenuSetting').datagrid('getChanges');
-        alert(rows.length+' rows are changed!');
+        
+        var id = new Date().getTime();
+        var pid = undefined;
+        var node = $('#tgMenuSetting').treegrid('getSelected');
+        if (node){
+            pid = node.id;
+        }
+        $('#tgMenuSetting').treegrid('append',{
+        	parent: pid,
+        	data: [{
+                id: id,
+                name: '',
+                url: '',
+                icon: 'pencil',
+                comment: ''
+            }]
+        });
+        $('#tgMenuSetting').treegrid('beginEdit', id);
+        sysmanage.menu.newId = id;
     }
 });
 
