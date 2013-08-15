@@ -1,4 +1,6 @@
-
+<script type="text/javascript">
+	jQuery.require("sysmanage.menu");
+</script>
 <table id="tgMenuSetting" class="easyui-treegrid"
         data-options="
             iconCls: 'icon-edit',
@@ -33,6 +35,14 @@
             			
             		}
             	}">显示图标</th>
+            <th data-options="field:'status',width:120,formattter:sysmanage.menu.formatIcon,
+            	editor:{
+            		type: 'combobox',
+            		options: {
+            			required: true,
+            			
+            		}
+            	}">菜单状态</th>
             <th data-options="field:'url',width:180,editor:{
             		type: 'validatebox',
             		options: {

@@ -5,6 +5,15 @@
  * @copyright: Nick All Rights Reserved
  */
 jQuery.extend({
+	log: function(message) {
+		try {
+			console.log(message);
+		} catch (error) {
+			// do nothing when javascript error occurs
+		}
+	},
+});
+jQuery.extend({
 	/**
 	 * create new package and object instance if not exists
 	 * <code>namespace</code> comply with OGNL notion and semantics
@@ -58,6 +67,51 @@ jQuery.extend({
     	}
     	if (arguments.length == 2) {
     		jQuery.extend(obj, arguments[1]);
+    	}
+    },
+    /**
+     * require another modules or instances to be loaded before render the current page
+     * support dynamic arguments
+     * for example:
+     * jQuery.require("context") or 
+     * jQuery.require("context", "sysmanage.menu") or
+     * jQuery.require(["context", "sysmanage.menu"], "foo.bar")
+     */
+    basePath: "resources/js/",
+    require: function() {
+    	if (arguments.length < 1) {
+    		throw new Error("Illegal arguments error");
+    	}
+    	var paths = [];
+    	for (i = 0, j = arguments.length; i < j; i++) {
+    		var arg = arguments[i];
+    		if (!!!arg) {
+    			continue;
+    		}
+    		if (jQuery.type(arg) == 'array') {
+    			for (k = 0; k < arg.length; k++) {
+    				var path = arg[k].replace(/\./g, "\/");
+        			paths.push(path);
+    			}
+    		}
+    		else if (jQuery.type(arg) == 'string') {
+    			var path = arg.replace(/\./g, "\/");
+    			paths.push(path);
+    		}
+    	}
+    	jQuery.log("need loaded script paths = " + paths);
+    	for (i = 0; i < paths.length; i++) {
+    		var url = this.basePath + paths[i] +".js";
+    		var t1 = new Date().getTime();
+    		jQuery.ajax(url, {
+				dataType: 'script',
+				async: false,
+				success: function() {
+					var t2 = new Date().getTime();
+					jQuery.log("script [" + url + "] loaded successfully and cost "
+							+ (t2 - t1) +" ms");
+				}
+			});
     	}
     }
 });

@@ -47,8 +47,13 @@ jQuery.define(context, {
 	 * copyright declare
 	 */
 	copyright: "Nick Chow All Rights Reserverd",
+	
+	getCopyright: function() {
+		return this.copyright;
+	},
+	
 	echo: function() {
-		alert(this.copyright);
+		alert(this.getCopyright());
 	},
 	/**
 	 * create new tab

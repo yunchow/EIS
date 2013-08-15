@@ -26,7 +26,6 @@
     <script type="text/javascript" src="plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="resources/js/core.js"></script>
     <script type="text/javascript" src="resources/js/context/context.js"></script>
-    <script type="text/javascript" src="resources/js/sysmanage/menu.js"></script>
 </head>
 <body  class="easyui-layout" style="overflow-y:hidden" scroll="no">
     <div data-options="region:'north',border:false" style="height:60px;width:100%;margin:0px;padding:0px;overflow:hidden;">
@@ -145,7 +144,7 @@
         <div id="mm-tabcloseleft">当前页左侧全部关闭</div>
 	</div>
 
-	<script>
+	<script type="text/javascript">
 		$(function(){
 			context.ready();
 		});
