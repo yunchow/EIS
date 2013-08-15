@@ -25,7 +25,7 @@
     <script type="text/javascript" src="plugins/easyui/jquery.easyui.min.1.3.2.js"></script>
     <script type="text/javascript" src="plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="resources/js/core.js"></script>
-    <script type="text/javascript" src="resources/js/context/context.js"></script>
+    <script type="text/javascript" src="resources/js/context.js"></script>
 </head>
 <body  class="easyui-layout" style="overflow-y:hidden" scroll="no">
     <div data-options="region:'north',border:false" style="height:60px;width:100%;margin:0px;padding:0px;overflow:hidden;">

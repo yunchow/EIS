@@ -29,9 +29,30 @@ public class Menu implements Serializable {
 	private String name;
 	private String url;
 	private String icon;
+	private String status;
 	private String comment;
 	private Menu parent;
 	private List<Menu> children;
+
+	public Menu() {
+		
+	}
+	
+	/**
+	 * @param name
+	 * @param url
+	 * @param icon
+	 * @param status
+	 * @param comment
+	 */
+	public Menu(String name, String url, String icon, String status, String comment) {
+		super();
+		this.name = name;
+		this.url = url;
+		this.icon = icon;
+		this.status = status;
+		this.comment = comment;
+	}
 
 	public String getId() {
 		return id;
@@ -89,10 +110,18 @@ public class Menu implements Serializable {
 		this.comment = comment;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	@Override
 	public String toString() {
-		return "Menu [id=" + id + ", name=" + name + ", url=" + url + ", icon=" + icon + ", comment=" + comment + ", parent=" + parent + ", children="
-				+ children + "]";
+		return "Menu [id=" + id + ", name=" + name + ", url=" + url + ", icon=" + icon + ", status=" + status + ", comment=" + comment + ", parent=" + parent
+				+ ", children=" + children + "]";
 	}
 
 	@Override

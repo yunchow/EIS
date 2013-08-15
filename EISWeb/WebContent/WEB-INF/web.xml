@@ -53,7 +53,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</filter>
 	<filter-mapping>
 		<filter-name>CharacterEncodingFilter</filter-name>
-		<servlet-name>dispatcherServlet</servlet-name>
+		<servlet-name>*.htm</servlet-name>
 	</filter-mapping>
 	
 	<!-- <error-page>

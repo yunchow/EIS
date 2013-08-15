@@ -54,6 +54,7 @@
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="sysmanage.menu.cancel()">取消</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="sysmanage.menu.onRemoveMenu()">删除</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="sysmanage.menu.saveMenuItem()">保存</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="sysmanage.menu.reload()">刷新</a>
 </div>
 <div id="mmMenuGrid" class="easyui-menu" style="width:120px;">
     <div onclick="sysmanage.menu.appendMenu()" data-options="iconCls:'icon-add'">追加菜单</div>

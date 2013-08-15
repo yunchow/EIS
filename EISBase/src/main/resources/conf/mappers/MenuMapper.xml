@@ -8,12 +8,14 @@
 		<result property="name" column="pname"/>
 		<result property="url" column="purl"/>
 		<result property="icon" column="picon"/>
+		<result property="status" column="pstatus"/>
 		<result property="comment" column="pcomment"/>
 		<collection property="children" ofType="com.eis.base.domain.entity.Menu">
 			<id property="id" column="cid"/>
 			<result property="name" column="cname"/>
 			<result property="url" column="curl"/>
 			<result property="icon" column="cicon"/>
+			<result property="status" column="cstatus"/>
 			<result property="comment" column="ccomment"/>
 			<association property="parent" javaType="com.eis.base.domain.entity.Menu">
 				<id property="id" column="pid"/>
@@ -27,12 +29,14 @@
 			p.name pname,
 			p.url purl,
 			p.icon picon,
+			p.status pstatus,
 			p.comment pcomment,
 			p.pid ppid,
 			c.id cid,
 			c.name cname,
 			c.url curl,
 			c.icon cicon,
+			c.status cstatus,
 			c.comment ccomment,
 			c.pid cpid
 		from menuitem p
@@ -46,12 +50,14 @@
 			p.name pname,
 			p.url purl,
 			p.icon picon,
+			p.status pstatus,
 			p.comment pcomment,
 			p.pid ppid,
 			c.id cid,
 			c.name cname,
 			c.url curl,
 			c.icon cicon,
+			c.status cstatus,
 			c.comment ccomment,
 			c.pid cpid
 		from menuitem p
@@ -61,14 +67,14 @@
 	
 	<insert id="add" parameterType="com.eis.base.domain.entity.Menu">
 		insert into menuitem 
-			(id, name, url, icon, pid, comment) 
+			(id, name, url, icon, status, pid, comment) 
 		values 
-		    (#{id}, #{name}, #{url}, #{icon}, #{parent.id}, #{comment})
+		    (#{id}, #{name}, #{url}, #{icon}, #{status}, #{parent.id}, #{comment})
 	</insert>
 	
 	<update id="update" parameterType="com.eis.base.domain.entity.Menu">
 		update menuitem 
-		    set name = #{name}, url = #{url}, icon = #{icon}, pid = #{parent.id}, comment = #{comment} 
+		    set name = #{name}, url = #{url}, icon = #{icon}, status=#{status}, pid = #{parent.id}, comment = #{comment} 
 		where 
 		    id = #{id}
 	</update>

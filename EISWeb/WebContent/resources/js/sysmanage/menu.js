@@ -41,16 +41,25 @@ jQuery.define(sysmanage.menu, {
             $('#tgMenuSetting').treegrid('beginEdit', row.id);
         }
     },
+    reload: function() {
+    	$("#tgMenuSetting").treegrid("reload");
+    },
     saveMenuItem: function(){
         if (sysmanage.menu.editingId != undefined){
             var t = $('#tgMenuSetting');
             t.treegrid('endEdit', sysmanage.menu.editingId);
-            sysmanage.menu.editingId = undefined;
+            var node = t.treegrid("find", sysmanage.menu.editingId);
+            $.get("sysmanage/menu/update.htm", node, function() {
+                sysmanage.menu.editingId = undefined;
+            });
         }
         else if (sysmanage.menu.newId != undefined){
             var t = $('#tgMenuSetting');
             t.treegrid('endEdit', sysmanage.menu.newId);
-            sysmanage.menu.newId = undefined;
+            var node = t.treegrid("find", sysmanage.menu.newId);
+            $.get("sysmanage/menu/add.htm", node, function() {
+                sysmanage.menu.newId = undefined;
+            });
         }
     },
     cancel: function(){

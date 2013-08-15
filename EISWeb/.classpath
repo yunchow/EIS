@@ -14,9 +14,9 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="base_java"/>
-	<classpathentry excluding="**/mappers/" kind="src" path="base_resources"/>
+	<classpathentry excluding="conf/mappers/" including="freemarker/" kind="src" path="base_resources"/>
 	<classpathentry kind="src" path="platform_java"/>
-	<classpathentry excluding="**/mappers/|logback.xml" kind="src" path="platform_resources"/>
+	<classpathentry excluding="logback.xml" including="conf/beans-activiti.xml|conf/beans-platform.xml|conf/mybatis-config.xml" kind="src" path="platform_resources"/>
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v7.0">
 		<attributes>
 			<attribute name="owner.project.facets" value="jst.web"/>

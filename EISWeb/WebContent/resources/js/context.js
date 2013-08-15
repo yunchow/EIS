@@ -13,13 +13,21 @@ jQuery.define(context, {
 	 * 初始化
 	 */
 	ready: function() {
+		this.init();
 		$("#mmCenterMainTab").bind('contextmenu',function(e){
             e.preventDefault();
         });
 		this.enableHomeTabRightClickMenue();
 		this.bindHomeTabsMenueRightEvent();
 	},
-	
+	init: function() {
+		$.ajaxSetup({
+			global: true,
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+			    alert("系统错误");
+			}
+		});
+	},	
 	/**
 	 * 修改主题
 	 */
