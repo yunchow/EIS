@@ -1,8 +1,8 @@
 /**
- * 增加 jQuery 插件对名称空间进行支持
+ * This jQuery Plugin is to support namespace feature
  * @author: nick chow
  * @date: 2013-8-12
- * @copyright: Nick All Rights Reserved
+ * @copyright: Nick Chow All Rights Reserved
  */
 jQuery.extend({
 	log: function(message) {
@@ -49,7 +49,10 @@ jQuery.extend({
         return current;
     },
     /**
-     * define modules to gover variables for different ns
+     * define modules to gover variables into different namespaces
+     * for example:
+     * jQuery.define("foo.bar", {....}); or
+     * jQuery.define(foo.bar, {...});
      */
     define: function() {
     	if (arguments.length < 2) {
