@@ -108,11 +108,13 @@
 				<entry key="base" value="@{base}" />
 				<entry key="resRoot" value="@{resRoot}" />
 				<entry key="appVersion" value="${appVersion}" />
+				<entry key="require" value-ref="requireDirective" />
 			</map>
 		</property>
 		<property name="defaultEncoding" value="utf-8" />
 	</bean>
 
+	<bean id="requireDirective" class="com.eis.web.directive.RequireDirective" />
 	<bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />
 	<bean id="fmHtmlEscape" class="freemarker.template.utility.HtmlEscape" />
 

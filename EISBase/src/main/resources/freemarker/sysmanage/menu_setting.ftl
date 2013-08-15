@@ -1,6 +1,4 @@
-<script type="text/javascript">
-	jQuery.require("sysmanage.menu");
-</script>
+<@require ns="sysmanage.menu" />
 <table id="tgMenuSetting" class="easyui-treegrid"
         data-options="
             iconCls: 'icon-edit',
@@ -15,9 +13,6 @@
             idField: 'id',
             treeField: 'name',
             onContextMenu: sysmanage.menu.onContextMenu">
-            
-            
-            <!--onClickRow: sysmanage.menu.onClickRow,-->
     <thead>
         <tr>
             <th data-options="field:'name',width:150,align:'left',

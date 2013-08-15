@@ -37,11 +37,7 @@ jQuery.define(context, {
 	 * @param message
 	 */
 	log: function(message) {
-		try {
-			console.log(message);
-		} catch (error) {
-			// do nothing when javascript error occurs
-		}
+		jQuery.log(message);
 	},
 	/**
 	 * copyright declare
