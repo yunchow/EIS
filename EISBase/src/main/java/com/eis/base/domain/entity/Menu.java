@@ -30,6 +30,7 @@ public class Menu implements Serializable {
 	private String url;
 	private String icon;
 	private String status;
+	private int seq;
 	private String comment;
 	private Menu parent;
 	private List<Menu> children;
@@ -116,6 +117,14 @@ public class Menu implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public int getSeq() {
+		return seq;
+	}
+
+	public void setSeq(int seq) {
+		this.seq = seq;
 	}
 
 	@Override

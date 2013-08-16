@@ -1,20 +1,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eis.base.domain.repository.MenuRepository">
-	<cache />
-	
 	<resultMap type="com.eis.base.domain.entity.Menu" id="menuMap">
 		<id property="id" column="pid"/>
 		<result property="name" column="pname"/>
 		<result property="url" column="purl"/>
 		<result property="icon" column="picon"/>
+		<result property="seq" column="pseq"/>
 		<result property="status" column="pstatus"/>
 		<result property="comment" column="pcomment"/>
-		<collection property="children" ofType="com.eis.base.domain.entity.Menu">
+		<collection property="children" ofType="com.eis.base.domain.entity.Menu" notNullColumn="cid">
 			<id property="id" column="cid"/>
 			<result property="name" column="cname"/>
 			<result property="url" column="curl"/>
 			<result property="icon" column="cicon"/>
+			<result property="seq" column="cseq"/>
 			<result property="status" column="cstatus"/>
 			<result property="comment" column="ccomment"/>
 			<association property="parent" javaType="com.eis.base.domain.entity.Menu">
@@ -30,6 +30,7 @@
 			p.url purl,
 			p.icon picon,
 			p.status pstatus,
+			p.seq pseq,
 			p.comment pcomment,
 			p.pid ppid,
 			c.id cid,
@@ -37,11 +38,13 @@
 			c.url curl,
 			c.icon cicon,
 			c.status cstatus,
+			c.seq cseq,
 			c.comment ccomment,
 			c.pid cpid
 		from menuitem p
 		left outer join menuitem c on c.pid = p.id
 		where p.pid is null
+		order by pseq, cseq
 	</select>
 	
 	<select id="findById" parameterType="String" resultMap="menuMap">
@@ -51,36 +54,39 @@
 			p.url purl,
 			p.icon picon,
 			p.status pstatus,
+			p.seq pseq,
 			p.comment pcomment,
 			p.pid ppid,
 			c.id cid,
 			c.name cname,
 			c.url curl,
 			c.icon cicon,
+			c.seq cseq,
 			c.status cstatus,
 			c.comment ccomment,
 			c.pid cpid
 		from menuitem p
 		left outer join menuitem c on c.pid = p.id
 		where p.pid is null and id = #{id}
+		order by pseq, cseq
 	</select>
 	
 	<insert id="add" parameterType="com.eis.base.domain.entity.Menu">
 		insert into menuitem 
-			(id, name, url, icon, status, pid, comment) 
+			(id, name, url, icon, seq, status, pid, comment) 
 		values 
-		    (#{id}, #{name}, #{url}, #{icon}, #{status}, #{parent.id}, #{comment})
+		    (#{id}, #{name}, #{url}, #{icon}, #{seq}, #{status}, #{parent.id}, #{comment})
 	</insert>
 	
 	<update id="update" parameterType="com.eis.base.domain.entity.Menu">
 		update menuitem 
-		    set name = #{name}, url = #{url}, icon = #{icon}, status=#{status}, pid = #{parent.id}, comment = #{comment} 
+		    set name = #{name}, url = #{url}, icon = #{icon}, seq = #{seq}, status = #{status}, pid = #{parent.id}, comment = #{comment} 
 		where 
 		    id = #{id}
 	</update>
 	
 	<delete id="delete" parameterType="String">
-		delete from menuitem where id=#{id}
+		delete from menuitem where id=#{id} or pid=#{id}
 	</delete>
 
 </mapper>

@@ -21,11 +21,24 @@ jQuery.define(sysmanage.menu, {
         });
     },
     
-    formatIcon: function(value) {
+    formatIcon: function(value, row, index) {
 		if (!value) {
 			return "";
 		}
 		return '<span class="icon '+ value +'">&nbsp;</span>';
+	},
+	
+	formatStatus: function(value, row, index) {
+		if (!value) {
+			return "";
+		}
+		if (value == 'Y') {
+			return '<span style="color:#333;">显示</span>';
+		} else if (value == 'N') {
+			return '<span style="color:blue;">隐藏</span>';
+		} else {
+			return '<span style="color:red;">错误</span>';
+		}
 	},
 	
 	editingId: undefined,
@@ -39,6 +52,8 @@ jQuery.define(sysmanage.menu, {
         if (row){
         	sysmanage.menu.editingId = row.id
             $('#tgMenuSetting').treegrid('beginEdit', row.id);
+        } else {
+        	context.alert("请选择你要编辑的记录");
         }
     },
     reload: function() {
@@ -49,16 +64,16 @@ jQuery.define(sysmanage.menu, {
             var t = $('#tgMenuSetting');
             t.treegrid('endEdit', sysmanage.menu.editingId);
             var node = t.treegrid("find", sysmanage.menu.editingId);
-            $.get("sysmanage/menu/update.htm", node, function() {
-                sysmanage.menu.editingId = undefined;
-            });
+            sysmanage.menu.editingId = undefined;
+            $.post("sysmanage/menu/update.htm", node);
         }
         else if (sysmanage.menu.newId != undefined){
             var t = $('#tgMenuSetting');
             t.treegrid('endEdit', sysmanage.menu.newId);
             var node = t.treegrid("find", sysmanage.menu.newId);
-            $.get("sysmanage/menu/add.htm", node, function() {
-                sysmanage.menu.newId = undefined;
+            sysmanage.menu.newId = undefined;
+            $.post("sysmanage/menu/add.htm", node, function(uuid) {
+            	t.treegrid("reload");
             });
         }
     },
@@ -98,19 +113,28 @@ jQuery.define(sysmanage.menu, {
     	if (sysmanage.menu.isEditing()){
             return;
         }
-    	var id = new Date().getTime();
-        var node = $('#tgMenuSetting').treegrid('getSelected');
-        $('#tgMenuSetting').treegrid('append',{
+    	var g = $('#tgMenuSetting');
+        var node = g.treegrid('getSelected');
+        if (node) {
+        	if (node.parent) {
+        		context.alert("只支持两级菜单");
+        		return;
+        	}
+        }
+        var id = new Date().getTime();
+        g.treegrid('append',{
             parent: node.id,
             data: [{
                 id: id,
                 name: '',
                 url: '',
                 icon: 'pencil',
+                status: 'Y',
+                seq: 500,
                 comment: ''
             }]
         });
-        $('#tgMenuSetting').treegrid('beginEdit', id);
+        g.treegrid('beginEdit', id);
         sysmanage.menu.newId = id;
     },
     onRemoveMenu: function(){
@@ -119,19 +143,11 @@ jQuery.define(sysmanage.menu, {
         }
         var node = $('#tgMenuSetting').treegrid('getSelected');
         if (node){
-            $('#tgMenuSetting').treegrid('remove', node.id);
-        }
-    },
-    collapse: function(){
-        var node = $('#tgMenuSetting').treegrid('getSelected');
-        if (node){
-            $('#tgMenuSetting').treegrid('collapse', node.id);
-        }
-    },
-    expand: function(){
-        var node = $('#tgMenuSetting').treegrid('getSelected');
-        if (node){
-            $('#tgMenuSetting').treegrid('expand', node.id);
+            $.get("sysmanage/menu/delete/"+ node.id +".htm", function() {
+            	$('#tgMenuSetting').treegrid('remove', node.id);
+            });
+        } else {
+        	context.alert("请选择你要删除的记录");
         }
     },
 	
@@ -177,8 +193,12 @@ jQuery.define(sysmanage.menu, {
         var id = new Date().getTime();
         var pid = undefined;
         var node = $('#tgMenuSetting').treegrid('getSelected');
-        if (node){
-            pid = node.id;
+        if (node) {
+        	if (node.parent) {
+        		context.alert("只支持两级菜单");
+        		return;
+        	}
+        	pid = node.id;
         }
         $('#tgMenuSetting').treegrid('append',{
         	parent: pid,
@@ -187,11 +207,31 @@ jQuery.define(sysmanage.menu, {
                 name: '',
                 url: '',
                 icon: 'pencil',
+                status: 'Y',
+                seq: 500,
                 comment: ''
             }]
         });
         $('#tgMenuSetting').treegrid('beginEdit', id);
         sysmanage.menu.newId = id;
+    },
+    collapse: function(){
+        var node = $('#tgMenuSetting').treegrid('getSelected');
+        if (node){
+            $('#tgMenuSetting').treegrid('collapse', node.id);
+        }
+    },
+    expand: function(){
+        var node = $('#tgMenuSetting').treegrid('getSelected');
+        if (node){
+            $('#tgMenuSetting').treegrid('expand', node.id);
+        }
+    },
+    collapseAll: function(){
+    	$('#tgMenuSetting').treegrid("collapseAll");
+    },
+    expandAll: function(){
+    	$('#tgMenuSetting').treegrid("expandAll");
     }
 });
 

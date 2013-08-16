@@ -24,7 +24,7 @@ jQuery.define(context, {
 		$.ajaxSetup({
 			global: true,
 			error: function (XMLHttpRequest, textStatus, errorThrown) {
-			    alert("系统错误");
+				jQuery.messager.alert("系统消息", "系统产生内部错误！", "error");
 			}
 		});
 	},	
@@ -39,7 +39,14 @@ jQuery.define(context, {
 		}
 		$("link:first").attr('href', 'plugins/easyui/themes/'+ theme +'/easyui.css');
 	},
-	
+	alert: function() {
+		if (arguments.length == 1) {
+			jQuery.messager.alert("系统消息", arguments[0], "warning");
+		}
+		else if (arguments.length == 2) {
+			jQuery.messager.alert(arguments[0], arguments[1], "warning");
+		}
+	},
 	/**
 	 * 记录日志
 	 * @param message
@@ -89,36 +96,26 @@ jQuery.define(context, {
 	},
 	
 	/**
-	 * 主页面tab右键菜单
-	 */
-	onMainTabContextMenu: function(e) {
-		context.log("主页面tab右键菜单Fired");
-		e.preventDefault();
-        $('#mmCenterMainTab').menu('show',{
-            left: e.pageX,
-            top: e.pageY
-        });
-        var subtitle = $(this).children(".tabs-closable").text();
-		$('#mmCenterMainTab').data("currtab", subtitle);
-        return false;
-	},
-	
-	/**
 	 * 主页tabs右击菜单
 	 */
 	enableHomeTabRightClickMenue: function() {
-		$(".tabs-inner").dblclick(function() {
+		$(".tabs-inner").dblclick(function(e) {
 			var subtitle = $(this).children(".tabs-closable").text();
 			$('#homeTabBar').tabs('close', subtitle);
 		})
-		/*$(".tabs-inner").bind('contextmenu', function(e) {
+		$(".tabs-inner").bind('contextmenu', function(e) {
+			context.log("主页面tab右键菜单Fired");
 			e.preventDefault();
-			$('#mmCenterMainTab').menu('show', {
-				left : e.pageX,
-				top : e.pageY
-			});
-			return false;
-		});*/
+			context.log(e);
+	        $('#mmCenterMainTab').menu('show',{
+	            left: e.pageX,
+	            top: e.pageY
+	        });
+	        var subtitle = $(this).children(".tabs-closable").text();
+	        context.log("当前tab是" + subtitle);
+			$('#mmCenterMainTab').data("currtab", subtitle);
+	        return false;
+		});
 	},
 	
 	/**
@@ -138,7 +135,6 @@ jQuery.define(context, {
 		// 关闭当前
 		$('#mm-tabclose').click(function() {
 			var currtab_title = $('#mmCenterMainTab').data("currtab");
-			alert(currtab_title);
 			$('#homeTabBar').tabs('close', currtab_title);
 		})
 		// 全部关闭

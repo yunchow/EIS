@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +36,13 @@ public class MenuController {
 	@Autowired
 	private MenuRepository menuRepository;
 	
+	@RequestMapping("/delete/{id}")
+	@ResponseBody
+	public String deleteMenu(@PathVariable String id) {
+		menuRepository.delete(id);
+		return "end";
+	}
+	
 	@RequestMapping("/{type}")
 	@ResponseBody
 	public String saveOrUpdateMenu(@PathVariable String type,
@@ -42,21 +50,26 @@ public class MenuController {
 			@RequestParam String name,
 			@RequestParam String url,
 			@RequestParam String icon,
+			@RequestParam int seq,
 			@RequestParam String status,
-			@RequestParam(value = "parent[id]", required = false) String pid,
+			@RequestParam(value = "_parentId", required = false) String pid,
 			@RequestParam String comment) {
 		Menu menu = new Menu(name, url, icon, status, comment);
+		menu.setSeq(seq);
 		Menu parent = new Menu();
-		parent.setId(pid);
+		if (StringUtils.hasLength(pid)) {
+			parent.setId(pid);
+		}
 		menu.setParent(parent);
+		String uuid = UUIDHelper.uuid();
 		if ("add".equals(type)) {
-			menu.setId(UUIDHelper.uuid());
+			menu.setId(uuid);
 			menuRepository.add(menu);
 		} else if ("update".equals(type)) {
 			menu.setId(id);
 			menuRepository.update(menu);
 		}
-		return "failed";
+		return uuid;
 	}
 
 	@RequestMapping("/page")

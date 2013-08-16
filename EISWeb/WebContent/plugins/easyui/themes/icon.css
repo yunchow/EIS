@@ -62,3 +62,26 @@
 .icon-mini-refresh{
 	background:url('icons/mini_refresh.png') no-repeat center center;
 }
+
+/* 自定义 */
+.bar{
+	background:url('icons/bar.png') no-repeat center center;
+}
+.blank{
+	background:url('icons/blank.gif') no-repeat center center;
+}
+.table{
+	background:url('icons/default.png') no-repeat center center;
+}
+.line{
+	background:url('icons/line.png') no-repeat center center;
+}
+.message{
+	background:url('icons/message.png') no-repeat center center;
+}
+.map{
+	background:url('icons/map.png') no-repeat center center;
+}
+.text{
+	background:url('icons/text.png') no-repeat center center;
+}

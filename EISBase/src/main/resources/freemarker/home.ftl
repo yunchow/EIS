@@ -29,8 +29,7 @@
 </head>
 <body  class="easyui-layout" style="overflow-y:hidden" scroll="no">
     <div data-options="region:'north',border:false" style="height:60px;width:100%;margin:0px;padding:0px;overflow:hidden;">
-    	<!--<img src="plugins/login/images/toplogo-main.png" >-->
-    	<font style="font-size:18px;">XXXX系统</font>
+    	<img src="resources/image/logo.jpg" style="height:60px;">
     	<div style="float:right;padding-right:10px;">
     		<dl>
     			<dd>
@@ -101,7 +100,7 @@
     </div>
     
     <div data-options="region:'center'" style="overflow: hidden;">
-        <div id="homeTabBar" class="easyui-tabs" data-options="border:false,fit:true,onContextMenu:context.onMainTabContextMenu" style="width:700px;height:250px">
+        <div id="homeTabBar" class="easyui-tabs" data-options="border:false,fit:true" style="width:700px;height:250px">
 	        <div class="centerTabButton" data-options="closable:true,iconCls:'icon-ok'" title="About" style="padding:10px">
 	            <p style="font-size:14px">jQuery EasyUI framework help you build your web page easily.</p>
 	            <ul>
