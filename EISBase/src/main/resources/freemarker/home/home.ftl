@@ -69,34 +69,8 @@
 		</div>
     </div>
     
-    <div data-options="region:'west',split:true"  title="导航菜单" style="width:150px;padding:1px;">
-        <div class="easyui-accordion" data-options="fit:true,border:false">
-            <div title="系统管理" data-options="iconCls:'group_add'" style="padding:0px">
-                <ul>
-                	<li>
-						<div data-options="iconCls:'pencil'" onclick="context.addTab('菜单管理','sysmanage/menu/page.htm','pencil')">
-							<a href="javascript:;">
-								<span class="icon pencil">&nbsp;</span>
-								<span class="nav">菜单管理</span>
-							</a>
-						</div>
-					</li>
-                </ul>
-            </div>
-            <div title="业务管理" data-options="iconCls:'folder'" style="padding:0px;">
-                <ul>
-                	<li>
-						<div url="userController.do?user" title="用户管理" onclick="context.addTab('用户管理','http://www.baidu.com','pencil')">
-							<a href="#">
-								<span class="icon pencil">&nbsp;</span>
-								<span class="nav">用户管理</span>
-							</a>
-						</div>
-					</li>
-                </ul>
-            </div>
-            
-        </div>
+    <div data-options="region:'west',split:true" href="home/menu/list.htm"  title="导航菜单" style="width:150px;padding:1px;">
+        
     </div>
     
     <div data-options="region:'center'" style="overflow: hidden;">
