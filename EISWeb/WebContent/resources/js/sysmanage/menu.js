@@ -21,6 +21,15 @@ jQuery.define(sysmanage.menu, {
         });
     },
     
+    onClickRow: function(row){
+    	if (sysmanage.menu.newId){
+        	$('#tgMenuSetting').treegrid('select', sysmanage.menu.newId);
+        }
+        else if (sysmanage.menu.editingId){
+        	$('#tgMenuSetting').treegrid('select', sysmanage.menu.editingId);
+        }
+    },
+    
     formatIcon: function(value, row, index) {
 		if (!value) {
 			return "";
@@ -58,6 +67,8 @@ jQuery.define(sysmanage.menu, {
     },
     reload: function() {
     	$("#tgMenuSetting").treegrid("reload");
+    	sysmanage.menu.editingId = undefined;
+    	sysmanage.menu.newId = undefined;
     },
     saveMenuItem: function(){
         if (sysmanage.menu.editingId != undefined){
@@ -109,7 +120,7 @@ jQuery.define(sysmanage.menu, {
         }
     },
     
-    appendMenu: function(){
+    /*appendMenu: function(){
     	if (sysmanage.menu.isEditing()){
             return;
         }
@@ -134,20 +145,30 @@ jQuery.define(sysmanage.menu, {
                 comment: ''
             }]
         });
+        g.treegrid('select', id);
         g.treegrid('beginEdit', id);
         sysmanage.menu.newId = id;
-    },
+    },*/
     onRemoveMenu: function(){
-    	if (sysmanage.menu.isEditing()){
-            return;
-        }
-        var node = $('#tgMenuSetting').treegrid('getSelected');
-        if (node){
-            $.get("sysmanage/menu/delete/"+ node.id +".htm", function() {
-            	$('#tgMenuSetting').treegrid('remove', node.id);
+    	if (sysmanage.menu.editingId != undefined){
+            $.get("sysmanage/menu/delete/"+ sysmanage.menu.editingId +".htm", function() {
+            	$('#tgMenuSetting').treegrid('remove', sysmanage.menu.editingId);
+                sysmanage.menu.editingId = undefined;
             });
-        } else {
-        	context.alert("请选择你要删除的记录");
+        }
+        else if (sysmanage.menu.newId != undefined) {
+        	$('#tgMenuSetting').treegrid('remove', sysmanage.menu.newId);
+        	sysmanage.menu.newId = undefined;
+        }
+        else {
+        	var node = $('#tgMenuSetting').treegrid('getSelected');
+            if (node){
+                $.get("sysmanage/menu/delete/"+ node.id +".htm", function() {
+                	$('#tgMenuSetting').treegrid('remove', node.id);
+                });
+            } else {
+            	context.alert("请选择你要删除的记录");
+            }
         }
     },
 	
@@ -169,17 +190,7 @@ jQuery.define(sysmanage.menu, {
             return false;
         }
     },
-    onClickRow: function(index, rowData){
-        if (sysmanage.menu.editingId != index){
-            if (sysmanage.menu.endEditing()){
-                $('#tgMenuSetting').datagrid('selectRow', index)
-                        .datagrid('beginEdit', index);
-                sysmanage.menu.editingId = index;
-            } else {
-                $('#tgMenuSetting').datagrid('selectRow', sysmanage.menu.editingId);
-            }
-        }
-    },
+ 
     append: function(){
     	if (sysmanage.menu.editingId){
             $('#tgMenuSetting').treegrid('select', sysmanage.menu.editingId);
@@ -199,6 +210,7 @@ jQuery.define(sysmanage.menu, {
         		return;
         	}
         	pid = node.id;
+        	$('#tgMenuSetting').treegrid('expand', node.id);
         }
         $('#tgMenuSetting').treegrid('append',{
         	parent: pid,
@@ -212,6 +224,7 @@ jQuery.define(sysmanage.menu, {
                 comment: ''
             }]
         });
+        $('#tgMenuSetting').treegrid('select', id);
         $('#tgMenuSetting').treegrid('beginEdit', id);
         sysmanage.menu.newId = id;
     },

@@ -92,18 +92,22 @@ jQuery.define(context, {
 		} else {
 			$('#homeTabBar').tabs('select', subtitle);
 		}
-		this.enableHomeTabRightClickMenue();
+		//this.enableHomeTabRightClickMenue();
 	},
 	
 	/**
-	 * 主页tabs右击菜单
+	 * 主页tabs右击菜单和双击事件
 	 */
 	enableHomeTabRightClickMenue: function() {
-		$(".tabs-inner").dblclick(function(e) {
-			var subtitle = $(this).children(".tabs-closable").text();
+		$(".tabs li").live("dblclick", function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			var subtitle = $(this).find(".tabs-title").html();
+			context.log("准备关闭TAB:" + subtitle);
 			$('#homeTabBar').tabs('close', subtitle);
+			return false;
 		})
-		$(".tabs-inner").bind('contextmenu', function(e) {
+		$(".tabs-inner").live('contextmenu', function(e) {
 			context.log("主页面tab右键菜单Fired");
 			e.preventDefault();
 			context.log(e);
@@ -179,4 +183,7 @@ jQuery.define(context, {
 			$('#mmCenterMainTab').menu('hide');
 		});
 	}
+});
+$(function(){
+	context.ready();
 });

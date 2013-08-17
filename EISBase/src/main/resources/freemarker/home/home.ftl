@@ -24,10 +24,10 @@
     <script type="text/javascript" src="plugins/tools/dataformat.js"></script>
     <script type="text/javascript" src="plugins/easyui/jquery.easyui.min.1.3.2.js"></script>
     <script type="text/javascript" src="plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
-    <script type="text/javascript" src="resources/js/core.js"></script>
+    <script type="text/javascript" src="resources/js/jns.js"></script>
     <script type="text/javascript" src="resources/js/context.js"></script>
 </head>
-<body  class="easyui-layout" style="overflow-y:hidden" scroll="no">
+<body  class="easyui-layout" style="overflow-y:hidden" scroll="no" data-options="boder:false">
     <div data-options="region:'north',border:false" style="height:60px;width:100%;margin:0px;padding:0px;overflow:hidden;">
     	<img src="resources/image/logo.jpg" style="height:60px;">
     	<div style="float:right;padding-right:10px;">
@@ -69,7 +69,7 @@
 		</div>
     </div>
     
-    <div data-options="region:'west',split:true" href="home/menu/list.htm"  title="导航菜单" style="width:150px;padding:1px;">
+    <div data-options="region:'west',split:true" href="home/menu/list.htm" title="导航菜单" style="width:150px;padding:1px;">
         
     </div>
     
@@ -103,8 +103,8 @@
     </div>
     
     <div data-options="region:'south',split:false,border:false" style="height:25px;overflow:hidden;">
-		<div align="center" style="color: #CC99FF; padding-top: 2px">
-			&copy; 版权所有<span class="tip"><a href="#" title="JEECG_v3.1 Simple版本">nick</a> (推荐谷歌浏览器，获得更快响应速度)  技术支持:<a href="#" title="nick Simple版本">nick</a></span>
+		<div align="left" style="color:#333;padding-top:4px">
+			&copy;2013&nbsp; nick chow all rights reserved
 		</div>
     </div>
     
@@ -116,11 +116,5 @@
         <div id="mm-tabcloseright">当前页右侧全部关闭</div>
         <div id="mm-tabcloseleft">当前页左侧全部关闭</div>
 	</div>
-
-	<script type="text/javascript">
-		$(function(){
-			context.ready();
-		});
-    </script>
 </body>
 </html>

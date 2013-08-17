@@ -1,19 +1,18 @@
 <@require ns="sysmanage.menu"/>
-<table id="tgMenuSetting" class="easyui-treegrid" style="width:auto;"
+<table id="tgMenuSetting" class="easyui-treegrid"
         data-options="
             iconCls: 'icon-edit',
             toolbar: '#tbMenuGrid',
             rownumbers: true,
             animate: false,
             collapsible: true,
-            border: false,
             fit: true,
+            border: false,
             fitColumns: true,
             url: 'sysmanage/menu/json.htm',
             idField: 'id',
             treeField: 'name',
             onDblClickRow: sysmanage.menu.editMenuItem,
-            onClickRow: sysmanage.menu.onClickRow,
             onContextMenu: sysmanage.menu.onContextMenu">
     <thead>
         <tr>
@@ -135,7 +134,7 @@
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="sysmanage.menu.expandAll()">全部展开</a>
 </div>
 <div id="mmMenuGrid" class="easyui-menu" style="width:120px;">
-    <div onclick="sysmanage.menu.append()" data-options="iconCls:'icon-add'">追加菜单</div>
+    <div onclick="sysmanage.menu.appendMenu()" data-options="iconCls:'icon-add'">追加菜单</div>
     <div onclick="sysmanage.menu.onRemoveMenu()" data-options="iconCls:'icon-remove'">删除当前菜单</div>
     <div class="menu-sep"></div>
     <div onclick="sysmanage.menu.collapse()">折叠</div>
