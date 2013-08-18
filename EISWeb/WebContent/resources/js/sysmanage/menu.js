@@ -73,6 +73,10 @@ jQuery.define(sysmanage.menu, {
     saveMenuItem: function(){
         if (sysmanage.menu.editingId != undefined){
             var t = $('#tgMenuSetting');
+            if (!t.treegrid("validateRow", sysmanage.menu.editingId)) {
+            	context.alert("数据格式不正确");
+            	return;
+            }
             t.treegrid('endEdit', sysmanage.menu.editingId);
             var node = t.treegrid("find", sysmanage.menu.editingId);
             sysmanage.menu.editingId = undefined;
@@ -80,6 +84,10 @@ jQuery.define(sysmanage.menu, {
         }
         else if (sysmanage.menu.newId != undefined){
             var t = $('#tgMenuSetting');
+            if (!t.treegrid("validateRow", sysmanage.menu.newId)) {
+            	context.alert("数据格式不正确");
+            	return;
+            }
             t.treegrid('endEdit', sysmanage.menu.newId);
             var node = t.treegrid("find", sysmanage.menu.newId);
             sysmanage.menu.newId = undefined;

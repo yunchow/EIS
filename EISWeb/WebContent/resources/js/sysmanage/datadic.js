@@ -70,9 +70,13 @@ jQuery.define(sysmanage.datadic, {
     },
     accept: function(){
         if (sysmanage.datadic.isEditing()){
-            $('#dg').datagrid('acceptChanges');
+        	if (!$("#dg").datagrid("validateRow", sysmanage.datadic.editIndex)) {
+        		context.alert("数据格式不正确");
+        		return;
+        	}
             sysmanage.datadic.editIndex = undefined;
             var row = $('#dg').datagrid('getSelected');
+            $('#dg').datagrid('acceptChanges');
             if (row) {
             	if (row.add) {
             		$.post("sysmanage/datadic/save.htm", row, function() {
