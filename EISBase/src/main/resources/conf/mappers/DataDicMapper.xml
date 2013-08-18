@@ -1,0 +1,45 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.eis.base.domain.repository.DataDicRepository">
+	<resultMap type="hashmap" id="resultMap">
+		<id property="id" column="pid"/>
+	</resultMap>
+	
+	<select id="findByPage" parameterType="hashmap" resultMap="resultMap">
+		select * from sys_datadic 
+		<if test="type != null">
+			where type like #{type} 
+		</if>
+		order by type
+		limit #{start}, #{pageSize}
+	</select>
+	
+	<select id="findTotalCount" resultType="int">
+		select count(*) from sys_datadic
+		<if test="type != null">
+			where type like #{type} 
+		</if>
+	</select>
+	
+	<select id="findById" parameterType="String" resultMap="resultMap">
+		select * from sys_datadic where id = #{id}
+	</select>
+	
+	<insert id="add" parameterType="hashmap">
+		insert into 
+			sys_datadic(id, type, value, text, comment) 
+		values 
+			(#{id}, #{type}, #{value}, #{text}, #{comment})
+	</insert>
+	
+	<update id="update">
+		update sys_datadic
+		set type = #{type}, value = #{value}, text = #{text}, comment = #{comment}
+		where id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		delete from sys_datadic where id=#{id}
+	</delete>
+
+</mapper>

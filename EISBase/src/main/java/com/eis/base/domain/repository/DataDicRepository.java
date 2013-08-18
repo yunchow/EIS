@@ -6,15 +6,12 @@
  */
 package com.eis.base.domain.repository;
 
-import java.util.List;
-
 import org.springframework.stereotype.Repository;
 
-import com.eis.base.domain.entity.Menu;
 import com.eis.platform.repository.GenericRepository;
 
  /**
- * Title: MenuRepository.java
+ * Title: DataDicRepository.java
  * <p>
  * Please comment here
  * </p>
@@ -23,20 +20,6 @@ import com.eis.platform.repository.GenericRepository;
  * @date: Aug 13, 2013
  */
 @Repository
-public interface MenuRepository extends GenericRepository {
+public interface DataDicRepository extends GenericRepository {
 
-	/**
-	 * @return
-	 */
-	public List<Menu> findAll();
-
-	/**
-	 * @param menu
-	 */
-	public void add(Menu menu);
-
-	/**
-	 * @param menu
-	 */
-	public void update(Menu menu);
 }

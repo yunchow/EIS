@@ -47,6 +47,9 @@ jQuery.define(context, {
 			jQuery.messager.alert(arguments[0], arguments[1], "warning");
 		}
 	},
+	uuid: function() {
+		return new UUID().id;
+	},
 	/**
 	 * 记录日志
 	 * @param message
