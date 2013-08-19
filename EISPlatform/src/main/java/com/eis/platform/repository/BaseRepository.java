@@ -12,7 +12,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 /**
- * Title: GenericRepository.java
+ * Title: BaseRepository.java
  * <p>
  * Please comment here
  * </p>
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Repository;
  * @date: Aug 13, 2013
  */
 @Repository
-public interface GenericRepository {
+public interface BaseRepository {
 
 	/**
 	 * create new entity

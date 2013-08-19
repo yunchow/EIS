@@ -11,8 +11,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.eis.base.domain.entity.Menu;
-import com.eis.platform.repository.GenericRepository;
-
+import com.eis.platform.repository.BaseRepository;
  /**
  * Title: MenuRepository.java
  * <p>
@@ -23,8 +22,7 @@ import com.eis.platform.repository.GenericRepository;
  * @date: Aug 13, 2013
  */
 @Repository
-public interface MenuRepository extends GenericRepository {
-
+public interface MenuRepository extends BaseRepository {
 	/**
 	 * @return
 	 */

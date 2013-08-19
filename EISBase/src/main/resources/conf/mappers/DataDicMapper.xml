@@ -11,7 +11,6 @@
 			where type like #{type} 
 		</if>
 		order by type
-		limit #{start}, #{pageSize}
 	</select>
 	
 	<select id="findTotalCount" resultType="int">

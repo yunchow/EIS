@@ -11,7 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.eis.base.domain.repository.DataDicRepository;
-import com.eis.platform.repository.GenericRepository;
+import com.eis.platform.repository.BaseRepository;
+import com.eis.platform.web.controller.BaseController;
 
  /**
  * Title: DataDicController.java
@@ -35,7 +36,7 @@ public class DataDicController extends BaseController {
 	}
 
 	@Override
-	public GenericRepository getRepository() {
+	public BaseRepository getRepository() {
 		return dataDicRepository;
 	}
 }

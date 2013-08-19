@@ -25,7 +25,19 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="configLocation" value="classpath:conf/mybatis-config.xml"></property>
 		<property name="mapperLocations" value="classpath*:conf/mappers/**/*.xml" />
+		<property name="plugins" ref="paginationPlugin"></property>
 	</bean>
+	
+	<bean id="paginationPlugin" class="com.eis.platform.plugin.PaginationPlugin">
+		<property name="dialect" value="${dialect}"></property>
+		<property name="dialectMap">
+			<map>
+				<entry key="mysql" value-ref="mySqlDialect" />
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="mySqlDialect" class="com.eis.platform.plugin.MySqlDialect"></bean>
 	
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.eis.**.repository" />

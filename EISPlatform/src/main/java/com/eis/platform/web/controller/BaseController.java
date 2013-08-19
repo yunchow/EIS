@@ -4,7 +4,7 @@
  * author: nick.chow
  * date: Aug 18, 2013
  */
-package com.eis.base.web.controller;
+package com.eis.platform.web.controller;
 
 import java.util.Map;
 
@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.eis.platform.repository.GenericRepository;
-
+import com.eis.platform.repository.BaseRepository;
  /**
  * Title: BasicController.java
  * <p>
@@ -30,7 +29,7 @@ public abstract class BaseController {
 	 * child class must override this method
 	 * @return
 	 */
-	public abstract GenericRepository getRepository();
+	public abstract BaseRepository getRepository();
 
 	@RequestMapping("/save")
 	@ResponseBody
@@ -53,12 +52,12 @@ public abstract class BaseController {
 	@RequestMapping("/list")
 	@ResponseBody
 	public Map<String, Object> findByPage(@RequestParam Map<String, Object> model) {
-		int pageSize = Integer.valueOf("" + model.get("rows"));
+		/*int pageSize = Integer.valueOf("" + model.get("rows"));
 		int pageNo = Integer.valueOf("" + model.get("page"));
 		int start = (pageNo - 1) * pageSize;
 		model.put("start", start);
 		model.put("end", start + pageSize);
-		model.put("pageSize", pageSize);
+		model.put("pageSize", pageSize);*/
 		model.put("rows", getRepository().findByPage(model));
 		model.put("total", getRepository().findTotalCount(model));
 		return model;

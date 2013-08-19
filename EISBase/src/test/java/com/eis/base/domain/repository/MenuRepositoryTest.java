@@ -46,7 +46,7 @@ public class MenuRepositoryTest {
 	}
 
 	/**
-	 * Test method for {@link com.eis.platform.repository.GenericRepository#add(java.lang.Object)}.
+	 * Test method for {@link com.eis.platform.repository.BaseRepository#add(java.lang.Object)}.
 	 */
 	@Test
 	public void testAdd() {
@@ -54,7 +54,7 @@ public class MenuRepositoryTest {
 	}
 
 	/**
-	 * Test method for {@link com.eis.platform.repository.GenericRepository#delete(java.lang.String)}.
+	 * Test method for {@link com.eis.platform.repository.BaseRepository#delete(java.lang.String)}.
 	 */
 	@Test
 	public void testDelete() {
@@ -62,7 +62,7 @@ public class MenuRepositoryTest {
 	}
 
 	/**
-	 * Test method for {@link com.eis.platform.repository.GenericRepository#update(java.lang.Object)}.
+	 * Test method for {@link com.eis.platform.repository.BaseRepository#update(java.lang.Object)}.
 	 */
 	@Test
 	public void testUpdate() {
@@ -70,7 +70,7 @@ public class MenuRepositoryTest {
 	}
 
 	/**
-	 * Test method for {@link com.eis.platform.repository.GenericRepository#findById(java.lang.String)}.
+	 * Test method for {@link com.eis.platform.repository.BaseRepository#findById(java.lang.String)}.
 	 */
 	@Test
 	public void testFindById() {
