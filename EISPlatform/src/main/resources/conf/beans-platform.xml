@@ -37,6 +37,11 @@
 		</property>
 	</bean>
 	
+	<bean class="com.eis.platform.plugin.PaginationPluginAware">
+		<constructor-arg ref="paginationPlugin"></constructor-arg>
+		<constructor-arg ref="sqlSessionFactory"></constructor-arg>
+	</bean>
+	
 	<bean id="mySqlDialect" class="com.eis.platform.plugin.MySqlDialect"></bean>
 	
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
