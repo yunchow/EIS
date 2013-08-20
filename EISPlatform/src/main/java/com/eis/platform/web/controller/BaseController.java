@@ -52,14 +52,7 @@ public abstract class BaseController {
 	@RequestMapping("/list")
 	@ResponseBody
 	public Map<String, Object> findByPage(@RequestParam Map<String, Object> model) {
-		/*int pageSize = Integer.valueOf("" + model.get("rows"));
-		int pageNo = Integer.valueOf("" + model.get("page"));
-		int start = (pageNo - 1) * pageSize;
-		model.put("start", start);
-		model.put("end", start + pageSize);
-		model.put("pageSize", pageSize);*/
 		model.put("rows", getRepository().findByPage(model));
-		//model.put("total", getRepository().findTotalCount(model));
 		return model;
 	}
 }
