@@ -8,7 +8,7 @@ jQuery.define(sysmanage.datadic, base, {
     updateUrl: "sysmanage/datadic/update.htm",
     
 	ready: function() {
-		parent.ready();
+		parents.ready();
 	}
 
 });

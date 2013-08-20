@@ -71,7 +71,7 @@ jQuery.extend({
     	if (arguments.length >= 2) {
     		jQuery.extend(obj, arguments[1]);
     		window.me = obj;
-    		window.parent = arguments[1];
+    		window.parents = arguments[1];
     	}
     	if (arguments.length >= 3) {
     		jQuery.extend(obj, arguments[2]);

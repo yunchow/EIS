@@ -20,6 +20,7 @@
     <link rel="stylesheet" type="text/css" href="resources/accordion/css/accordion.css">
     <link rel="stylesheet" type="text/css" href="resources/accordion/css/icons.css">
 	<link rel="stylesheet  type="text/css" href="resources/accordion/css/accordion.css">
+	<link rel="stylesheet" type="text/css" href="resources/css/style.css">
     <script type="text/javascript" src="plugins/jquery/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="plugins/tools/dataformat.js"></script>
     <script type="text/javascript" src="plugins/easyui/jquery.easyui.min.1.3.2.js"></script>
