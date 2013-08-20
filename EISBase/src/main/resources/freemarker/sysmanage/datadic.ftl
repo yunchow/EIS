@@ -62,5 +62,5 @@
 </div>
 
 <script type="text/javascript">
-    
+    sysmanage.datadic.ready();
 </script>

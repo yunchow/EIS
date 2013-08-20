@@ -68,8 +68,13 @@ jQuery.extend({
     	else {
     		throw new Error("Illegal arguments type error");
     	}
-    	if (arguments.length == 2) {
+    	if (arguments.length >= 2) {
     		jQuery.extend(obj, arguments[1]);
+    		window.me = obj;
+    		window.parent = arguments[1];
+    	}
+    	if (arguments.length >= 3) {
+    		jQuery.extend(obj, arguments[2]);
     	}
     },
     /**

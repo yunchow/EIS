@@ -24,7 +24,7 @@
 		select * from sys_datadic where id = #{id}
 	</select>
 	
-	<insert id="add" parameterType="hashmap">
+	<insert id="save" parameterType="hashmap">
 		insert into 
 			sys_datadic(id, type, value, text, comment) 
 		values 

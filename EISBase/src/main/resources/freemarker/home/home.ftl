@@ -27,7 +27,7 @@
     <script type="text/javascript" src="resources/js/jns.js"></script>
     <script type="text/javascript" src="resources/js/context.js"></script>
     <script type="text/javascript" src="resources/js/uuid.js"></script>
-    <script type="text/javascript" src="resources/js/sysmanage/datadic.js"></script>
+    <script type="text/javascript" src="resources/js/base.js"></script>
 </head>
 <body  class="easyui-layout" style="overflow-y:hidden" scroll="no" data-options="boder:false">
     <div data-options="region:'north',border:false" style="height:60px;width:100%;margin:0px;padding:0px;overflow:hidden;">
