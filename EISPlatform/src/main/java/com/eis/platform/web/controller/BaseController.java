@@ -34,7 +34,7 @@ public abstract class BaseController {
 	@RequestMapping("/save")
 	@ResponseBody
 	public int save(@RequestParam Map<String, Object> model) {
-		return getRepository().add(model);
+		return getRepository().save(model);
 	}
 	
 	@RequestMapping("/update")

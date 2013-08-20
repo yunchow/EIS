@@ -28,7 +28,7 @@ public interface BaseRepository {
 	 * 
 	 * @param entity
 	 */
-	int add(Map<String, Object> model);
+	int save(Map<String, Object> model);
 
 	/**
 	 * delete an entity from repository

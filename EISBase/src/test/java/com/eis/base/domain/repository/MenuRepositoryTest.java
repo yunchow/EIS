@@ -46,7 +46,7 @@ public class MenuRepositoryTest {
 	}
 
 	/**
-	 * Test method for {@link com.eis.platform.repository.BaseRepository#add(java.lang.Object)}.
+	 * Test method for {@link com.eis.platform.repository.BaseRepository#save(java.lang.Object)}.
 	 */
 	@Test
 	public void testAdd() {
