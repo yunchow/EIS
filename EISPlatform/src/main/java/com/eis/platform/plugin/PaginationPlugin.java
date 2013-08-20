@@ -15,12 +15,7 @@ import java.util.Properties;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.MappedStatement.Builder;
 import org.apache.ibatis.mapping.ParameterMapping;
-import org.apache.ibatis.mapping.ResultMap;
-import org.apache.ibatis.mapping.ResultMapping;
-import org.apache.ibatis.mapping.SqlCommandType;
-import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
@@ -55,6 +50,8 @@ public class PaginationPlugin implements InitializingBean, Interceptor {
 	private SqlSessionTemplate sqlSessionTemplate;
 	private SqlSessionFactory sqlSessionFactory;
 	private Map<String, Dialect> dialectMap;
+	private ObjectFactory objectFactory = new DefaultObjectFactory();
+	private ObjectWrapperFactory objectWrapperFactory = new DefaultObjectWrapperFactory();
 
 	public String getDialect() {
 		return dialect;
@@ -100,11 +97,9 @@ public class PaginationPlugin implements InitializingBean, Interceptor {
 		StatementHandler statementHandler = (StatementHandler)invocation.getTarget();
 		final BoundSql boundSql = statementHandler.getBoundSql();
 		
-		ObjectFactory objectFactory = new DefaultObjectFactory();
-		ObjectWrapperFactory objectWrapperFactory = new DefaultObjectWrapperFactory();
 		MetaObject metaStatementHandler = MetaObject.forObject(statementHandler, objectFactory, objectWrapperFactory);
 		
-	    MappedStatement mappedStatement = (MappedStatement) metaStatementHandler.getValue("delegate.mappedStatement");
+	    final MappedStatement mappedStatement = (MappedStatement) metaStatementHandler.getValue("delegate.mappedStatement");
 	    if (mappedStatement.getId().indexOf("ByPage") == -1) {
 	    	return invocation.proceed();
 	    }
@@ -115,6 +110,8 @@ public class PaginationPlugin implements InitializingBean, Interceptor {
 		String pageNoParam = (String) param.get("page");
 		Integer pageSize = Integer.valueOf(pageSizeParam);
 		Integer pageNo = Integer.valueOf(pageNoParam);
+		param.put("offset", (pageNo - 1) * pageSize);
+		param.put("pageSize", pageSize);
 		
 		if (pageNo <= 0 || pageSize <= 0) {
 			logger.warn("pagination sql need valid pager arguments");
@@ -134,7 +131,9 @@ public class PaginationPlugin implements InitializingBean, Interceptor {
 		String totalCountStatementId = ns + ".findTotalCount";
 		
 		// query for records total count
-		
+		final MetaObject recordMetaObject = MetaObject.forObject(boundSql, objectFactory, objectWrapperFactory);
+		@SuppressWarnings("unchecked")
+		List<ParameterMapping> parameterMappings = (List<ParameterMapping>) recordMetaObject.getValue("parameterMappings");
 		MappedStatement totalMappedStatement = null;
 		try {
 			totalMappedStatement = configuration.getMappedStatement(totalCountStatementId);
@@ -142,6 +141,9 @@ public class PaginationPlugin implements InitializingBean, Interceptor {
 			logger.warn("cannot find target statement: {}", totalCountStatementId);
 		}
 		if (totalMappedStatement == null) {
+			logger.error("statement [{}] is required", totalCountStatementId);
+			throw new IllegalStateException(String.format("cannot find required statement: {%s}", totalCountStatementId));
+			/*logger.warn("cannot find findTotalCount statement, default sql will be used");
 			SqlSource sqlSource = new SqlSource() {
 				
 				@Override
@@ -151,9 +153,15 @@ public class PaginationPlugin implements InitializingBean, Interceptor {
 					if (index >= 0) {
 						sql = sql.substring(0, index);
 					}
-					
-					BoundSql boundSql = new BoundSql(configuration, sql, new ArrayList<ParameterMapping>(0), parameterObject);
-					return boundSql;
+					BoundSql totalBoundSql = new BoundSql(configuration, sql, new ArrayList<ParameterMapping>(0), parameterObject);
+					MetaObject totalMetaObject = MetaObject.forObject(totalBoundSql, objectFactory, objectWrapperFactory);
+					List<ParameterMapping> paramList = new ArrayList<ParameterMapping>(parameterMappings.size());
+					for (ParameterMapping paramMapping : parameterMappings) {
+						ParameterMapping param = new ParameterMapping.Builder(configuration, paramMapping.getProperty(), paramMapping.getJavaType()).build();
+						paramList.add(param);
+					}
+					totalMetaObject.setValue("parameterMappings", paramList);
+					return totalBoundSql;
 				}
 			};
 			Builder builder = new Builder(configuration, totalCountStatementId, sqlSource, SqlCommandType.SELECT);
@@ -162,12 +170,26 @@ public class PaginationPlugin implements InitializingBean, Interceptor {
 			resultMaps.add(resultMap);
 			builder.resultMaps(resultMaps);
 			totalMappedStatement = builder.build();
-			configuration.addMappedStatement(totalMappedStatement);
+			configuration.addMappedStatement(totalMappedStatement);*/
+		}
+		else {
+			logger.debug("findTotalCount param = {}", param);
+			Object total = sqlSessionTemplate.selectOne(totalCountStatementId, param);
+			logger.debug("total = {}", total);
+			param.put("total", total);
 		}
 		
-		Object total = sqlSessionTemplate.selectOne(totalCountStatementId, boundSql.getParameterObject());
-		param.put("total", total);
-		logger.debug("total = {}", total);
+		List<ParameterMapping> paramList = new ArrayList<ParameterMapping>(parameterMappings.size() + 2);
+		for (ParameterMapping paramMapping : parameterMappings) {
+			ParameterMapping paramMappingLocal = new ParameterMapping.Builder(configuration, paramMapping.getProperty(), paramMapping.getJavaType()).build();
+			paramList.add(paramMappingLocal);
+		}	
+		ParameterMapping parameterMapping = new ParameterMapping.Builder(configuration, "offset", Integer.class).build();
+		paramList.add(parameterMapping);
+		parameterMapping = new ParameterMapping.Builder(configuration, "pageSize", Integer.class).build();
+		paramList.add(parameterMapping);
+		
+		recordMetaObject.setValue("parameterMappings", paramList);
 		
 	    Dialect adialect = dialectMap.get(dialect);
 	    String sql = adialect.buildPaginationSql(boundSql.getSql(), pageSize, pageNo);

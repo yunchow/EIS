@@ -19,7 +19,7 @@ public class MySqlDialect implements Dialect {
 
 	@Override
 	public String buildPaginationSql(String sql, Integer pageSize, Integer pageNo) {
-		return sql + String.format(" limit %s, %s", (pageNo - 1) * pageSize, pageSize);
+		return sql + String.format(" limit ?, ?", (pageNo - 1) * pageSize, pageSize);
 	}
 	
 }

@@ -13,12 +13,12 @@
 		order by type
 	</select>
 	
-	<!-- <select id="findTotalCount" resultType="int">
+	<select id="findTotalCount" resultType="int">
 		select count(*) from sys_datadic
 		<if test="type != null">
 			where type like #{type} 
 		</if>
-	</select> -->
+	</select>
 	
 	<select id="findById" parameterType="String" resultMap="resultMap">
 		select * from sys_datadic where id = #{id}

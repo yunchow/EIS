@@ -59,7 +59,7 @@ public abstract class BaseController {
 		model.put("end", start + pageSize);
 		model.put("pageSize", pageSize);*/
 		model.put("rows", getRepository().findByPage(model));
-		model.put("total", getRepository().findTotalCount(model));
+		//model.put("total", getRepository().findTotalCount(model));
 		return model;
 	}
 }
