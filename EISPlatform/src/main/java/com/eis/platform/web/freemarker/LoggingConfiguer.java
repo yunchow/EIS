@@ -25,7 +25,7 @@ public class LoggingConfiguer implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		freemarker.log.Logger.selectLoggerLibrary(freemarker.log.Logger.LIBRARY_SLF4J);
-		logger.info("set freemarkder logging to slf4j");
+		logger.info("set freemarker logging to slf4j");
 	}
 
 }

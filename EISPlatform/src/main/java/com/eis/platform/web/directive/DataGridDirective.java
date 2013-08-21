@@ -1,8 +1,8 @@
 /**
- * fileName: EISWeb/com.eis.web.directive/ToolbarDirective.java
+ * fileName: EISPlatform/com.eis.platform.web.directive/DataGridDirective.java
  * copyright: EIS All rights reserved
  * author: nick.chow
- * date: Aug 15, 2013
+ * date: Aug 21, 2013
  */
 package com.eis.platform.web.directive;
 
@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
+
+import org.springframework.util.Assert;
 
 import freemarker.core.Environment;
 import freemarker.template.SimpleScalar;
@@ -19,39 +21,34 @@ import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
 
  /**
- * Title: ToolbarDirective.java
+ * Title: DataGridDirective.java
  * <p>
  * Please comment here
  * </p>
  * 
  * @author nick.chow
- * @date: Aug 15, 2013
+ * @date: Aug 21, 2013
  */
-public class ToolbarDirective extends TemplateDirectiveModelSupport {
-	
+public class DataGridDirective extends TemplateDirectiveModelSupport {
 
-	/**
-     * Executes this user-defined directive; called by FreeMarker when the user-defined
-     * directive is called in the template.
-     *
-     * @throws TemplateException
-     * @throws IOException
-     */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(Environment env, @SuppressWarnings("rawtypes") Map params, TemplateModel[] loopVars,
             TemplateDirectiveBody body) throws TemplateException, IOException {
 		SimpleScalar ns = (SimpleScalar) params.get("ns");
 		logger.debug("ns is {}", ns);
-		//Assert.notNull(ns, "ns property is required for toolbar derictive");
+		//Assert.notNull(ns, "ns property is required for datagrid derictive");
 		
-		if (body != null) {
-			StringWriter sw = new StringWriter();
-			body.render(sw);
-			params.put("append", new SimpleScalar(sw.toString()));
-		}
+		SimpleScalar url = (SimpleScalar) params.get("url");
+		logger.debug("url is {}", url);
+		Assert.notNull(url, "url property is required for datagrid derictive");
+		
+		StringWriter sw = new StringWriter();
+		body.render(sw);
+		params.put("body", new SimpleScalar(sw.toString()));
+		
 		Writer out = env.getOut();
-		Template template = configuration.getTemplate("toolbar.ftl");
+		Template template = configuration.getTemplate("datagrid.ftl");
 		template.process(params, out);
 	}
 

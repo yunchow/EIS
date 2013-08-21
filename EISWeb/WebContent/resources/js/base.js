@@ -25,6 +25,7 @@ jQuery.define(base, {
     	var param = {};
     	param[me.searchField] = '%'+ value +'%';
     	me.$dg.datagrid("load", param);
+    	me.editIndex = undefined;
 	},
     reload: function() {
     	me.$dg.datagrid("reload");
@@ -48,7 +49,7 @@ jQuery.define(base, {
         	context.alert("请选择你要编辑的记录");
         }
     },
-    onEditRow: function(index, rowData){
+    onDblClickRow: function(index, rowData){
     	if (me.isEditing()){
             return false;
         }
