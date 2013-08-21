@@ -117,7 +117,7 @@
 	
 	<bean id="dataGridDirective" parent="directiveModelSupport" class="com.eis.platform.web.directive.DataGridDirective" />
 	
-	<bean id="requireDirective" class="com.eis.web.directive.RequireDirective" />
+	<bean id="requireDirective" class="com.eis.platform.web.directive.RequireDirective" />
 	<bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />
 	<bean id="fmHtmlEscape" class="freemarker.template.utility.HtmlEscape" />
 

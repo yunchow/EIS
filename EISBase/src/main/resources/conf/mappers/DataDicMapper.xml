@@ -2,7 +2,7 @@
 
 <mapper namespace="com.eis.base.domain.repository.DataDicRepository">
 	<resultMap type="hashmap" id="resultMap">
-		<id property="id" column="pid"/>
+		<id property="id" column="id"/>
 	</resultMap>
 	
 	<select id="findByPage" parameterType="hashmap" resultMap="resultMap">
