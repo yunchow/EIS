@@ -16,7 +16,11 @@
     <th data-options="field:'comment',width:250,editor:'text'">说明</th>
 </@datagrid>
 
-<@toolbar id="roleToolbar" ns="sysmanage.role"/>
+<@toolbar id="roleToolbar" ns="sysmanage.role" menu="#roleSearchBoxMenu"/>
+
+<div id="roleSearchBoxMenu" style="width:auto">
+    <div data-options="name:'name'">角色名称</div>
+</div>
 
 <script type="text/javascript">
     sysmanage.role.ready();

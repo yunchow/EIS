@@ -6,6 +6,8 @@
  */
 package com.eis.platform.web.directive;
 
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,9 +24,14 @@ import freemarker.template.TemplateDirectiveModel;
  * @date: Aug 21, 2013
  */
 public abstract class TemplateDirectiveModelSupport implements TemplateDirectiveModel {
+	public static final String TOKEN = "fmtoken";
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	protected Configuration configuration;
 
+	public String getToken() {
+		return UUID.randomUUID().toString().replace("-", "");
+	}
+	
 	public Configuration getConfiguration() {
 		return configuration;
 	}

@@ -11,6 +11,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
 
+import org.springframework.util.Assert;
+
 import freemarker.core.Environment;
 import freemarker.template.SimpleScalar;
 import freemarker.template.Template;
@@ -41,9 +43,10 @@ public class ToolbarDirective extends TemplateDirectiveModelSupport {
 	@Override
 	public void execute(Environment env, @SuppressWarnings("rawtypes") Map params, TemplateModel[] loopVars,
             TemplateDirectiveBody body) throws TemplateException, IOException {
+		params.put(TOKEN, getToken());
 		SimpleScalar ns = (SimpleScalar) params.get("ns");
 		logger.debug("ns is {}", ns);
-		//Assert.notNull(ns, "ns property is required for toolbar derictive");
+		Assert.notNull(ns, "ns property is required for toolbar derictive");
 		
 		if (body != null) {
 			StringWriter sw = new StringWriter();

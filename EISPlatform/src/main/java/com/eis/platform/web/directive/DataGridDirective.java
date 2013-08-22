@@ -35,9 +35,10 @@ public class DataGridDirective extends TemplateDirectiveModelSupport {
 	@Override
 	public void execute(Environment env, @SuppressWarnings("rawtypes") Map params, TemplateModel[] loopVars,
             TemplateDirectiveBody body) throws TemplateException, IOException {
+		params.put(TOKEN, getToken());
 		SimpleScalar ns = (SimpleScalar) params.get("ns");
 		logger.debug("ns is {}", ns);
-		//Assert.notNull(ns, "ns property is required for datagrid derictive");
+		Assert.notNull(ns, "ns property is required for datagrid derictive");
 		
 		SimpleScalar url = (SimpleScalar) params.get("url");
 		logger.debug("url is {}", url);

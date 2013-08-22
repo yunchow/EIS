@@ -15,6 +15,9 @@ jQuery.define(base, {
 		context.log("base module is ready");
 		this.onReady();
 	},
+	/**
+	 * hook method for children
+	 */
 	onReady: function() {
 		
 	},
@@ -25,9 +28,10 @@ jQuery.define(base, {
         }
         return false;
     },
-    doSearch: function(value){
+    doSearch: function(value, name){
+    	alert(value + "," + name);
     	var param = {};
-    	param[this.searchField] = '%'+ value +'%';
+    	param[name || this.searchField] = '%'+ value +'%';
     	this.$dg.datagrid("load", param);
     	this.editIndex = undefined;
 	},

@@ -27,6 +27,12 @@ jQuery.define(context, {
 				jQuery.messager.alert("系统消息", "系统产生内部错误！", "error");
 			}
 		});
+		/*$("body").bind("dblclick", function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			context.log("body dblClick fired");
+			return false;
+		});*/
 	},	
 	/**
 	 * 修改主题

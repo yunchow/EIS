@@ -1,15 +1,12 @@
 <#if !rownumbers??>
 	<#assign rownumbers = true>
 </#if>
-<#assign prefix=ns?replace(".","_")+"_datagrid">
 
 <script type="text/javascript">
-	function _${prefix}_onClickRow(index) {
-		context.log("_${prefix}_onClickRow fired");
+	function _${fmtoken}_onClickRow(index) {
 		${ns}.onClickRow(index);
 	}
-	function _${prefix}_onDblClickRow(index, rowData) {
-		context.log("_${prefix}_onDblClickRow fired");
+	function _${fmtoken}_onDblClickRow(index, rowData) {
 		${ns}.onDblClickRow(index, rowData);
 	}
 </script>
@@ -26,8 +23,8 @@
             rownumbers: ${rownumbers?c},
             pagination: true,
             pageSize: ${pageSize!30},
-            onClickRow:_${prefix}_onClickRow,
-            onDblClickRow:_${prefix}_onDblClickRow
+            onClickRow:_${fmtoken}_onClickRow,
+            onDblClickRow:_${fmtoken}_onDblClickRow
         ">
     <thead>
         <tr>

@@ -1,6 +1,7 @@
 <@require ns="sysmanage.datadic"/>
-<@datagrid ns="sysmanage.datadic" 
-		   url="sysmanage/datadic/list.htm">
+<@datagrid id="datadicGrid"
+			ns="sysmanage.datadic" 
+		   	url="sysmanage/datadic/list.htm">
 	<th data-options="field:'id',width:120">ID</th>
     <th data-options="field:'type',width:80,
             editor:{
