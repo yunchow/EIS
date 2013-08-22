@@ -41,8 +41,8 @@
 			c.seq cseq,
 			c.comment ccomment,
 			c.pid cpid
-		from menuitem p
-		left outer join menuitem c on c.pid = p.id
+		from sys_menuitem p
+		left outer join sys_menuitem c on c.pid = p.id
 		where p.pid is null
 		order by pseq, cseq
 	</select>
@@ -65,28 +65,28 @@
 			c.status cstatus,
 			c.comment ccomment,
 			c.pid cpid
-		from menuitem p
-		left outer join menuitem c on c.pid = p.id
+		from sys_menuitem p
+		left outer join sys_menuitem c on c.pid = p.id
 		where p.pid is null and id = #{id}
 		order by pseq, cseq
 	</select>
 	
 	<insert id="add" parameterType="com.eis.base.domain.entity.Menu">
-		insert into menuitem 
+		insert into sys_menuitem 
 			(id, name, url, icon, seq, status, pid, comment) 
 		values 
 		    (#{id}, #{name}, #{url}, #{icon}, #{seq}, #{status}, #{parent.id}, #{comment})
 	</insert>
 	
 	<update id="update" parameterType="com.eis.base.domain.entity.Menu">
-		update menuitem 
+		update sys_menuitem 
 		    set name = #{name}, url = #{url}, icon = #{icon}, seq = #{seq}, status = #{status}, pid = #{parent.id}, comment = #{comment} 
 		where 
 		    id = #{id}
 	</update>
 	
 	<delete id="delete" parameterType="String">
-		delete from menuitem where id=#{id} or pid=#{id}
+		delete from sys_menuitem where id=#{id} or pid=#{id}
 	</delete>
 
 </mapper>
