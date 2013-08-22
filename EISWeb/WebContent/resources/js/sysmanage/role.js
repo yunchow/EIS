@@ -7,8 +7,8 @@ jQuery.define(sysmanage.role, base, {
     saveUrl: "sysmanage/role/save.htm",
     updateUrl: "sysmanage/role/update.htm",
     
-	ready: function() {
-		parents.ready();
+	onReady: function() {
+		context.log("sysmanage.role is ready");
 	}
 
 });

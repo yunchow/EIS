@@ -1,6 +1,18 @@
 <#if !rownumbers??>
 	<#assign rownumbers = true>
 </#if>
+<#assign prefix=ns?replace(".","_")+"_datagrid">
+
+<script type="text/javascript">
+	function _${prefix}_onClickRow(index) {
+		context.log("_${prefix}_onClickRow fired");
+		${ns}.onClickRow(index);
+	}
+	function _${prefix}_onDblClickRow(index, rowData) {
+		context.log("_${prefix}_onDblClickRow fired");
+		${ns}.onDblClickRow(index, rowData);
+	}
+</script>
 
 <table id="${id!'dg'}" class="easyui-datagrid"
         data-options="
@@ -14,8 +26,8 @@
             rownumbers: ${rownumbers?c},
             pagination: true,
             pageSize: ${pageSize!30},
-            onClickRow:${ns!'me'}.onClickRow,
-            onDblClickRow:${ns!'me'}.onDblClickRow
+            onClickRow:_${prefix}_onClickRow,
+            onDblClickRow:_${prefix}_onDblClickRow
         ">
     <thead>
         <tr>
@@ -23,3 +35,4 @@
         </tr>
     </thead>
 </table>
+
