@@ -29,7 +29,6 @@ jQuery.define(base, {
         return false;
     },
     doSearch: function(value, name){
-    	alert(value + "," + name);
     	var param = {};
     	param[name || this.searchField] = '%'+ value +'%';
     	this.$dg.datagrid("load", param);

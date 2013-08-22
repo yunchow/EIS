@@ -1,7 +1,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eis.base.domain.repository.MenuRepository">
-	<resultMap type="com.eis.base.domain.entity.Menu" id="menuMap">
+	<!-- <resultMap type="com.eis.base.domain.entity.Menu" id="menuMap">
 		<id property="id" column="pid"/>
 		<result property="name" column="pname"/>
 		<result property="url" column="purl"/>
@@ -45,6 +45,15 @@
 		left outer join sys_menuitem c on c.pid = p.id
 		where p.pid is null
 		order by pseq, cseq
+	</select> -->
+	
+	<resultMap type="com.eis.base.domain.entity.Menu" id="menuMap">
+		<id property="id"/>
+	</resultMap>
+	
+	<select id="findAll" resultMap="menuMap">
+		select * from sys_menuitem
+		order by seq
 	</select>
 	
 	<select id="findById" parameterType="String" resultMap="menuMap">

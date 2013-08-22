@@ -6,6 +6,9 @@
  */
 package com.eis.base.domain.repository;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Repository;
 
 import com.eis.platform.repository.BaseRepository;
@@ -18,7 +21,18 @@ import com.eis.platform.repository.BaseRepository;
  * @author nick.chow
  * @date: Aug 13, 2013
  */
+/**
+ * Title: DataDicRepository.java
+ * <p>
+ * Please comment here
+ * </p>
+ * 
+ * @author nick.chow
+ * @date: Aug 13, 2013
+ */
 @Repository
 public interface RoleRepository extends BaseRepository {
+	
+	List<Map<String, String>> findAllMenu();
 	
 }

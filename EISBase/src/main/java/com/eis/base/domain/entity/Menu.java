@@ -7,6 +7,7 @@
 package com.eis.base.domain.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,14 +27,19 @@ public class Menu implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String id;
+	private String pid;
 	private String name;
+	/**
+	 * 用于tree显示，与name值相同
+	 */
+	private String text;
 	private String url;
 	private String icon;
 	private String status;
 	private int seq;
 	private String comment;
 	private Menu parent;
-	private List<Menu> children;
+	private List<Menu> children = new ArrayList<Menu>();
 
 	public Menu() {
 		
@@ -53,6 +59,26 @@ public class Menu implements Serializable {
 		this.icon = icon;
 		this.status = status;
 		this.comment = comment;
+	}
+	
+	public void addChild(Menu menu) {
+		children.add(menu);
+	}
+
+	public String getPid() {
+		return pid;
+	}
+
+	public void setPid(String pid) {
+		this.pid = pid;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public String getId() {

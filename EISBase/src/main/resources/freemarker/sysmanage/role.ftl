@@ -13,7 +13,16 @@
     		}
     	}
     ">角色名称</th>
-    <th data-options="field:'comment',width:250,editor:'text'">说明</th>
+    <th data-options="field:'rolemenu',width:80,
+    	editor:{
+    		type:'combotree',
+    		options:{
+    			url: 'sysmanage/menu/json.htm',
+    			multiple: true
+    		}
+    	}
+    ">角色权限</th>
+    <th data-options="field:'comment',width:150,editor:'text'">说明</th>
 </@datagrid>
 
 <@toolbar id="roleToolbar" ns="sysmanage.role" menu="#roleSearchBoxMenu"/>
@@ -22,6 +31,3 @@
     <div data-options="name:'name'">角色名称</div>
 </div>
 
-<script type="text/javascript">
-    sysmanage.role.ready();
-</script>

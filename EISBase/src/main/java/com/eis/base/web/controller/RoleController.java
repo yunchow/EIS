@@ -6,9 +6,13 @@
  */
 package com.eis.base.web.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eis.base.domain.repository.RoleRepository;
 import com.eis.platform.repository.BaseRepository;
@@ -33,6 +37,12 @@ public class RoleController extends BaseController {
 	@RequestMapping("/page")
 	public String preparePage() {
 		return "sysmanage/role.ftl";
+	}
+	
+	@RequestMapping("/menus")
+	@ResponseBody
+	public List<Map<String, String>> findAllMenu() {
+		return roleRepository.findAllMenu();
 	}
 
 	@Override

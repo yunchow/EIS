@@ -5,6 +5,14 @@
 		<id property="id" column="id"/>
 	</resultMap>
 	
+	<resultMap type="hashmap" id="menuTreeMap">
+		<id column="id" property="id"/>
+	</resultMap>
+	
+	<select id="findAllMenu" resultMap="menuTreeMap">
+		select id, pid, name from sys_menuitem
+	</select>
+	
 	<select id="findByPage" parameterType="hashmap" resultMap="resultMap">
 		select * from sys_role 
 		<if test="name != null">

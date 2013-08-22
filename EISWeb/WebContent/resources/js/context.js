@@ -108,14 +108,14 @@ jQuery.define(context, {
 	 * 主页tabs右击菜单和双击事件
 	 */
 	enableHomeTabRightClickMenue: function() {
-		$(".tabs li").live("dblclick", function(e) {
+		/*$(".tabs li").live("dblclick", function(e) {
 			e.preventDefault();
 			e.stopPropagation();
 			var subtitle = $(this).find(".tabs-title").html();
 			context.log("准备关闭TAB:" + subtitle);
 			$('#homeTabBar').tabs('close', subtitle);
 			return false;
-		})
+		})*/
 		$(".tabs-inner").live('contextmenu', function(e) {
 			context.log("主页面tab右键菜单Fired");
 			e.preventDefault();

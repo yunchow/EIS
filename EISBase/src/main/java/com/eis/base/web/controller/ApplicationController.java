@@ -6,7 +6,10 @@
  */
 package com.eis.base.web.controller;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,8 +40,21 @@ public class ApplicationController {
 	
 	@RequestMapping("/home/menu/list")
 	public String loadLeftMenuPage(ModelMap model) {
-		List<Menu> menus = menuRepository.findAll();
-		model.addAttribute("menus", menus);
+		List<Menu> menuList = menuRepository.findAll();
+		Map<String, Menu> map = new HashMap<String, Menu>(menuList.size());
+		for (Menu menu : menuList) {
+			map.put(menu.getId(), menu);
+		}
+		Iterator<Menu> iter = menuList.iterator();
+		while (iter.hasNext()) {
+			Menu menu = iter.next();
+			menu.setText(menu.getName());
+			if (menu.getPid() != null) {
+				map.get(menu.getPid()).addChild(menu);
+				iter.remove();
+			}
+		}
+		model.addAttribute("menus", menuList);
 		return "home/menu_list.ftl";
 	}
 

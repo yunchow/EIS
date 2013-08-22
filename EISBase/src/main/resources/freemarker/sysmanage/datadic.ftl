@@ -33,7 +33,3 @@
 </@datagrid>
 
 <@toolbar ns="sysmanage.datadic"/>
-
-<script type="text/javascript">
-    sysmanage.datadic.ready();
-</script>

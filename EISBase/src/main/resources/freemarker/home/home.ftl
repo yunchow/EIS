@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Complex Layout - XXX</title>
+    <title>Ubuntu</title>
     <style type="text/css">
 		a {
 			color: Black;
@@ -21,10 +21,12 @@
     <link rel="stylesheet" type="text/css" href="resources/accordion/css/icons.css">
 	<link rel="stylesheet  type="text/css" href="resources/accordion/css/accordion.css">
 	<link rel="stylesheet" type="text/css" href="resources/css/style.css">
+	<link rel="stylesheet" href="plugins/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
     <script type="text/javascript" src="plugins/jquery/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="plugins/tools/dataformat.js"></script>
     <script type="text/javascript" src="plugins/easyui/jquery.easyui.min.1.3.2.js"></script>
     <script type="text/javascript" src="plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="plugins/ztree/js/jquery.ztree.all-3.5.js"></script>
     <script type="text/javascript" src="resources/js/jns.js"></script>
     <script type="text/javascript" src="resources/js/context.js"></script>
     <script type="text/javascript" src="resources/js/uuid.js"></script>
