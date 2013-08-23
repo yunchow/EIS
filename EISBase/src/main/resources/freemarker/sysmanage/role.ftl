@@ -19,12 +19,13 @@
     		options:{
     			data: sysmanage.role.menuTreeStore,
     			multiple: true,
-    			required: true
+    			required: true,
+    			panelHeight:'auto'
     		}
     	},
     	formatter: sysmanage.role.formatMenu
     ">角色权限</th>
-    <th data-options="field:'comment',width:50,editor:'text'">说明</th>
+    <th data-options="field:'comment',width:80,editor:'text'">说明</th>
 </@datagrid>
 
 <@toolbar id="roleToolbar" ns="sysmanage.role" menu="#roleSearchBoxMenu"/>

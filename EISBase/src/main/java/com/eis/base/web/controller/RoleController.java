@@ -63,6 +63,11 @@ public class RoleController extends BaseController {
 		this.onSave(model);
 	}
 	
+	@Override
+	protected void onDelete(String id) {
+		roleRepository.deleteRoleMenu(id);
+	}
+
 	@RequestMapping("/page")
 	public String preparePage() {
 		return "sysmanage/role.ftl";
