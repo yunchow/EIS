@@ -8,6 +8,8 @@ package com.eis.platform.web.controller;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +26,7 @@ import com.eis.platform.repository.BaseRepository;
  * @date: Aug 18, 2013
  */
 public abstract class BaseController {
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	/**
 	 * child class must override this method
@@ -34,19 +37,35 @@ public abstract class BaseController {
 	@RequestMapping("/save")
 	@ResponseBody
 	public int save(@RequestParam Map<String, Object> model) {
-		return getRepository().save(model);
+		int result = getRepository().save(model);
+		this.onSave(model);
+		return result;
+	}
+	
+	protected void onSave(Map<String, Object> model) {
+		
 	}
 	
 	@RequestMapping("/update")
 	@ResponseBody
 	public int update(@RequestParam Map<String, Object> model) {
+		this.onUpdate(model);
 		return getRepository().update(model);
+	}
+	
+	protected void onUpdate(Map<String, Object> model) {
+		
 	}
 	
 	@RequestMapping("/delete/{id}")
 	@ResponseBody
 	public int delete(@PathVariable String id) {
+		this.onDelete(id);
 		return getRepository().delete(id);
+	}
+	
+	protected void onDelete(String id) {
+		
 	}
 	
 	@RequestMapping("/list")

@@ -35,4 +35,7 @@ public interface RoleRepository extends BaseRepository {
 	
 	List<Map<String, String>> findAllMenu();
 	
+	void deleteRoleMenu(String id);
+	
+	void saveRoleMenu(List<Map<String, String>> params);
 }

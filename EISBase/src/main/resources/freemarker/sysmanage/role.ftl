@@ -13,17 +13,18 @@
     		}
     	}
     ">角色名称</th>
-    <th data-options="field:'rolemenu',width:80,
+    <th data-options="field:'rolemenus',width:150,
     	editor:{
     		type:'combotree',
     		options:{
     			data: sysmanage.role.menuTreeStore,
-    			multiple: true
+    			multiple: true,
+    			required: true
     		}
     	},
     	formatter: sysmanage.role.formatMenu
     ">角色权限</th>
-    <th data-options="field:'comment',width:150,editor:'text'">说明</th>
+    <th data-options="field:'comment',width:50,editor:'text'">说明</th>
 </@datagrid>
 
 <@toolbar id="roleToolbar" ns="sysmanage.role" menu="#roleSearchBoxMenu"/>

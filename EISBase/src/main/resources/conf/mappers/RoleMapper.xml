@@ -3,18 +3,37 @@
 <mapper namespace="com.eis.base.domain.repository.RoleRepository">
 	<resultMap type="hashmap" id="resultMap">
 		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="text" column="name"/>
+		<collection property="rolemenus" ofType="hashmap" javaType="ArrayList">
+			<id column="mid" property="mid"/>
+			<id column="rid" property="rid"/>
+		</collection>
 	</resultMap>
 	
 	<resultMap type="hashmap" id="menuTreeMap">
 		<id column="id" property="id"/>
 	</resultMap>
 	
+	<delete id="deleteRoleMenu" parameterType="string">
+		delete from sys_rolemenu where rid = #{id}
+	</delete>
+	
+	<insert id="saveRoleMenu" parameterType="list">
+		insert into sys_rolemenu(rid, mid)
+		values
+		<foreach collection="list" item="each" separator=",">
+			(#{each.rid}, #{each.mid})
+		</foreach>
+	</insert>
+	
 	<select id="findAllMenu" resultMap="menuTreeMap">
 		select id, pid, name from sys_menuitem
 	</select>
 	
 	<select id="findByPage" parameterType="hashmap" resultMap="resultMap">
-		select * from sys_role 
+		select t1.*, t2.* from sys_role t1 left outer join sys_rolemenu t2
+		on t1.id = t2.rid
 		<if test="name != null">
 			where name like #{name} 
 		</if>

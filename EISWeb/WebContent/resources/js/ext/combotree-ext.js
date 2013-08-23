@@ -12,12 +12,21 @@ jQuery.extend(jQuery.fn.datagrid.defaults.editors, {
 			jQuery(target).combotree('destroy');
 		},
 		getValue : function(target) {
-			var temp = jQuery(target).combotree('getValues');
-			return temp.join(',');
+			var valus = jQuery(target).combotree('getValues');
+			if (!!!valus) return '';
+			return valus.join(',');
 		},
 		setValue : function(target, value) {
-			var temp = value.split(',');
-			jQuery(target).combotree('setValues', temp);
+			if (!!!value) return;
+			var t = value, c = [];
+			if ($.isArray(value)) {
+				for (var i in value) {
+					c.push(value[i].mid);
+				}
+				t = c.join(",");
+			}
+			var values = t.split(',');
+			jQuery(target).combotree('setValues', values);
 		},
 		resize : function(target, width) {
 			jQuery(target).combotree('resize', width);

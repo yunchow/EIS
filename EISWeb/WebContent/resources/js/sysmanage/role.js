@@ -16,11 +16,25 @@ jQuery.define(sysmanage.role, base, {
 	},
 	
 	formatMenu: function(value, row, index) {
-		
+		var t = value, c = [];
+		if ($.isArray(value)) {
+			for (var i in value) {
+				c.push(value[i].mid);
+			}
+			t = c.join(",");
+		}
+		return sysmanage.role.formatMenuFor(t, row, index);
+	},
+	
+	formatMenuFor: function(value, row, index) {
 		if (!value) {
 			return "";
 		}
-		return "格式：" + value;
-	},
-
+		var names = [];
+		for (var i in this.menuTreeStore) {
+			var menu = this.menuTreeStore[i];
+			this.getTreeNodeName(menu, value, names);
+		}
+		return names.join(",");
+	}
 });

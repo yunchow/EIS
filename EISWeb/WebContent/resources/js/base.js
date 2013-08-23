@@ -32,6 +32,21 @@ jQuery.define(base, {
 			me.menuTreeStore = $.parseJSON(data);
 		});
 	},
+	
+	getTreeNodeName: function(treeNode, value, names) {
+		if (!!!treeNode) {
+			return;
+		}
+		if (value.indexOf(treeNode.id) >= 0) {
+			names.push(treeNode.text);
+		}
+		if (treeNode.children && treeNode.children.length > 0) {
+			for (var child in treeNode.children) {
+				this.getTreeNodeName(treeNode.children[child], value, names);
+			}
+		}
+	},
+	
 	isEditing: function(){
         if (this.editIndex != undefined){
         	 this.$dg.datagrid('selectRow', this.editIndex)
