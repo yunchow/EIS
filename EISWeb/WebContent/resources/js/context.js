@@ -46,23 +46,6 @@ jQuery.define(context, {
 		$("link:first").attr('href', 'plugins/easyui/themes/'+ theme +'/easyui.css');
 	},
 	
-	/**
-	 * 将数组中的所有元素用,进行连接成为字符串
-	 * 对于字符串类型直接返回
-	 * @param value
-	 */
-	joinArrayIf: function(value) {
-		if ($.isArray(value)) {
-			var c = [];
-			for (var i in value) {
-				c.push(value[i].mid);
-			}
-			return c.join(",");
-		}
-		else {
-			return value;
-		}
-	},
 	alert: function() {
 		if (arguments.length == 1) {
 			jQuery.messager.alert("系统消息", arguments[0], "warning");

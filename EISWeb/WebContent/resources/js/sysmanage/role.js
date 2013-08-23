@@ -16,7 +16,7 @@ jQuery.define(sysmanage.role, base, {
 	},
 	
 	formatMenu: function(value, row, index) {
-		return sysmanage.role.formatMenuFor(context.joinArrayIf(value), row, index);
+		return sysmanage.role.formatMenuFor(tools.joinArrayIf(value), row, index);
 	},
 	
 	formatMenuFor: function(value, row, index) {
