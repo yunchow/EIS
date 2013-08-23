@@ -27,6 +27,7 @@
     <script type="text/javascript" src="plugins/easyui/jquery.easyui.min.1.3.2.js"></script>
     <script type="text/javascript" src="plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="plugins/ztree/js/jquery.ztree.all-3.5.js"></script>
+    <script type="text/javascript" src="resources/js/ext/combotree-ext.js"></script>
     <script type="text/javascript" src="resources/js/jns.js"></script>
     <script type="text/javascript" src="resources/js/context.js"></script>
     <script type="text/javascript" src="resources/js/uuid.js"></script>

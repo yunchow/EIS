@@ -8,6 +8,11 @@ jQuery.define(base, {
 	deleteUrl: undefined,
     saveUrl: undefined,
     updateUrl: undefined,
+    menuTreeStore: undefined,
+    
+    init: function() {
+    	context.log("base module init");
+    },
     
 	ready: function() {
 		this.$dg = $('#' + this.dgId);
@@ -20,6 +25,12 @@ jQuery.define(base, {
 	 */
 	onReady: function() {
 		
+	},
+	loadMenuTreeStore: function() {
+		var me = this;
+		$.post("sysmanage/menu/json.htm", function(data) {
+			me.menuTreeStore = $.parseJSON(data);
+		});
 	},
 	isEditing: function(){
         if (this.editIndex != undefined){

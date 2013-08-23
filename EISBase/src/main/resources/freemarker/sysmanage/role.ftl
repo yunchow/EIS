@@ -17,10 +17,11 @@
     	editor:{
     		type:'combotree',
     		options:{
-    			url: 'sysmanage/menu/json.htm',
+    			data: sysmanage.role.menuTreeStore,
     			multiple: true
     		}
-    	}
+    	},
+    	formatter: sysmanage.role.formatMenu
     ">角色权限</th>
     <th data-options="field:'comment',width:150,editor:'text'">说明</th>
 </@datagrid>

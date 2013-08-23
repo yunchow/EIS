@@ -74,6 +74,7 @@ jQuery.extend({
     	if (arguments.length >= 3) {
     		jQuery.extend(obj, arguments[2]);
     	}
+    	obj.init.call(obj);
     	$(function() {
     		obj.ready.call(obj);
     	});
