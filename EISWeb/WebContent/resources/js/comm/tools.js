@@ -5,9 +5,7 @@
  * @copyright: Nick All Rights Reserved
  */
 
-jQuery.ns("tools");
-
-jQuery.define(tools, {
+tools = {
 	/**
 	 * 将数组中的所有元素用,进行连接成为字符串
 	 * 对于字符串类型直接返回
@@ -25,4 +23,4 @@ jQuery.define(tools, {
 			return value;
 		}
 	}
-});
+};
