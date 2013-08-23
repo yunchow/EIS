@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.eis.platform.vo.Tree;
+
 /**
  * Title: Menu.java
  * <p>
@@ -19,7 +21,7 @@ import java.util.List;
  * @author nick.chow
  * @date: Aug 13, 2013
  */
-public class Menu implements Serializable {
+public class Menu implements Tree, Serializable {
 
 	/**
 	 * 
@@ -39,7 +41,7 @@ public class Menu implements Serializable {
 	private int seq;
 	private String comment;
 	private Menu parent;
-	private List<Menu> children = new ArrayList<Menu>();
+	private List<Tree> children = new ArrayList<Tree>();
 
 	public Menu() {
 		
@@ -61,7 +63,7 @@ public class Menu implements Serializable {
 		this.comment = comment;
 	}
 	
-	public void addChild(Menu menu) {
+	public void addChild(Tree menu) {
 		children.add(menu);
 	}
 
@@ -121,11 +123,11 @@ public class Menu implements Serializable {
 		this.parent = parent;
 	}
 
-	public List<Menu> getChildren() {
+	public List<Tree> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<Menu> children) {
+	public void setChildren(List<Tree> children) {
 		this.children = children;
 	}
 

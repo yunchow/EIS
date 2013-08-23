@@ -6,10 +6,7 @@
  */
 package com.eis.base.web.controller;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.eis.base.domain.entity.Menu;
 import com.eis.base.domain.repository.MenuRepository;
 import com.eis.platform.helper.UUIDHelper;
+import com.eis.platform.util.TreeUtil;
 
  /**
  * Title: MenuController.java
@@ -84,19 +82,7 @@ public class MenuController {
 	@ResponseBody
 	public List<Menu> findAll() {
 		List<Menu> menuList = menuRepository.findAll();
-		Map<String, Menu> map = new HashMap<String, Menu>(menuList.size());
-		for (Menu menu : menuList) {
-			map.put(menu.getId(), menu);
-		}
-		Iterator<Menu> iter = menuList.iterator();
-		while (iter.hasNext()) {
-			Menu menu = iter.next();
-			menu.setText(menu.getName());
-			if (menu.getPid() != null) {
-				map.get(menu.getPid()).addChild(menu);
-				iter.remove();
-			}
-		}
+		TreeUtil.buildJsonTreeFor(menuList);
 		return menuList;
 	}
 	

@@ -49,6 +49,8 @@
 	
 	<resultMap type="com.eis.base.domain.entity.Menu" id="menuMap">
 		<id property="id"/>
+		<id property="name" column="name"/>
+		<id property="text" column="name"/>
 	</resultMap>
 	
 	<select id="findAll" resultMap="menuMap">
