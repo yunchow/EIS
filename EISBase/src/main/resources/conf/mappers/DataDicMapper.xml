@@ -13,6 +13,10 @@
 		order by type
 	</select>
 	
+	<select id="findByType" parameterType="String" resultMap="resultMap">
+		select * from sys_datadic where type = #{type}
+	</select>
+	
 	<select id="findTotalCount" resultType="int">
 		select count(*) from sys_datadic
 		<if test="type != null">

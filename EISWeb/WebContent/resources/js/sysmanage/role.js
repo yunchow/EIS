@@ -8,7 +8,7 @@ jQuery.define(sysmanage.role, base, {
     updateUrl: "sysmanage/role/update.htm",
     
     init: function() {
-    	this.loadMenuTreeStore();
+    	
     },
     
 	onReady: function() {
@@ -24,8 +24,8 @@ jQuery.define(sysmanage.role, base, {
 			return "";
 		}
 		var names = [];
-		for (var i in this.menuTreeStore) {
-			var menu = this.menuTreeStore[i];
+		for (var i in store.menuTreeStore) {
+			var menu = store.menuTreeStore[i];
 			this.getTreeNodeName(menu, value, names);
 		}
 		return names.join(",");

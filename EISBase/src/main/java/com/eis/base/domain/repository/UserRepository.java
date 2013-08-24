@@ -1,5 +1,5 @@
 /**
- * fileName: EISBase/com.eis.base.domain.repository/MenuRepository.java
+ * fileName: EISBase/com.eis.base.domain.repository/UserRepository.java
  * copyright: EIS All rights reverved
  * author: nick.chow
  * date: Aug 13, 2013
@@ -13,16 +13,20 @@ import org.springframework.stereotype.Repository;
 
 import com.eis.platform.repository.BaseRepository;
  /**
- * Title: DataDicRepository.java
+ * Title: UserRepository.java
  * <p>
  * Please comment here
  * </p>
  * 
  * @author nick.chow
- * @date: Aug 13, 2013
+ * @date: Aug 24, 2013
  */
 @Repository
-public interface DataDicRepository extends BaseRepository {
+public interface UserRepository extends BaseRepository {
 	
-	List<Map<String, String>> findByType(String type);
+	List<Map<String, String>> findAllRole();
+	
+	void deleteUserRole(String id);
+	
+	void saveUserRole(List<Map<String, String>> params);
 }

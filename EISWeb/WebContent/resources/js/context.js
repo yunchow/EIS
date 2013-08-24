@@ -45,7 +45,88 @@ jQuery.define(context, {
 		}
 		$("link:first").attr('href', 'plugins/easyui/themes/'+ theme +'/easyui.css');
 	},
-	
+	confirm: function() {
+		this.openDialog(arguments, "confirm");
+	},
+	prompt: function() {
+		this.openDialog(arguments, "prompt");
+	},
+	openDialog: function(arguments, type) {
+		var title = "系统消息";
+		var message = "你确定要继续吗？";
+		var onConfirmClick = tools.emptyFn;
+		var onCancelClick = tools.emptyFn;
+		if (arguments.length == 2) {
+			message = arguments[0];
+		}
+		else if (arguments.length == 3) {
+			if ($.isFunction(arguments[1])) {
+				message = arguments[0];
+				onConfirmClick = arguments[1];
+			}
+			else {
+				title = arguments[0];
+				message = arguments[1];
+			}
+		}
+		else if (arguments.length == 4) {
+			if ($.isFunction(arguments[1])) {
+				message = arguments[0];
+				onConfirmClick = arguments[1];
+				onCancelClick = arguments[2];
+			}
+			else {
+				title = arguments[0];
+				message = arguments[1];
+				onConfirmClick = arguments[2];
+			}
+		}
+		else if (arguments.length == 5) {
+			title = arguments[0];
+			message = arguments[1];
+			onConfirmClick = arguments[2];
+			onCancelClick = arguments[3];
+		}
+		var scope = arguments[arguments.length - 1];
+		var callbackFn = function(r) {
+			if (r){
+            	onConfirmClick.call(scope, r);
+            }
+            else {
+            	onCancelClick.call(scope, r);
+            }
+		};
+		if (type == "confirm") {
+			$.messager.confirm(title, message, callbackFn);
+		}
+		else {
+			$.messager.prompt(title, message, callbackFn);
+		}
+	},
+	warn: function() {
+		if (arguments.length == 1) {
+			jQuery.messager.alert("系统警告", arguments[0], "warning");
+		}
+		else if (arguments.length == 2) {
+			jQuery.messager.alert(arguments[0], arguments[1], "warning");
+		}
+	},
+	info: function() {
+		if (arguments.length == 1) {
+			jQuery.messager.alert("系统消息", arguments[0], "info");
+		}
+		else if (arguments.length == 2) {
+			jQuery.messager.alert(arguments[0], arguments[1], "info");
+		}
+	},
+	error: function() {
+		if (arguments.length == 1) {
+			jQuery.messager.alert("系统错误", arguments[0], "error");
+		}
+		else if (arguments.length == 2) {
+			jQuery.messager.alert(arguments[0], arguments[1], "error");
+		}
+	},
 	alert: function() {
 		if (arguments.length == 1) {
 			jQuery.messager.alert("系统消息", arguments[0], "warning");
@@ -55,7 +136,7 @@ jQuery.define(context, {
 		}
 	},
 	uuid: function() {
-		return new UUID().id;
+		return tools.uuid();
 	},
 	/**
 	 * 记录日志
@@ -193,7 +274,4 @@ jQuery.define(context, {
 			$('#mmCenterMainTab').menu('hide');
 		});
 	}
-});
-$(function(){
-	context.ready();
 });

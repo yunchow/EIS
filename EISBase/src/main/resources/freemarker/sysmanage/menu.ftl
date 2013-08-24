@@ -141,6 +141,4 @@
     <div onclick="sysmanage.menu.collapse()">折叠</div>
     <div onclick="sysmanage.menu.expand()">展开</div>
 </div>
-<script type="text/javascript">
-	sysmanage.menu.ready();
-</script>
+

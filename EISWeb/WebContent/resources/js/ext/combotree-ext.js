@@ -21,7 +21,7 @@ jQuery.extend(jQuery.fn.datagrid.defaults.editors, {
 			var t = value, c = [];
 			if ($.isArray(value)) {
 				for (var i in value) {
-					c.push(value[i].mid);
+					c.push(value[i].id);
 				}
 				t = c.join(",");
 			}

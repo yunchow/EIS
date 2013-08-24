@@ -8,9 +8,10 @@ jQuery.define(base, {
 	deleteUrl: undefined,
     saveUrl: undefined,
     updateUrl: undefined,
-    menuTreeStore: undefined,
     
     init: function() {
+    	store.initMenuTreeStore();
+    	store.initRoleStore();
     	context.log("base module init");
     },
     
@@ -25,12 +26,6 @@ jQuery.define(base, {
 	 */
 	onReady: function() {
 		
-	},
-	loadMenuTreeStore: function() {
-		var me = this;
-		$.post("sysmanage/menu/json.htm", function(data) {
-			me.menuTreeStore = $.parseJSON(data);
-		});
 	},
 	
 	getTreeNodeName: function(treeNode, value, names) {
@@ -123,16 +118,33 @@ jQuery.define(base, {
     removeit: function(){
         var row = this.$dg.datagrid('getSelected');
         if (row) {
-        	if (!row.add) {
-        		$.post(this.deleteUrl + row.id + ".htm");
+        	if (config.showConfirmDialogBeforeDelete) {
+        		context.confirm("你确定要删除吗？", this.onRemove, this);
         	}
-        	var index = this.$dg.datagrid("getRowIndex", row);
-        	this.$dg.datagrid('deleteRow', index);
-        	this.editIndex = undefined;
+        	else {
+        		this.onRemove();
+        	}
         }
         else {
         	context.alert("请选择要删除的记录行");
         }
+    },
+    /**
+     * 删除表格行,子类可重载此方法
+     * @param row
+     */
+    onRemove: function(row) {
+    	var row = this.$dg.datagrid('getSelected');
+    	if (!row.add) {
+    		$.post(this.deleteUrl + row.id + ".htm", function() {
+    			if (config.showScuessfullMessageBox) {
+    				context.info("删除成功！");
+    			}
+    		});
+    	}
+    	var index = this.$dg.datagrid("getRowIndex", row);
+    	this.$dg.datagrid('deleteRow', index);
+    	this.editIndex = undefined;
     },
     /**
      * 保存编辑的行
@@ -150,10 +162,17 @@ jQuery.define(base, {
             	if (row.add_add___) {
             		$.post(this.saveUrl, row, function() {
             			row.add_add___ = false;
+            			if (config.showScuessfullMessageBox) {
+            				context.info("保存成功！");
+            			}            			
             		});
             	}
             	else {
-            		$.post(this.updateUrl, row);
+            		$.post(this.updateUrl, row, function() {
+            			if (config.showScuessfullMessageBox) {
+            				context.info("修改成功！");
+            			} 
+            		});
             	}
             }
         }
@@ -162,7 +181,23 @@ jQuery.define(base, {
      * 取消操作
      */
     reject: function(){
-        this.$dg.datagrid('rejectChanges');
+    	if (this.editIndex == undefined) {
+    		return;
+    	}
+    	var me = this;
+    	if (config.showConfirmDialogBeforeDelete) {
+    		context.confirm("你确定取消吗？", this.onReject, me);
+    	}
+    	else {
+    		this.onReject();
+    	}
+    },
+    
+    /**
+     * 取消处理逻辑，子类可重载此方法
+     */
+    onReject: function() {
+    	this.$dg.datagrid('rejectChanges');
         this.editIndex = undefined;
     }
 });

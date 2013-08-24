@@ -5,13 +5,20 @@
  * @copyright: Nick Chow All Rights Reserved
  */
 jQuery.extend({
+	consoleEnabled: undefined,
 	log: function(message) {
-		try {
-			console.log(message);
-		} catch (error) {
-			// do nothing when javascript error occurs
+		if (this.consoleEnabled == undefined) {
+			try {
+				console.log("install log first");
+				this.consoleEnabled = true;
+			} catch (error) {
+				this.consoleEnabled = false;
+			}
 		}
-	},
+		if (this.consoleEnabled == true) {
+			console.log(message);
+		}
+	}
 });
 jQuery.extend({
 	/**
@@ -74,9 +81,23 @@ jQuery.extend({
     	if (arguments.length >= 3) {
     		jQuery.extend(obj, arguments[2]);
     	}
-    	obj.init.call(obj);
+    	if (obj.init) {
+			try {
+				obj.init.call(obj);
+	    	}
+	    	catch (e)  {
+	    		jQuery.log("Error: init exception");
+	    	}
+		}
     	$(function() {
-    		obj.ready.call(obj);
+    		if (obj.ready) {
+    			try {
+        			obj.ready.call(obj);
+            	}
+            	catch (e)  {
+            		jQuery.log("Error: ready exception");
+            	}
+    		}
     	});
     },
     /**
@@ -109,9 +130,9 @@ jQuery.extend({
     			paths.push(path);
     		}
     	}
-    	jQuery.log("need loaded script paths = " + paths);
     	for (i = 0; i < paths.length; i++) {
     		var url = this.basePath + paths[i] +".js";
+    		jQuery.log("need loaded script --> " + url);
     		var t1 = new Date().getTime();
     		jQuery.ajax(url, {
 				dataType: 'script',

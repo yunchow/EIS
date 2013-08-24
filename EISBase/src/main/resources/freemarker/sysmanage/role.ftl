@@ -3,8 +3,8 @@
 		   id="roleGrid"
 		   toolbar="#roleToolbar" 
 		   url="sysmanage/role/list.htm">
-	<th data-options="field:'id',width:120">ID</th>
-    <th data-options="field:'name',width:80,
+	<#--<th data-options="field:'id',width:120">ID</th>-->
+    <th data-options="field:'name',width:40,
     	editor:{
     		type:'validatebox',
     		options:{
@@ -13,14 +13,15 @@
     		}
     	}
     ">角色名称</th>
-    <th data-options="field:'rolemenus',width:150,
+    <th data-options="field:'rolemenus',width:200,
     	editor:{
     		type:'combotree',
     		options:{
-    			data: sysmanage.role.menuTreeStore,
+    			data: store.menuTreeStore,
     			multiple: true,
     			required: true,
-    			panelHeight:'auto'
+    			panelHeight:'auto',
+    			lines: true
     		}
     	},
     	formatter: sysmanage.role.formatMenu

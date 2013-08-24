@@ -118,6 +118,11 @@ public class PaginationPlugin implements InitializingBean, Interceptor {
 		Map<String, Object> param = (Map<String, Object>) boundSql.getParameterObject();
 		String pageSizeParam = (String) param.get("rows");
 		String pageNoParam = (String) param.get("page");
+		
+		if (pageSizeParam == null || pageNoParam == null) {
+			return invocation.proceed();
+		}
+		
 		Integer pageSize = Integer.valueOf(pageSizeParam);
 		Integer pageNo = Integer.valueOf(pageNoParam);
 		param.put("offset", (pageNo - 1) * pageSize);

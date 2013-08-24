@@ -6,9 +6,14 @@
  */
 package com.eis.base.web.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eis.base.domain.repository.DataDicRepository;
 import com.eis.platform.repository.BaseRepository;
@@ -34,6 +39,12 @@ public class DataDicController extends BaseController {
 	public String preparePage() {
 		return "sysmanage/datadic.ftl";
 	}
+	
+	@RequestMapping("/{type}")
+	@ResponseBody
+	public List<Map<String, String>> findByType(@PathVariable String type) {
+		return dataDicRepository.findByType(type);
+	} 
 
 	@Override
 	public BaseRepository getRepository() {

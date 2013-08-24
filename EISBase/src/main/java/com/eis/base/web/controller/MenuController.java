@@ -74,8 +74,8 @@ public class MenuController {
 	}
 
 	@RequestMapping("/page")
-	public String menuUI() {
-		return "sysmanage/menu_setting.ftl";
+	public String prepare() {
+		return "sysmanage/menu.ftl";
 	}
 	
 	@RequestMapping("/json")
