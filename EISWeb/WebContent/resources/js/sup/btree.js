@@ -69,7 +69,7 @@ jQuery.define(btree, {
     	this.editingId = undefined;
     	this.newId = undefined;
     },
-    save: function(){
+    accept: function(){
         if (this.editingId != undefined){
             var t = this.$tg;
             if (!t.treegrid("validateRow", this.editingId)) {
@@ -93,7 +93,7 @@ jQuery.define(btree, {
             $.post(this.saveUrl, node);
         }
     },
-    cancel: function(){
+    reject: function(){
         if (this.editingId != undefined){
             this.$tg.treegrid('cancelEdit', this.editingId);
             this.editingId = undefined;
@@ -121,7 +121,7 @@ jQuery.define(btree, {
         }
     },
     
-    remove: function(){
+    removeit: function(){
     	var me = this;
     	if (this.editingId != undefined){
             $.get(this.deleteUrl + this.editingId +".htm", function() {

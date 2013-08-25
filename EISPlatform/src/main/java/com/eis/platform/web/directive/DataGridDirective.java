@@ -46,6 +46,7 @@ public class DataGridDirective extends TemplateDirectiveModelSupport {
 		logger.debug("url is {}", url);
 		Assert.notNull(url, "url property is required for datagrid derictive");
 		
+		Assert.notNull(body, "datagrid body cannot be null");
 		StringWriter sw = new StringWriter();
 		body.render(sw);
 		params.put("body", new SimpleScalar(sw.toString()));

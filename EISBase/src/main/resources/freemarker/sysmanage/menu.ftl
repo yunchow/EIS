@@ -1,5 +1,5 @@
 <@require ns="sysmanage.menu"/>
-<@treegrid ns="sysmanage.menu" id="tgMenuSetting" url="sysmanage/menu/tree.htm" toolbar="#tbMenuGrid" idField="id" treeField="name">
+<@treegrid ns="sysmanage.menu" id="tgMenuSetting" url="sysmanage/menu/tree.htm" toolbar="#tbMenuGrid">
     <th data-options="field:'name',width:150,align:'left',
     	editor:{
     		type: 'validatebox',
@@ -105,22 +105,9 @@
     		}
     	}">菜单说明</th>
 </@treegrid>
-<div id="tbMenuGrid" style="height:auto">
-    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="sysmanage.menu.append()">增加</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="sysmanage.menu.edit()">编辑</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="sysmanage.menu.cancel()">取消</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="sysmanage.menu.remove()">删除</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="sysmanage.menu.save()">保存</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="sysmanage.menu.reload()">刷新</a>
+<@toolbar id="tbMenuGrid" ns="sysmanage.menu" searchbox=false>
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="sysmanage.menu.collapseAll()">全部折叠</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="sysmanage.menu.expandAll()">全部展开</a>
-</div>
-<div id="mmMenuGrid" class="easyui-menu" style="width:120px;">
-    <div onclick="sysmanage.menu.append()" data-options="iconCls:'icon-add'">追加</div>
-    <div onclick="sysmanage.menu.remove()" data-options="iconCls:'icon-edit'">编辑</div>
-    <div onclick="sysmanage.menu.remove()" data-options="iconCls:'icon-remove'">删除</div>
-    <div class="menu-sep"></div>
-    <div onclick="sysmanage.menu.collapse()">折叠</div>
-    <div onclick="sysmanage.menu.expand()">展开</div>
-</div>
+</@toolbar>
+<@menu id="mmMenuGrid" ns="sysmanage.menu"/>
 

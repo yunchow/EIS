@@ -46,8 +46,11 @@ public final class TreeUtil {
 		while (iter.hasNext()) {
 			Tree tree = (Tree) iter.next();
 			if (tree.getPid() != null) {
-				map.get(tree.getPid()).addChild(tree);
-				iter.remove();
+				Tree ptree = map.get(tree.getPid());
+				if (ptree != null) {
+					ptree.addChild(tree);
+					iter.remove();
+				}
 			}
 		}
 	}
