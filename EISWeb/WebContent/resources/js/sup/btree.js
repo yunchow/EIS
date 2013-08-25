@@ -70,6 +70,7 @@ jQuery.define(btree, {
     	this.newId = undefined;
     },
     accept: function(){
+    	var me = this;
         if (this.editingId != undefined){
             var t = this.$tg;
             if (!t.treegrid("validateRow", this.editingId)) {
@@ -79,7 +80,11 @@ jQuery.define(btree, {
             t.treegrid('endEdit', this.editingId);
             var node = t.treegrid("find", this.editingId);
             this.editingId = undefined;
-            $.post(this.updateUrl, node);
+            $.post(this.updateUrl, node, function() {
+    			if (config.showScuessfullMessageBox) {
+    				context.info("修改成功！");
+    			} 
+    		});
         }
         else if (this.newId != undefined){
             var t = this.$tg;
@@ -90,10 +95,29 @@ jQuery.define(btree, {
             t.treegrid('endEdit', this.newId);
             var node = t.treegrid("find", this.newId);
             this.newId = undefined;
-            $.post(this.saveUrl, node);
+            $.post(this.saveUrl, node, function() {
+    			if (config.showScuessfullMessageBox) {
+    				context.info("保存成功！");
+    			}            			
+    		});
         }
     },
+    /**
+     * 取消操作
+     */
     reject: function(){
+    	if (this.editingId == undefined && this.newId == undefined) {
+    		return;
+    	}
+    	var me = this;
+    	if (config.showConfirmDialogBeforeDelete) {
+    		context.confirm("你确定取消吗？", this.onReject, me);
+    	}
+    	else {
+    		this.onReject();
+    	}
+    },
+    onReject: function(){
         if (this.editingId != undefined){
             this.$tg.treegrid('cancelEdit', this.editingId);
             this.editingId = undefined;
@@ -122,25 +146,47 @@ jQuery.define(btree, {
     },
     
     removeit: function(){
+    	var node = this.$tg.treegrid('getSelected');
+        if (node){
+        	if (config.showConfirmDialogBeforeDelete) {
+        		context.confirm("你确定要删除吗？", this.onRemove, this);
+        	}
+        	else {
+        		this.onRemove();
+        	}
+        } else {
+        	context.alert("请选择你要删除的记录");
+        }
+    },
+    
+    onRemove: function(){
     	var me = this;
     	if (this.editingId != undefined){
             $.get(this.deleteUrl + this.editingId +".htm", function() {
             	me.$tg.treegrid('remove', this.editingId);
             	me.editingId = undefined;
+            	if (config.showScuessfullMessageBox) {
+    				context.info("删除成功！");
+    			}
             });
         }
         else if (this.newId != undefined) {
         	this.$tg.treegrid('remove', this.newId);
         	this.newId = undefined;
+        	if (config.showScuessfullMessageBox) {
+				context.info("删除成功！");
+			}
         }
         else {
         	var node = this.$tg.treegrid('getSelected');
             if (node){
                 $.get(this.deleteUrl + node.id +".htm", function() {
-                	me.$tg.treegrid('remove', node.id);
+                	me.$tg.treegrid('remove', node.id, function() {
+            			if (config.showScuessfullMessageBox) {
+            				context.info("删除成功！");
+            			}
+            		});
                 });
-            } else {
-            	context.alert("请选择你要删除的记录");
             }
         }
     },

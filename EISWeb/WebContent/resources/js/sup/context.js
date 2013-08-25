@@ -43,6 +43,7 @@ jQuery.define(context, {
 		} else {
 			$(".nav").css("color", "#333");
 		}
+		$.cookie("theme", theme);
 		$("link:first").attr('href', 'plugins/easyui/themes/'+ theme +'/easyui.css');
 	},
 	confirm: function() {

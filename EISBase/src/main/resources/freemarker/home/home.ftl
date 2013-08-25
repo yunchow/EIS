@@ -15,14 +15,21 @@
 		}
 		
     </style>
-    <link rel="stylesheet" type="text/css" href="plugins/easyui/themes/metro/easyui.css">
+    <script type="text/javascript" src="plugins/jquery/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="resources/js/ext/cookie.js"></script>
+    <script type="text/javascript">
+    	var theme = $.cookie("theme");
+    	if (!theme) {
+    		theme = "metro";
+    	}
+    	document.write('<link rel="stylesheet" type="text/css" href="plugins/easyui/themes/'+ theme +'/easyui.css">');
+    </script>
     <link rel="stylesheet" type="text/css" href="plugins/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="resources/accordion/css/accordion.css">
     <link rel="stylesheet" type="text/css" href="resources/accordion/css/icons.css">
 	<link rel="stylesheet  type="text/css" href="resources/accordion/css/accordion.css">
 	<link rel="stylesheet" type="text/css" href="resources/css/style.css">
 	<link rel="stylesheet" href="plugins/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
-    <script type="text/javascript" src="plugins/jquery/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="plugins/tools/dataformat.js"></script>
     <script type="text/javascript" src="plugins/easyui/jquery.easyui.min.1.3.2.js"></script>
     <script type="text/javascript" src="plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
