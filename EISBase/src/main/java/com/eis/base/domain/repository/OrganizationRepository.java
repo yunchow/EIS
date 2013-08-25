@@ -6,12 +6,9 @@
  */
 package com.eis.base.domain.repository;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.stereotype.Repository;
 
-import com.eis.platform.repository.BaseRepository;
+import com.eis.platform.repository.TreeRepository;
  /**
  * Title: OrganizationRepository.java
  * <p>
@@ -22,10 +19,6 @@ import com.eis.platform.repository.BaseRepository;
  * @date: Aug 13, 2013
  */
 @Repository
-public interface OrganizationRepository extends BaseRepository {
-	/**
-	 * @return orgnizationList
-	 */
-	public List<Map<String, String>> findAll();
+public interface OrganizationRepository extends TreeRepository {
 
 }

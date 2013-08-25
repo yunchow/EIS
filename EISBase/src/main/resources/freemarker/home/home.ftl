@@ -99,7 +99,7 @@
 	    </div>
     </div>
     
-    <div data-options="region:'east',split:false,iconCls:'icon-reload',collapsed:false" title="辅助工具" style="width:185px;overflow:hidden;">
+    <div data-options="region:'east',split:true,iconCls:'icon-reload',collapsed:false" title="辅助工具" style="width:195px;overflow:hidden;">
         <div class="easyui-tabs" data-options="border:false" style="height:220px;">
         	<div title="日历" style="padding:0px;">
         		<div class="easyui-calendar" data-options="border:false"></div>

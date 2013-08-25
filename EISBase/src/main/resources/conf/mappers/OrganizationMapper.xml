@@ -2,33 +2,32 @@
 
 <mapper namespace="com.eis.base.domain.repository.OrganizationRepository">
 	
-	<resultMap type="hashmap" id="menuMap">
+	<resultMap type="com.eis.base.domain.entity.Organization" id="organizeMap">
 		<id property="id"/>
 		<id property="name" column="name"/>
 		<id property="text" column="name"/>
 	</resultMap>
 	
-	<select id="findAll" resultMap="menuMap">
+	<select id="findAll" resultMap="organizeMap">
 		select * from sys_organization
-		order by seq
+		order by name
 	</select>
 	
-	<select id="findById" parameterType="String" resultMap="menuMap">
+	<select id="findById" parameterType="String" resultMap="organizeMap">
 		select * from sys_organization
 		where id = #{id}
-		order by seq
 	</select>
 	
-	<insert id="add" parameterType="com.eis.base.domain.entity.Menu">
+	<insert id="save" parameterType="hashmap">
 		insert into sys_organization 
-			(id, name, oganizer, pid, comment) 
+			(id, name, organizer, pid, comment) 
 		values 
-		    (#{id}, #{name}, #{oganizer}, #{pid}, #{comment})
+		    (#{id}, #{name}, #{organizer}, #{pid}, #{comment})
 	</insert>
 	
-	<update id="update" parameterType="com.eis.base.domain.entity.Menu">
+	<update id="update" parameterType="hashmap">
 		update sys_organization 
-		    set name = #{name}, oganizer = #{oganizer}, pid = #{pid}, comment = #{comment} 
+		    set name = #{name}, organizer = #{organizer}, pid = #{pid}, comment = #{comment} 
 		where 
 		    id = #{id}
 	</update>

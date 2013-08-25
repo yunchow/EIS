@@ -5,7 +5,7 @@ jQuery.ns("sysmanage.menu");
 
 jQuery.define(sysmanage.menu, btree, {
 	tgName: "tgMenuSetting",
-	tgMenueName: "mmMenuGrid",
+	tgMenuName: "mmMenuGrid",
 	deleteUrl: "sysmanage/menu/delete/",
     saveUrl: "sysmanage/menu/save.htm",
     updateUrl: "sysmanage/menu/update.htm",

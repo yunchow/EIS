@@ -5,7 +5,7 @@ jQuery.ns("btree");
 
 jQuery.define(btree, {
 	tgName: undefined,
-	tgMenueName: undefined,
+	tgMenuName: undefined,
 	deleteUrl: undefined,
     saveUrl: undefined,
     updateUrl: undefined,
@@ -18,7 +18,7 @@ jQuery.define(btree, {
 	
 	ready: function() {
 		this.$tg = $("#" + this.tgName);
-		this.$mm = $("#" + this.tgMenueName);
+		this.$mm = $("#" + this.tgMenuName);
 		this.onReady();
 		context.log("btree is ready.");
 	},
