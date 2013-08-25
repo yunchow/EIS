@@ -6,12 +6,9 @@
  */
 package com.eis.base.domain.repository;
 
-import java.util.List;
-
 import org.springframework.stereotype.Repository;
 
-import com.eis.base.domain.entity.Menu;
-import com.eis.platform.repository.BaseRepository;
+import com.eis.platform.repository.TreeRepository;
  /**
  * Title: MenuRepository.java
  * <p>
@@ -22,19 +19,6 @@ import com.eis.platform.repository.BaseRepository;
  * @date: Aug 13, 2013
  */
 @Repository
-public interface MenuRepository extends BaseRepository {
-	/**
-	 * @return
-	 */
-	public List<Menu> findAll();
-
-	/**
-	 * @param menu
-	 */
-	public void add(Menu menu);
-
-	/**
-	 * @param menu
-	 */
-	public void update(Menu menu);
+public interface MenuRepository extends TreeRepository {
+	
 }

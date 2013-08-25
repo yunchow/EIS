@@ -40,7 +40,8 @@ public class MenuRepositoryTest {
 	 */
 	@Test
 	public void testFindAll() {
-		List<Menu> ms = mr.findAll();
+		@SuppressWarnings("unchecked")
+		List<Menu> ms = (List<Menu>) mr.findAll();
 		System.out.println(ms);
 		Assert.assertNotNull(ms);
 	}

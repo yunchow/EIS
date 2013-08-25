@@ -28,13 +28,14 @@
     <script type="text/javascript" src="plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="plugins/ztree/js/jquery.ztree.all-3.5.js"></script>
     <script type="text/javascript" src="resources/js/ext/combotree-ext.js"></script>
-    <script type="text/javascript" src="resources/js/jns.js"></script>
-    <script type="text/javascript" src="resources/js/comm/tools.js"></script>
-    <script type="text/javascript" src="resources/js/comm/config.js"></script>
-    <script type="text/javascript" src="resources/js/comm/uuid.js"></script>
-    <script type="text/javascript" src="resources/js/comm/store.js"></script>
-    <script type="text/javascript" src="resources/js/context.js"></script>
-    <script type="text/javascript" src="resources/js/base.js"></script>
+    <script type="text/javascript" src="resources/js/sup/jns.js"></script>
+    <script type="text/javascript" src="resources/js/sup/tools.js"></script>
+    <script type="text/javascript" src="resources/js/sup/config.js"></script>
+    <script type="text/javascript" src="resources/js/sup/uuid.js"></script>
+    <script type="text/javascript" src="resources/js/sup/store.js"></script>
+    <script type="text/javascript" src="resources/js/sup/context.js"></script>
+    <script type="text/javascript" src="resources/js/sup/base.js"></script>
+    <script type="text/javascript" src="resources/js/sup/btree.js"></script>
 </head>
 <body  class="easyui-layout" style="overflow-y:hidden" scroll="no" data-options="boder:false">
     <div data-options="region:'north',border:false" style="height:60px;width:100%;margin:0px;padding:0px;overflow:hidden;">

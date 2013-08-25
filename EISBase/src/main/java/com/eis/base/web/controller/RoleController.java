@@ -68,8 +68,8 @@ public class RoleController extends BaseController {
 		roleRepository.deleteRoleMenu(id);
 	}
 
-	@RequestMapping("/page")
-	public String preparePage() {
+	@Override
+	protected String getGridPage() {
 		return "sysmanage/role.ftl";
 	}
 	

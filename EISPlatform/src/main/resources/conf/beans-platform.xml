@@ -95,6 +95,7 @@
 				<entry key="require" value-ref="requireDirective" />
 				<entry key="toolbar" value-ref="toolbarDirective" />
 				<entry key="datagrid" value-ref="dataGridDirective" />
+				<entry key="treegrid" value-ref="treeGridDirective" />
 			</map>
 		</property>
 		<property name="defaultEncoding" value="utf-8" />
@@ -116,6 +117,10 @@
 	<bean id="toolbarDirective" parent="directiveModelSupport" class="com.eis.platform.web.directive.ToolbarDirective" />
 	
 	<bean id="dataGridDirective" parent="directiveModelSupport" class="com.eis.platform.web.directive.DataGridDirective" />
+	
+	<bean id="treeGridDirective" parent="directiveModelSupport" class="com.eis.platform.web.directive.DataGridDirective">
+		<property name="templateName" value="treegrid.ftl"></property>
+	</bean>
 	
 	<bean id="requireDirective" class="com.eis.platform.web.directive.RequireDirective" />
 	<bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />

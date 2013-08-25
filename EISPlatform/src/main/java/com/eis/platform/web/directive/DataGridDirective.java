@@ -31,6 +31,8 @@ import freemarker.template.TemplateModel;
  */
 public class DataGridDirective extends TemplateDirectiveModelSupport {
 
+	private String templateName = "datagrid.ftl";
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(Environment env, @SuppressWarnings("rawtypes") Map params, TemplateModel[] loopVars,
@@ -49,8 +51,16 @@ public class DataGridDirective extends TemplateDirectiveModelSupport {
 		params.put("body", new SimpleScalar(sw.toString()));
 		
 		Writer out = env.getOut();
-		Template template = configuration.getTemplate("datagrid.ftl");
+		Template template = configuration.getTemplate(templateName);
 		template.process(params, out);
 	}
 
+	public String getTemplateName() {
+		return templateName;
+	}
+
+	public void setTemplateName(String templateName) {
+		this.templateName = templateName;
+	}
+	
 }

@@ -28,6 +28,15 @@ import com.eis.platform.repository.BaseRepository;
 public abstract class BaseController {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
+	@RequestMapping("/grid")
+	public String prepare() {
+		return getGridPage();
+	}
+	
+	protected String getGridPage() {
+		return null;
+	}
+	
 	/**
 	 * child class must override this method
 	 * @return

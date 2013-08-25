@@ -1,5 +1,5 @@
 /**
- * fileName: EISBase/com.eis.base.web.controller/MenuController.java
+ * fileName: EISBase/com.eis.base.web.controller/OrganizationController.java
  * copyright: EIS All rights reverved
  * author: nick.chow
  * date: Aug 13, 2013
@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.eis.base.domain.repository.MenuRepository;
+import com.eis.base.domain.repository.OrganizationRepository;
 import com.eis.platform.repository.BaseRepository;
 import com.eis.platform.web.controller.TreeController;
 
  /**
- * Title: MenuController.java
+ * Title: OrganizationController.java
  * <p>
  * Please comment here
  * </p>
@@ -24,20 +24,20 @@ import com.eis.platform.web.controller.TreeController;
  * @date: Aug 13, 2013
  */
 @Controller
-@RequestMapping("/sysmanage/menu")
-public class MenuController extends TreeController {
+@RequestMapping("/sysmanage/organization")
+public class OrganizationController extends TreeController {
 	
 	@Autowired
-	private MenuRepository menuRepository;
-	
+	private OrganizationRepository organizationRepository;
+
 	@Override
 	protected String getGridPage() {
-		return "sysmanage/menu.ftl";
+		return "sysmanage/organization.ftl";
 	}
 	
 	@Override
 	public BaseRepository getRepository() {
-		return menuRepository;
+		return organizationRepository;
 	}
 	
 }

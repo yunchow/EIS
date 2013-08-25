@@ -30,7 +30,7 @@ store = {
 			return;
 		}
 		var me = this;
-		$.post("sysmanage/menu/json.htm", function(data) {
+		$.post("sysmanage/menu/tree.htm", function(data) {
 			me.menuTreeStore = $.parseJSON(data);
 			context.log("init menu tree store correctly");
 		});

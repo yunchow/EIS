@@ -81,8 +81,8 @@ public class UserController extends BaseController {
 		userRepository.deleteUserRole(id);
 	}
 	
-	@RequestMapping("/page")
-	public String prepare() {
+	@Override
+	protected String getGridPage() {
 		return "sysmanage/user.ftl";
 	}
 	

@@ -59,39 +59,20 @@
 	</select>
 	
 	<select id="findById" parameterType="String" resultMap="menuMap">
-		select
-			p.id pid,
-			p.name pname,
-			p.url purl,
-			p.icon picon,
-			p.status pstatus,
-			p.seq pseq,
-			p.comment pcomment,
-			p.pid ppid,
-			c.id cid,
-			c.name cname,
-			c.url curl,
-			c.icon cicon,
-			c.seq cseq,
-			c.status cstatus,
-			c.comment ccomment,
-			c.pid cpid
-		from sys_menuitem p
-		left outer join sys_menuitem c on c.pid = p.id
-		where p.pid is null and id = #{id}
-		order by pseq, cseq
+		select * from sys_menuitem
+		where id = #{id}
 	</select>
 	
-	<insert id="add" parameterType="com.eis.base.domain.entity.Menu">
+	<insert id="save" parameterType="hashmap">
 		insert into sys_menuitem 
 			(id, name, url, icon, seq, status, pid, comment) 
 		values 
-		    (#{id}, #{name}, #{url}, #{icon}, #{seq}, #{status}, #{parent.id}, #{comment})
+		    (#{id}, #{name}, #{url}, #{icon}, #{seq}, #{status}, #{pid}, #{comment})
 	</insert>
 	
-	<update id="update" parameterType="com.eis.base.domain.entity.Menu">
+	<update id="update" parameterType="hashmap">
 		update sys_menuitem 
-		    set name = #{name}, url = #{url}, icon = #{icon}, seq = #{seq}, status = #{status}, pid = #{parent.id}, comment = #{comment} 
+		    set name = #{name}, url = #{url}, icon = #{icon}, seq = #{seq}, status = #{status}, pid = #{pid}, comment = #{comment} 
 		where 
 		    id = #{id}
 	</update>

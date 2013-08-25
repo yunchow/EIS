@@ -13,9 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.eis.base.domain.entity.Menu;
 import com.eis.base.domain.repository.MenuRepository;
 import com.eis.platform.util.TreeUtil;
+import com.eis.platform.vo.Tree;
 
  /**
  * Title: UserAction.java
@@ -38,7 +38,7 @@ public class ApplicationController {
 	
 	@RequestMapping("/home/menu/list")
 	public String loadLeftMenuPage(ModelMap model) {
-		List<Menu> menuList = menuRepository.findAll();
+		List<? extends Tree> menuList = menuRepository.findAll();
 		TreeUtil.buildJsonTreeFor(menuList);
 		model.addAttribute("menus", menuList);
 		return "home/menu_list.ftl";

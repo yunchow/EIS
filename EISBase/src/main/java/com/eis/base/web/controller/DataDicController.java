@@ -35,8 +35,9 @@ public class DataDicController extends BaseController {
 	@Autowired
 	private DataDicRepository dataDicRepository;
 	
-	@RequestMapping("/page")
-	public String preparePage() {
+	
+	@Override
+	protected String getGridPage() {
 		return "sysmanage/datadic.ftl";
 	}
 	
