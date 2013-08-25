@@ -162,8 +162,8 @@ jQuery.define(btree, {
     onRemove: function(){
     	var me = this;
     	if (this.editingId != undefined){
-            $.get(this.deleteUrl + this.editingId +".htm", function() {
-            	me.$tg.treegrid('remove', this.editingId);
+            $.post(this.deleteUrl + this.editingId +".htm", function() {
+            	me.$tg.treegrid('remove', me.editingId);
             	me.editingId = undefined;
             	if (config.showScuessfullMessageBox) {
     				context.info("删除成功！");
@@ -180,12 +180,11 @@ jQuery.define(btree, {
         else {
         	var node = this.$tg.treegrid('getSelected');
             if (node){
-                $.get(this.deleteUrl + node.id +".htm", function() {
-                	me.$tg.treegrid('remove', node.id, function() {
-            			if (config.showScuessfullMessageBox) {
-            				context.info("删除成功！");
-            			}
-            		});
+                $.post(this.deleteUrl + node.id +".htm", function() {
+                	me.$tg.treegrid('remove', node.id);
+                	if (config.showScuessfullMessageBox) {
+        				context.info("删除成功！");
+        			}
                 });
             }
         }
