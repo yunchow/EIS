@@ -76,7 +76,7 @@
 		    <artifactId>activiti-modeler</artifactId>
 		    <version>${activiti.version}</version>
 		</dependency>
-		
+
 		<dependency>
 		    <groupId>org.freemarker</groupId>
 		    <artifactId>freemarker</artifactId>

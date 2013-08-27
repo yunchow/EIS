@@ -10,7 +10,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ModelQuery;
@@ -71,7 +70,7 @@ public class ModelController {
 	public String saveModel(
 			@RequestParam("name") String name, 
 			@RequestParam("key") String key, 
-			@RequestParam("comment") String comment) {
+			@RequestParam("metaInfo") String metaInfo) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		ObjectNode editorNode = objectMapper.createObjectNode();
 		editorNode.put("id", "canvas");
@@ -81,12 +80,12 @@ public class ModelController {
 		editorNode.put("stencilset", stencilSetNode);
 		Model modelData = repositoryService.newModel();
 
-		ObjectNode modelObjectNode = objectMapper.createObjectNode();
+		/*ObjectNode modelObjectNode = objectMapper.createObjectNode();
 		modelObjectNode.put(ModelDataJsonConstants.MODEL_NAME, name);
 		modelObjectNode.put(ModelDataJsonConstants.MODEL_REVISION, 1);
 		comment = StringUtils.defaultString(comment);
-		modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, comment);
-		modelData.setMetaInfo(modelObjectNode.toString());
+		modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, comment);*/
+		modelData.setMetaInfo(metaInfo);
 		modelData.setName(name);
 		modelData.setKey(StringUtils.defaultString(key));
 		
