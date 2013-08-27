@@ -35,6 +35,7 @@
     <script type="text/javascript" src="plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="plugins/ztree/js/jquery.ztree.all-3.5.js"></script>
     <script type="text/javascript" src="resources/js/ext/combotree-ext.js"></script>
+    <script type="text/javascript" src="resources/js/ext/date.js"></script>
     <script type="text/javascript" src="resources/js/sup/jns.js"></script>
     <script type="text/javascript" src="resources/js/sup/tools.js"></script>
     <script type="text/javascript" src="resources/js/sup/config.js"></script>
