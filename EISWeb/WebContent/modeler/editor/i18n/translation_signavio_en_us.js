@@ -72,15 +72,15 @@ ORYX.I18N.PropertyWindow.btnDown = "Move down";
 ORYX.I18N.PropertyWindow.createNew = "Create new";
 
 if(!ORYX.I18N.PropertyWindow) ORYX.I18N.PropertyWindow = {};
-ORYX.I18N.PropertyWindow.oftenUsed = "Main attributes";
-ORYX.I18N.PropertyWindow.moreProps = "More attributes";
+ORYX.I18N.PropertyWindow.oftenUsed = "主要属性"; // by nick chow  Main attributes
+ORYX.I18N.PropertyWindow.moreProps = "更多属性";  // by nick chow  More attributes
 ORYX.I18N.PropertyWindow.characteristicNr = "Cost &amp; Resource Analysis";
 ORYX.I18N.PropertyWindow.meta = "Custom attributes";
 
 if(!ORYX.I18N.PropertyWindow.Category){ORYX.I18N.PropertyWindow.Category = {}}
-ORYX.I18N.PropertyWindow.Category.popular = "Main Attributes";
+ORYX.I18N.PropertyWindow.Category.popular = "主要属性";  // by nick chow Main attributes
 ORYX.I18N.PropertyWindow.Category.characteristicnr = "Cost &amp; Resource Analysis";
-ORYX.I18N.PropertyWindow.Category.others = "More Attributes";
+ORYX.I18N.PropertyWindow.Category.others = "更多属性"; // nick chow
 ORYX.I18N.PropertyWindow.Category.meta = "Custom Attributes";
 
 if(!ORYX.I18N.PropertyWindow.ListView) ORYX.I18N.PropertyWindow.ListView = {};
