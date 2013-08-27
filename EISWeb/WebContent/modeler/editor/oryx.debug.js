@@ -11579,6 +11579,7 @@ ORYX.Editor = {
                 "</div>" + 
               "</div>";
 			
+			
 			if( headerPanel.body ){
 				headerPanel.body.dom.innerHTML = content;
 			} else {
@@ -11588,9 +11589,9 @@ ORYX.Editor = {
 		
 		ORYX.Editor.Cookie.onChange(fn);
 		fn(ORYX.Editor.Cookie.getParams());
-		
+		// update by nick chow to delete header for editor
 		// The oryx header
-		this.addToRegion("north", headerPanel );
+		//this.addToRegion("north", headerPanel );
 	},
 	
 	/**
@@ -18342,7 +18343,8 @@ new function(){
 		mask = Ext.get(document.createElement("div"));
 		parent.appendChild(mask);
 		mask.dom.setAttribute("style", s);
-		mask.dom.innerHTML = 	"<div class='mask-logo' style='"+ss+"'>"+
+		// update by nick to delete the image overlay
+		/*mask.dom.innerHTML = 	"<div class='mask-logo' style='"+ss+"'>"+
 									"<div>"+
 										"<img style='"+simg+"' src='"+ORYX.CONFIG.EXPLORER_PATH+"/src/img/signavio/smoky/logo.png' />"+
 									"</div>"+
@@ -18352,7 +18354,11 @@ new function(){
 										"<img style='"+sloading+"' src='"+(ORYX.CONFIG.BLANK_IMAGE||Ext.BLANK_IMAGE_URL)+"'/>"+
 									"</span>" +
 								"</div>";
-
+								*/
+		
+		mask.dom.innerHTML = 	"<div style='padding:10px;'>"+
+									"<img style='"+sloading+"' src='"+(ORYX.CONFIG.BLANK_IMAGE||Ext.BLANK_IMAGE_URL)+"'/>" + "正在初始化编辑器，请稍候..."+
+								"</div>";
 		mask.first().show({duration:0.3});
 
 	}
