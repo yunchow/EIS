@@ -11,7 +11,9 @@
     <th data-options="field:'metaInfo',width:80">元数据</th>
 </@datagrid>
 
-<@toolbar id="modelToolbar" ns="flowmanage.model" menu="#modelSearchBoxMenu"/>
+<@toolbar id="modelToolbar" ns="flowmanage.model" menu="#modelSearchBoxMenu">
+	<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="flowmanage.model.editFlow()">编辑流程</a>
+</@toolbar>
 
 <div id="modelSearchBoxMenu" style="width:auto">
     <div data-options="name:'name'">模型名称</div>

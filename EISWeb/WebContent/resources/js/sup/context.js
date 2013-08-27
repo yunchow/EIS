@@ -166,7 +166,7 @@ jQuery.define(context, {
 	 */
 	addTab: function(subtitle, url, icon) {
 		if (!$('#homeTabBar').tabs('exists', subtitle)) {
-			if(url.indexOf('isIframe') != -1){
+			if(url.indexOf('if') != -1){
 				$('#homeTabBar').tabs('add', {
 					title : subtitle,
 					content : '<iframe src="' + url + '" frameborder="0" style="border:0;width:100%;height:99.4%;"></iframe>',
@@ -185,6 +185,19 @@ jQuery.define(context, {
 			$('#homeTabBar').tabs('select', subtitle);
 		}
 		//this.enableHomeTabRightClickMenue();
+	},
+	
+	openTab: function(subtitle, url, icon) {
+		if (!$('#homeTabBar').tabs('exists', subtitle)) {
+			$('#homeTabBar').tabs('add', {
+				title : subtitle,
+				content : '<iframe src="' + url + '" frameborder="0" style="border:0;width:100%;height:99.4%;"></iframe>',
+				closable : true,
+				icon : icon
+			});
+		} else {
+			$('#homeTabBar').tabs('select', subtitle);
+		}
 	},
 	
 	/**
