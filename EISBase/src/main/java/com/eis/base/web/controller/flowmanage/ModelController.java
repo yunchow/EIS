@@ -6,14 +6,26 @@
  */
 package com.eis.base.web.controller.flowmanage;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.activiti.bpmn.converter.BpmnXMLConverter;
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.editor.constants.ModelDataJsonConstants;
+import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ModelQuery;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
@@ -70,7 +82,7 @@ public class ModelController {
 	public String saveModel(
 			@RequestParam("name") String name, 
 			@RequestParam("key") String key, 
-			@RequestParam("metaInfo") String metaInfo) {
+			@RequestParam("description") String description) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		ObjectNode editorNode = objectMapper.createObjectNode();
 		editorNode.put("id", "canvas");
@@ -80,12 +92,11 @@ public class ModelController {
 		editorNode.put("stencilset", stencilSetNode);
 		Model modelData = repositoryService.newModel();
 
-		/*ObjectNode modelObjectNode = objectMapper.createObjectNode();
+		ObjectNode modelObjectNode = objectMapper.createObjectNode();
 		modelObjectNode.put(ModelDataJsonConstants.MODEL_NAME, name);
 		modelObjectNode.put(ModelDataJsonConstants.MODEL_REVISION, 1);
-		comment = StringUtils.defaultString(comment);
-		modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, comment);*/
-		modelData.setMetaInfo(metaInfo);
+		modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, StringUtils.defaultString(description));
+		modelData.setMetaInfo(modelObjectNode.toString());
 		modelData.setName(name);
 		modelData.setKey(StringUtils.defaultString(key));
 		
@@ -111,46 +122,44 @@ public class ModelController {
 
 	/**
 	 * 根据Model部署流程
+	 * @throws IOException 
+	 * @throws JsonProcessingException 
 	 */
-	/*@RequestMapping(value = "deploy/{modelId}")
-	public String deploy(@PathVariable("modelId") String modelId, RedirectAttributes redirectAttributes) {
-		try {
-			Model modelData = repositoryService.getModel(modelId);
-			ObjectNode modelNode = (ObjectNode) new ObjectMapper().readTree(repositoryService.getModelEditorSource(modelData.getId()));
-			byte[] bpmnBytes = null;
+	@RequestMapping(value = "/deploy/{modelId}")
+	@ResponseBody
+	public String deploy(@PathVariable("modelId") String modelId) throws JsonProcessingException, IOException {
+		Model modelData = repositoryService.getModel(modelId);
+		ObjectNode modelNode = (ObjectNode) new ObjectMapper().readTree(repositoryService.getModelEditorSource(modelData.getId()));
 
-			BpmnModel model = new BpmnJsonConverter().convertToBpmnModel(modelNode);
-			bpmnBytes = new BpmnXMLConverter().convertToXML(model);
+		BpmnModel model = new BpmnJsonConverter().convertToBpmnModel(modelNode);
+		byte[] bpmnBytes = new BpmnXMLConverter().convertToXML(model);
 
-			String processName = modelData.getName() + ".bpmn20.xml";
-			Deployment deployment = repositoryService.createDeployment().name(modelData.getName()).addString(processName, new String(bpmnBytes)).deploy();
-			redirectAttributes.addFlashAttribute("message", "部署成功，部署ID=" + deployment.getId());
-		} catch (Exception e) {
-			logger.error("根据模型部署流程失败：modelId={}", modelId, e);
-		}
-		return "redirect:/activiti/model/list";
-	}*/
+		String processName = modelData.getName() + ".bpmn20.xml";
+		Deployment deployment = repositoryService.createDeployment().name(modelData.getName()).addString(processName, new String(bpmnBytes)).deploy();
+		return deployment.getId();
+	}
 
 	/**
 	 * 导出model的xml文件
-	 *//*
-	@RequestMapping(value = "export/{modelId}")
-	public void export(@PathVariable("modelId") String modelId, HttpServletResponse response) {
-		try {
-			Model modelData = repositoryService.getModel(modelId);
-			BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
-			JsonNode editorNode = new ObjectMapper().readTree(repositoryService.getModelEditorSource(modelData.getId()));
-			BpmnModel bpmnModel = jsonConverter.convertToBpmnModel(editorNode);
-			BpmnXMLConverter xmlConverter = new BpmnXMLConverter();
-			byte[] bpmnBytes = xmlConverter.convertToXML(bpmnModel);
-
-			ByteArrayInputStream in = new ByteArrayInputStream(bpmnBytes);
-			IOUtils.copy(in, response.getOutputStream());
-			String filename = bpmnModel.getMainProcess().getId() + ".bpmn20.xml";
-			response.setHeader("Content-Disposition", "attachment; filename=" + filename);
-			response.flushBuffer();
-		} catch (Exception e) {
-			logger.error("导出model的xml文件失败：modelId={}", modelId, e);
-		}
-	}*/
+	 * @throws IOException 
+	 * @throws JsonProcessingException 
+	 */
+	@RequestMapping(value = "/export/{modelId}")
+	public void downloadFlowFile(@PathVariable("modelId") String modelId, HttpServletResponse response) throws JsonProcessingException, IOException {
+		Model modelData = repositoryService.getModel(modelId);
+		BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
+		JsonNode editorNode = new ObjectMapper().readTree(repositoryService.getModelEditorSource(modelData.getId()));
+		
+		BpmnModel bpmnModel = jsonConverter.convertToBpmnModel(editorNode);
+		BpmnXMLConverter xmlConverter = new BpmnXMLConverter();
+		byte[] bpmnBytes = xmlConverter.convertToXML(bpmnModel);
+		ByteArrayInputStream in = new ByteArrayInputStream(bpmnBytes);
+		
+		String filename = bpmnModel.getMainProcess().getId() + ".bpmn20.xml";
+		response.setHeader("Content-Disposition", "attachment; filename=" + filename);
+		//response.setContentType("text/xml; charset=utf-8");
+		//response.setContentLength(bpmnBytes.length);
+		IOUtils.copy(in, response.getOutputStream());
+		response.flushBuffer();
+	}
 }

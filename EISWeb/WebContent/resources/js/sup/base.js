@@ -160,11 +160,13 @@ jQuery.define(base, {
             this.$dg.datagrid('acceptChanges');
             if (row) {
             	if (row.add_add___) {
-            		$.post(this.saveUrl, row, function() {
+            		var me = this;
+            		$.post(this.saveUrl, row, function(data) {
             			row.add_add___ = false;
             			if (config.showScuessfullMessageBox) {
             				context.info("保存成功！");
-            			}            			
+            			}
+            			me.onSaveScuess();
             		});
             	}
             	else {
@@ -176,6 +178,14 @@ jQuery.define(base, {
             	}
             }
         }
+    },
+    
+    /**
+     * 新增记录成功时回调方法
+     * @param data
+     */
+    onSaveScuess: function(data) {
+    	
     },
     /**
      * 取消操作
