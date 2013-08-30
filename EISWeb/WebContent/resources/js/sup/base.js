@@ -10,14 +10,14 @@ jQuery.define(base, {
     updateUrl: undefined,
     
     init: function() {
-    	store.initMenuTreeStore();
-    	store.initRoleStore();
+    	//store.initMenuTreeStore();
+    	//store.initRoleStore();
     	context.log("base module init");
     },
     
 	ready: function() {
-		this.$dg = $('#' + this.dgId);
-		this.editIndex = undefined;
+		//this.$dg = $('#' + this.dgId);
+		//this.editIndex = undefined;
 		context.log("base module is ready");
 		this.onReady();
 	},

@@ -44,7 +44,7 @@ jQuery.define(context, {
 			$(".nav").css("color", "#333");
 		}
 		$.cookie("theme", theme);
-		$("link:first").attr('href', 'plugins/easyui/themes/'+ theme +'/easyui.css');
+		$("link:first").prop('href', 'resources/plugins/jquery-easyui-1.3.4/themes/'+ theme +'/easyui.css');
 	},
 	confirm: function() {
 		this.openDialog(arguments, "confirm");
@@ -184,7 +184,7 @@ jQuery.define(context, {
 		} else {
 			$('#homeTabBar').tabs('select', subtitle);
 		}
-		//this.enableHomeTabRightClickMenue();
+		this.enableHomeTabRightClickMenue();
 	},
 	
 	openTab: function(subtitle, url, icon) {
@@ -204,7 +204,7 @@ jQuery.define(context, {
 	 * 主页tabs右击菜单和双击事件
 	 */
 	enableHomeTabRightClickMenue: function() {
-		/*$(".tabs li").live("dblclick", function(e) {
+		/*$(".tabs li").on("dblclick", function(e) {
 			e.preventDefault();
 			e.stopPropagation();
 			var subtitle = $(this).find(".tabs-title").html();
@@ -212,7 +212,7 @@ jQuery.define(context, {
 			$('#homeTabBar').tabs('close', subtitle);
 			return false;
 		})*/
-		$(".tabs-inner").live('contextmenu', function(e) {
+		$(".tabs-inner").on('contextmenu', function(e) {
 			context.log("主页面tab右键菜单Fired");
 			e.preventDefault();
 			context.log(e);
