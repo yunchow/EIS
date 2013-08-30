@@ -25,21 +25,21 @@
     <div data-options="name:'name'">部署名称</div>
 </div>
 
-<div id="deployPackageDialog" class="easyui-dialog" title="Toolbar and Buttons" style="width:400px;height:200px;padding:10px;"
+<div id="deployPackageDialog" class="easyui-dialog" title="发布流程" style="width:400px;height:200px;padding:10px;"
     data-options="
-            iconCls: 'icon-save',
+            iconCls: 'icon-add',
             modal: true,
             closed: true,
             buttons: [{
-                text:'Ok',
+                text:'确认',
                 iconCls:'icon-ok',
                 handler:function(){
                     alert('ok');
                 }
             },{
-                text:'Cancel',
+                text:'取消',
                 handler:function(){
-                    alert('cancel');;
+                    $('#deployPackageDialog').dialog('close');
                 }
             }]
         ">
