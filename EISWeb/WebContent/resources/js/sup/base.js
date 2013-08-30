@@ -10,14 +10,14 @@ jQuery.define(base, {
     updateUrl: undefined,
     
     init: function() {
-    	//store.initMenuTreeStore();
-    	//store.initRoleStore();
+    	store.initMenuTreeStore();
+    	store.initRoleStore();
     	context.log("base module init");
     },
     
 	ready: function() {
-		//this.$dg = $('#' + this.dgId);
-		//this.editIndex = undefined;
+		this.$dg = $('#' + this.dgId);
+		this.editIndex = undefined;
 		context.log("base module is ready");
 		this.onReady();
 	},
@@ -54,6 +54,18 @@ jQuery.define(base, {
     	param[name || this.searchField] = '%'+ value +'%';
     	this.$dg.datagrid("load", param);
     	this.editIndex = undefined;
+	},
+	/**
+	 * 弹出窗口确认事件
+	 */
+	onDialogConfirmClick: function() {
+		
+	},
+	/**
+	 * 弹出窗口取消事件
+	 */
+	onDialogConfirmClick: function() {
+		
 	},
     reload: function() {
     	this.$dg.datagrid("reload");

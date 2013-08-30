@@ -19,6 +19,10 @@ jQuery.define(flowmanage.deploy, base, {
     	return {version: 1};
     },
     
+    onDialogConfirmClick: function() {
+		context.info("onDialogConfirmClick");
+	},
+    
     onDblClickRow: function(index, rowData){
     	
     },

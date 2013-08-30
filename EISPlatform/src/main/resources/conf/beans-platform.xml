@@ -97,6 +97,7 @@
 				<entry key="datagrid" value-ref="dataGridDirective" />
 				<entry key="treegrid" value-ref="treeGridDirective" />
 				<entry key="menu" value-ref="menuDirective" />
+				<entry key="dialog" value-ref="dialogDirective" />
 			</map>
 		</property>
 		<property name="defaultEncoding" value="utf-8" />
@@ -125,6 +126,10 @@
 	
 	<bean id="menuDirective" parent="directiveModelSupport" class="com.eis.platform.web.directive.TemplateDirective">
 		<property name="template" value="menu.ftl"></property>
+	</bean>
+	
+	<bean id="dialogDirective" parent="directiveModelSupport" class="com.eis.platform.web.directive.TemplateDirective">
+		<property name="template" value="dialog.ftl"></property>
 	</bean>
 	
 	<bean id="requireDirective" class="com.eis.platform.web.directive.RequireDirective" />

@@ -7,6 +7,7 @@
 package com.eis.platform.web.directive;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Map;
 
 import org.springframework.util.Assert;
@@ -38,6 +39,11 @@ public class TemplateDirective extends TemplateDirectiveModelSupport {
 		SimpleScalar ns = (SimpleScalar) params.get("ns");
 		logger.debug("ns is {}", ns);
 		Assert.notNull(ns, "ns property is required for datagrid derictive");
+		if (body != null) {
+			StringWriter sw = new StringWriter();
+			body.render(sw);
+			params.put("body", new SimpleScalar(sw.toString()));
+		}
 		Template template = configuration.getTemplate(this.template);
 		template.process(params, env.getOut());
 	}

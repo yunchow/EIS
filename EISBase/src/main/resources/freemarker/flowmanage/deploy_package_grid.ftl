@@ -25,23 +25,6 @@
     <div data-options="name:'name'">部署名称</div>
 </div>
 
-<div id="deployPackageDialog" class="easyui-dialog" title="发布流程" style="width:400px;height:200px;padding:10px;"
-    data-options="
-            iconCls: 'icon-add',
-            modal: true,
-            closed: true,
-            buttons: [{
-                text:'确认',
-                iconCls:'icon-ok',
-                handler:function(){
-                    alert('ok');
-                }
-            },{
-                text:'取消',
-                handler:function(){
-                    $('#deployPackageDialog').dialog('close');
-                }
-            }]
-        ">
-    The dialog content.
-</div>
+<@dialog id="deployPackageDialog" title="发布流程"  ns="flowmanage.deploy" width="400px" height="200px">
+		The dialog content.11111111111111111
+</@dialog>
