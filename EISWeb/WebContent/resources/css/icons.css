@@ -1,0 +1,67 @@
+.book_edit {
+	background: url('icons/book_edit.png') no-repeat;
+}
+
+.pencil {
+	background: url('icons/pencil.png') no-repeat;
+}
+
+.back {
+	background: url('icons/back.png') no-repeat;
+}
+
+.search {
+	background: url('icons/search.png') no-repeat;
+}
+
+.map {
+	background: url('icons/map.png') no-repeat;
+}
+
+.pictures {
+	background: url('icons/pictures.png') no-repeat;
+}
+
+.calculator {
+	background: url('icons/calculator.png') no-repeat;
+}
+
+.folder {
+	background: url('icons/folder.png') no-repeat;
+}
+
+.pie {
+	background: url('icons/pie.png') no-repeat;
+}
+
+.group_add {
+	background: url('icons/group_add.png') no-repeat;
+}
+/* 自定义 */
+.bar {
+	background: url('icons/bar.png') no-repeat center center;
+}
+
+.blank {
+	background: url('icons/blank.gif') no-repeat center center;
+}
+
+.table {
+	background: url('icons/default.png') no-repeat center center;
+}
+
+.line {
+	background: url('icons/line.png') no-repeat center center;
+}
+
+.message {
+	background: url('icons/message.png') no-repeat center center;
+}
+
+.map {
+	background: url('icons/map.png') no-repeat center center;
+}
+
+.text {
+	background: url('icons/text.png') no-repeat center center;
+}

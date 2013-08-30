@@ -15,26 +15,22 @@
 		}
 		
     </style>
-    <script type="text/javascript" src="plugins/jquery/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="resources/plugins/jquery/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="resources/plugins/jquery/jquery-migrate-1.2.1.js"></script>
     <script type="text/javascript" src="resources/js/ext/cookie.js"></script>
     <script type="text/javascript">
     	var theme = $.cookie("theme");
     	if (!theme) {
     		theme = "metro";
     	}
-    	document.write('<link rel="stylesheet" type="text/css" href="plugins/easyui/themes/'+ theme +'/easyui.css">');
+    	document.write('<link rel="stylesheet" type="text/css" href="resources/plugins/jquery-easyui-1.3.4/themes/'+ theme +'/easyui.css">');
     </script>
-    <link rel="stylesheet" type="text/css" href="plugins/easyui/themes/icon.css">
-    <link rel="stylesheet" type="text/css" href="resources/accordion/css/accordion.css">
-    <link rel="stylesheet" type="text/css" href="resources/accordion/css/icons.css">
-	<link rel="stylesheet  type="text/css" href="resources/accordion/css/accordion.css">
+    <link rel="stylesheet" type="text/css" href="resources/plugins/jquery-easyui-1.3.4/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/icons.css">
 	<link rel="stylesheet" type="text/css" href="resources/css/style.css">
-	<link rel="stylesheet" href="plugins/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
-    <script type="text/javascript" src="plugins/tools/dataformat.js"></script>
-    <script type="text/javascript" src="plugins/easyui/jquery.easyui.min.1.3.2.js"></script>
-    <script type="text/javascript" src="plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
-    <script type="text/javascript" src="plugins/ztree/js/jquery.ztree.all-3.5.js"></script>
-    <script type="text/javascript" src="plugins/download/jquery.fileDownload-1.4.2.js"></script>
+    <script type="text/javascript" src="resources/plugins/jquery-easyui-1.3.4/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="resources/plugins/jquery-easyui-1.3.4/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="resources/plugins/jquery-file-download-1.4.2/jquery.fileDownload-1.4.2.js"></script>
     <script type="text/javascript" src="resources/js/ext/combotree-ext.js"></script>
     <script type="text/javascript" src="resources/js/ext/date.js"></script>
     <script type="text/javascript" src="resources/js/sup/jns.js"></script>
