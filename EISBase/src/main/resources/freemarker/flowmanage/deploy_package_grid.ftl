@@ -25,6 +25,24 @@
     <div data-options="name:'name'">部署名称</div>
 </div>
 
-<@dialog id="deployPackageDialog" title="发布流程"  ns="flowmanage.deploy" width="400px" height="200px">
-		The dialog content.11111111111111111
+<@dialog id="deployPackageDialog" title="部署流程文件" confirm=false  ns="flowmanage.deploy" confirmText="确定" width="600px">
+	<div id="file-uploader">		
+		<noscript>			
+			<p>使打开浏览器 JavaScript功能使用上传</p>
+		</noscript>         
+	</div>
+	<div class="alert">
+		温馨提醒：选择文件后系统会自动上传并部署（支持同时选择多个文件）
+	</div>
+	<div class="alert">
+		支持文件格式:&nbsp;&nbsp;xml,&nbsp;&nbsp;zip,&nbsp;&nbsp;rar&nbsp;&nbsp;(文件最大不超过5MB)
+		<br>
+		支持浏览器:&nbsp;&nbsp;
+		Internet Explorer >=7,&nbsp;&nbsp;
+		Firefox,&nbsp;&nbsp;
+		Chrome,&nbsp;&nbsp;
+		Android >=2.3.x,&nbsp;&nbsp;
+		iOS >=6.0,&nbsp;&nbsp;
+		Safari >=5 (OS X)
+	</div>
 </@dialog>

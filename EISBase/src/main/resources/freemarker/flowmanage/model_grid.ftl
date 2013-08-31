@@ -30,7 +30,7 @@
 <@toolbar id="modelToolbar" ns="flowmanage.model" update=false cancel=false save=true menu="#modelSearchBoxMenu">
 	<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="flowmanage.model.editFlow()">设计流程</a>
 	<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'map',plain:true" onclick="flowmanage.model.deploy()">部署流程</a>
-	<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'bar',plain:true" onclick="flowmanage.model.exportFlow()">导出流程</a>
+	<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'line',plain:true" onclick="flowmanage.model.exportFlow()">导出流程</a>
 </@toolbar>
 
 <div id="modelSearchBoxMenu" style="width:auto">

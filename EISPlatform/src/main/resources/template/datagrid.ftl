@@ -18,7 +18,7 @@
             fit: true,
             fitColumns: true,
             border: false,
-            url: '${url}',
+            url: '${url!}',
             method: 'post',
             rownumbers: ${rownumbers?c},
             pagination: true,

@@ -26,6 +26,7 @@
     	document.write('<link rel="stylesheet" type="text/css" href="resources/plugins/jquery-easyui-1.3.4/themes/'+ theme +'/easyui.css">');
     </script>
     <link rel="stylesheet" type="text/css" href="resources/plugins/jquery-easyui-1.3.4/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="resources/plugins/fine-uploader-3.8.2/fineuploader.css">
     <link rel="stylesheet" type="text/css" href="resources/css/icons.css">
 	<link rel="stylesheet" type="text/css" href="resources/css/style.css">
     <script type="text/javascript" src="resources/plugins/jquery-easyui-1.3.4/jquery.easyui.min.js"></script>

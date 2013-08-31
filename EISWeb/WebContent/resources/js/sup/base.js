@@ -28,6 +28,10 @@ jQuery.define(base, {
 		
 	},
 	
+	getGrid: function() {
+		return this.$dg;
+	},
+	
 	getTreeNodeName: function(treeNode, value, names) {
 		if (!!!treeNode) {
 			return;
@@ -64,7 +68,7 @@ jQuery.define(base, {
 	/**
 	 * 弹出窗口取消事件
 	 */
-	onDialogConfirmClick: function() {
+	onDialogCancelClick: function() {
 		
 	},
     reload: function() {

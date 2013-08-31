@@ -137,6 +137,42 @@ jQuery.extend({
     		jQuery.ajax(url, {
 				dataType: 'script',
 				async: false,
+				cache: true,
+				success: function() {
+					var t2 = new Date().getTime();
+					jQuery.log("script [" + url + "] loaded successfully and cost "
+							+ (t2 - t1) +" ms");
+				}
+			});
+    	}
+    },
+    load: function() {
+    	if (arguments.length < 1) {
+    		throw new Error("Illegal arguments error");
+    	}
+    	var paths = [];
+    	for (i = 0, j = arguments.length; i < j; i++) {
+    		var arg = arguments[i];
+    		if (!!!arg) {
+    			continue;
+    		}
+    		if (jQuery.type(arg) == 'array') {
+    			for (k = 0; k < arg.length; k++) {
+        			paths.push(arg[k]);
+    			}
+    		}
+    		else if (jQuery.type(arg) == 'string') {
+    			paths.push(arg);
+    		}
+    	}
+    	for (i = 0; i < paths.length; i++) {
+    		var url = paths[i];
+    		jQuery.log("need loaded resource --> " + url);
+    		var t1 = new Date().getTime();
+    		jQuery.ajax(url, {
+				dataType: 'script',
+				async: false,
+				cache: true,
 				success: function() {
 					var t2 = new Date().getTime();
 					jQuery.log("script [" + url + "] loaded successfully and cost "

@@ -1,16 +1,20 @@
 <div id="${id!}" class="easyui-dialog" title="${title!}" style="width:${width!'auto'};height:${height!'auto'};padding:10px;"
     data-options="
-            iconCls: 'icon-add',
+            iconCls: '${icon!}',
             modal: true,
             closed: true,
-            buttons: [{
-                text:'确认',
+            buttons: [
+            <#if !confirm?? || confirm>
+            {
+                text:'${confirmText!}',
                 iconCls:'icon-ok',
                 handler:function(){
                     ${ns}.onDialogConfirmClick();
                 }
-            },{
-                text:'取消',
+            },
+            </#if>
+            {
+                text:'关闭',
                 iconCls:'icon-cancel',
                 handler:function(){
                     $('#${id!}').dialog('close');
