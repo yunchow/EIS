@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.zip.ZipInputStream;
 
 import org.activiti.engine.RepositoryService;
@@ -88,7 +89,11 @@ public class DeployPackageController {
 		}
 		List<ProcessDefinition> list = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).list();
 		logger.info("deploy list is {}", list);
-		result.put("success", list != null && !list.isEmpty());
+		boolean boo = list != null && !list.isEmpty();
+		result.put("success", new Random().nextInt(100) > 50);
+		if (!boo) {
+			result.put("error", "部署失败：未成功生成流程定义文件");
+		}
 		return result;
 	}
 

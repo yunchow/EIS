@@ -32,10 +32,10 @@
 		</noscript>         
 	</div>
 	<div class="alert">
-		温馨提醒：选择文件后系统会自动上传并部署（支持同时选择多个文件）
+		温馨提示：选择文件后系统会自动上传并部署（支持同时选择多个文件，IE除外）
 	</div>
 	<div class="alert">
-		支持文件格式:&nbsp;&nbsp;xml,&nbsp;&nbsp;zip,&nbsp;&nbsp;rar&nbsp;&nbsp;(文件最大不超过5MB)
+		支持文件格式:&nbsp;&nbsp;xml,&nbsp;&nbsp;bmp,&nbsp;&nbsp;zip,&nbsp;&nbsp;rar&nbsp;&nbsp;(文件最大不超过5MB)
 		<br>
 		支持浏览器:&nbsp;&nbsp;
 		Internet Explorer >=7,&nbsp;&nbsp;

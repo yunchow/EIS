@@ -30,11 +30,21 @@ jQuery.define(flowmanage.deploy, base, {
 		        sizeLimit: 5000000 // 50 kB = 50 * 1024 bytes
 		    },
 			text: {
-			    uploadButton: '增加文件...',
+			    uploadButton: '选择文件...',
 	            cancelButton: '取消',
-	            failUpload: '部署文件失败，请确认文件内容是否正确',
+	            failUpload: '上传失败',
 	            formatProgress: "{percent}%/{total_size}",
+	            retryButton: '重试',
 	            waitingForResponse: "上传中..."
+			},
+			/*dragAndDrop: {
+				hideDropzones: false,
+				extraDropzones: [document]
+			},*/
+			retry: {
+				enableAuto: true,
+				showButton: true,
+				autoRetryNote: "重试 {retryNum}/{maxAuto}..."
 			},
 			failedUploadTextDisplay: {
 		        mode: 'custom',
@@ -50,25 +60,18 @@ jQuery.define(flowmanage.deploy, base, {
 		    showMessage: function(message) {
 		        $('#file-uploader').append('<div class="alert alert-error">' + message + '</div>');
 		    },
-		    callbacks: {
-		        complete: function(id, fileName, responseJSON) {
-		          alert("ok");
-		        },
-		        submit: function() {
-					alert(11);
-				}
-		    },
 			debug: true
-        });           
-    },
-    
-    onDialogConfirmClick: function() {
-    	$('#fileupload').fileupload('add', {
-            fileInput: $("#fileupload")
         });
-    	var overallProgress = $('#fileupload').fileupload('progress');
-    	
-	},
+        $("#file-uploader").on("complete", function() {
+        	context.log("uploader complete event fired");
+        	$(".qq-upload-status-text").each(function() {
+        		if(!$(this).html()) {
+            		$(this).html("<font style='font-weight:bold;'>部署成功</font>" +
+            				"<img style='vertical-align: bottom;height:17px;margin-left:5px;' src='resources/image/result_ok.png'>")
+            	}
+        	});
+        });
+    },
     
     onDblClickRow: function(index, rowData){
     	
