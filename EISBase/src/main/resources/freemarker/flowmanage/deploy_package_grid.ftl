@@ -18,6 +18,8 @@
 </@datagrid>
 
 <@toolbar id="dplToolbar" ns="flowmanage.deploy" add=false delete=false update=false cancel=false save=false menu="#deploySearchBoxMenu">
+	<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true" onclick="flowmanage.deploy.deleteDeployment('only')">删除部署文件</a>
+	<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true" onclick="flowmanage.deploy.deleteDeployment('cascade')">删除部署文件以及实例和历史</a>
 	<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="flowmanage.deploy.deployFlow()">部署流程</a>
 </@toolbar>
 
@@ -35,7 +37,7 @@
 		温馨提示：选择文件后系统会自动上传并部署（支持同时选择多个文件，IE除外）
 	</div>
 	<div class="alert">
-		支持文件格式:&nbsp;&nbsp;xml,&nbsp;&nbsp;bmp,&nbsp;&nbsp;zip,&nbsp;&nbsp;rar&nbsp;&nbsp;(文件最大不超过5MB)
+		支持文件格式:&nbsp;&nbsp;bpmn20.xml、&nbsp;&nbsp;bpmn、&nbsp;&nbsp;zip、&nbsp;&nbsp;rar&nbsp;&nbsp;(文件最大不超过5MB)
 		<br>
 		支持浏览器:&nbsp;&nbsp;
 		Internet Explorer >=7,&nbsp;&nbsp;

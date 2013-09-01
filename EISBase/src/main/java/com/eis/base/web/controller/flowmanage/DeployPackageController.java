@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.zip.ZipInputStream;
 
 import org.activiti.engine.RepositoryService;
@@ -24,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,6 +57,14 @@ public class DeployPackageController {
 		return "flowmanage/do_deploy.ftl";
 	}
 
+	@RequestMapping("/delete/{cacade}/{id}")
+	@ResponseBody
+	public String deleteDeploymentCacadeProcess(@PathVariable String cacade, @PathVariable String id) {
+		logger.info("cacade = {}", cacade);
+		repositoryService.deleteDeployment(id, "cacade".equals(cacade));
+		return "200";
+	}
+	
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> uploadDeployFile(@RequestParam("qqfile") MultipartFile file) throws IOException {
@@ -66,7 +74,6 @@ public class DeployPackageController {
 			is = file.getInputStream();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-			result.put("preventRetry", true);
 			result.put("success", false);
 			result.put("error", "读取文件失败");
 			return result;
@@ -83,19 +90,19 @@ public class DeployPackageController {
 		Deployment deployment = null;
 		String extension = FilenameUtils.getExtension(fileName);
 		
-		if ("zip".equals(extension) || "rar".equals(extension)) {
+		if ("zip".equals(extension) || "bar".equals(extension)) {
 			ZipInputStream zip = new ZipInputStream(is);
-			deployment = repositoryService.createDeployment().addZipInputStream(zip).deploy();
+			deployment = repositoryService.createDeployment().name(file.getOriginalFilename()).addZipInputStream(zip).deploy();
 		} else {
 			if (logger.isInfoEnabled()) {
 				logger.info("file content is {}", new String(file.getBytes()));
 			}
-			deployment = repositoryService.createDeployment().addInputStream(fileName, is).deploy();
+			deployment = repositoryService.createDeployment().name(file.getOriginalFilename()).addInputStream(fileName, is).deploy();
 		}
 		List<ProcessDefinition> list = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).list();
 		logger.info("deploy list is {}", list);
 		boolean boo = list != null && !list.isEmpty();
-		result.put("success", new Random().nextInt(100) > 50 && false);
+		result.put("success", boo);
 		if (!boo) {
 			result.put("error", "部署失败：未成功生成流程定义文件");
 		}

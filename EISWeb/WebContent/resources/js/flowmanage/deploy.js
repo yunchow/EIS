@@ -19,13 +19,57 @@ jQuery.define(flowmanage.deploy, base, {
     	return {version: 1};
     },
     
+    deleteDeployment: function(cascade) {
+    	var row = this.$dg.datagrid('getSelected');
+    	if (!row) {
+    		context.alert("请选择要删除的记录行");
+    		return;
+    	}
+    	if (config.showConfirmDialogBeforeDelete) {
+    		if (cascade == 'cascade') {
+    			context.confirm("你确定要删除部署文件和对应的所有流程实例以及历史吗？", this.onDeleteDeploymentAndProcess, this);
+    		} 
+    		else {
+    			context.confirm("你确定要删除部署文件吗？", this.onDeleteOnlyDeployment, this);
+    		}
+    	}
+    	else {
+    		if (cascade == 'cascade') {
+    			this.onDeleteDeploymentAndProcess();
+    		} 
+    		else {
+    			this.onDeleteOnlyDeployment();
+    		}
+    	}
+    },
+    
+    onDeleteOnlyDeployment: function() {
+    	this.doDelete("only");
+    },
+    
+    onDeleteDeploymentAndProcess: function() {
+    	this.doDelete("cascade");
+    },
+    
+    doDelete: function(cascade) {
+    	var item = this.getGrid().datagrid("getSelected");
+    	var me = this;
+    	$.post("flowmanage/deploy/delete/"+ cascade +"/"+ item.id +".htm", function(data) {
+    		var index = me.$dg.datagrid("getRowIndex", item);
+        	me.$dg.datagrid('deleteRow', index);
+        	if (config.showScuessfullMessageBox) {
+				context.info("删除部署文件"+ (cascade == 'cascade' ? "及对应所有流程实例和历史" : "") +"成功！");
+			}
+    	});
+    },
+    
     createUploader: function(){            
         $("#file-uploader").fineUploader({
         	request: {
 			    endpoint: 'flowmanage/deploy/upload.htm'
 			},
 			validation: {
-		        allowedExtensions: ['rar', 'zip', 'xml', 'bmp'],
+		        allowedExtensions: ['bar', 'zip', 'bpmn20.xml', 'bpmn'],
 		        itemLimit: 10,
 		        sizeLimit: 5000000 // 50 kB = 50 * 1024 bytes
 		    },
