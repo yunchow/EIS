@@ -50,8 +50,11 @@
 	</bean>
 
 	<bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
-		<property name="supportedMediaTypes" value="*/*">
-		</property>
+		<property name = "supportedMediaTypes">
+              <list>
+                  <value>text/html;charset=UTF-8</value>   
+             </list>   
+        </property> 
 	</bean>
 
 	<bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">

@@ -15,11 +15,16 @@ import java.util.Map;
 import java.util.Random;
 import java.util.zip.ZipInputStream;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentQuery;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.apache.commons.io.FilenameUtils;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,18 +63,32 @@ public class DeployPackageController {
 	}
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> uploadDeployFile(@RequestParam("qqfile") MultipartFile file) {
+	//@ResponseBody
+	public void uploadDeployFile(@RequestParam("qqfile") MultipartFile file,
+			HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException {
+		response.setContentType("text/html;charset=UTF-8");
+		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> result = new HashMap<String, Object>();
 		InputStream is = null;
 		try {
 			is = file.getInputStream();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
+			result.put("preventRetry", true);
 			result.put("success", false);
 			result.put("error", "读取文件失败");
-			return result;
+			mapper.writeValue(response.getOutputStream(), result);
+			return;
 		}
+		
+		if (file.getSize() ==0 || file.getSize() >= 5 * 1024 * 1024) {
+			result.put("success", false);
+			result.put("preventRetry", true);
+			result.put("error", "文件大小超过最大限制：5MB");
+			mapper.writeValue(response.getOutputStream(), result);
+			return;
+		}
+		
 		String fileName = file.getOriginalFilename();
 		Deployment deployment = null;
 		String extension = FilenameUtils.getExtension(fileName);
@@ -79,11 +98,7 @@ public class DeployPackageController {
 			deployment = repositoryService.createDeployment().addZipInputStream(zip).deploy();
 		} else {
 			if (logger.isInfoEnabled()) {
-				try {
-					logger.info("file content is {}", new String(file.getBytes()));
-				} catch (IOException e) {
-					logger.error(e.getMessage(), e);
-				}
+				logger.info("file content is {}", new String(file.getBytes()));
 			}
 			deployment = repositoryService.createDeployment().addInputStream(fileName, is).deploy();
 		}
@@ -94,7 +109,7 @@ public class DeployPackageController {
 		if (!boo) {
 			result.put("error", "部署失败：未成功生成流程定义文件");
 		}
-		return result;
+		mapper.writeValue(response.getOutputStream(), result);
 	}
 
 	@RequestMapping("/list")
