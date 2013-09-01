@@ -8,6 +8,24 @@
 
 	<context:component-scan base-package="com.eis.**.web" />
 
+	<bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+		<property name = "supportedMediaTypes">
+              <list>
+                  <value>text/plain;charset=UTF-8</value>   
+                  <value>text/html;charset=UTF-8</value>
+             </list>   
+        </property> 
+	</bean>
+
+	<bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		<property name = "supportedMediaTypes">
+              <list>
+                  <value>text/plain;charset=UTF-8</value>   
+                  <value>text/html;charset=UTF-8</value>
+             </list>   
+        </property> 
+	</bean> 
+	
 	<mvc:annotation-driven conversion-service="conversionService">
 		<mvc:message-converters>
 			<ref local="stringHttpMessageConverter"/>
@@ -49,19 +67,6 @@
 		<property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView" />
 	</bean>
 
-	<bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
-		<property name = "supportedMediaTypes">
-              <list>
-                  <value>text/html;charset=UTF-8</value>   
-             </list>   
-        </property> 
-	</bean>
-
-	<bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-		<property name="supportedMediaTypes" value="*/*">
-		</property>
-	</bean>    
-	
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
 	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">

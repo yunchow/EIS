@@ -15,16 +15,11 @@ import java.util.Map;
 import java.util.Random;
 import java.util.zip.ZipInputStream;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentQuery;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.apache.commons.io.FilenameUtils;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,11 +58,8 @@ public class DeployPackageController {
 	}
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	//@ResponseBody
-	public void uploadDeployFile(@RequestParam("qqfile") MultipartFile file,
-			HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException {
-		response.setContentType("text/html;charset=UTF-8");
-		ObjectMapper mapper = new ObjectMapper();
+	@ResponseBody
+	public Map<String, Object> uploadDeployFile(@RequestParam("qqfile") MultipartFile file) throws IOException {
 		Map<String, Object> result = new HashMap<String, Object>();
 		InputStream is = null;
 		try {
@@ -77,16 +69,14 @@ public class DeployPackageController {
 			result.put("preventRetry", true);
 			result.put("success", false);
 			result.put("error", "读取文件失败");
-			mapper.writeValue(response.getOutputStream(), result);
-			return;
+			return result;
 		}
 		
 		if (file.getSize() ==0 || file.getSize() >= 5 * 1024 * 1024) {
 			result.put("success", false);
 			result.put("preventRetry", true);
 			result.put("error", "文件大小超过最大限制：5MB");
-			mapper.writeValue(response.getOutputStream(), result);
-			return;
+			return result;
 		}
 		
 		String fileName = file.getOriginalFilename();
@@ -105,11 +95,11 @@ public class DeployPackageController {
 		List<ProcessDefinition> list = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).list();
 		logger.info("deploy list is {}", list);
 		boolean boo = list != null && !list.isEmpty();
-		result.put("success", new Random().nextInt(100) > 50);
+		result.put("success", new Random().nextInt(100) > 50 && false);
 		if (!boo) {
 			result.put("error", "部署失败：未成功生成流程定义文件");
 		}
-		mapper.writeValue(response.getOutputStream(), result);
+		return result;
 	}
 
 	@RequestMapping("/list")

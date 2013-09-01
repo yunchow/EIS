@@ -25,7 +25,7 @@
     <div data-options="name:'name'">部署名称</div>
 </div>
 
-<@dialog id="deployPackageDialog" title="部署流程文件" confirm=false  ns="flowmanage.deploy" confirmText="确定" width="600px">
+<@dialog id="deployPackageDialog" title="部署流程文件" confirm=false  ns="flowmanage.deploy" confirmText="确定" maxHeight="400px" width="700px">
 	<div id="file-uploader">		
 		<noscript>			
 			<p>使打开浏览器 JavaScript功能使用上传</p>

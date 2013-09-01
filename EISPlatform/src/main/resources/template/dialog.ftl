@@ -1,4 +1,4 @@
-<div id="${id!}" class="easyui-dialog" title="${title!}" style="width:${width!'auto'};height:${height!'auto'};padding:10px;"
+<div id="${id!}" class="easyui-dialog" title="${title!}" style="width:${width!'auto'};height:${height!'auto'};max-height:${maxHeight!};padding:10px;"
     data-options="
             iconCls: '${icon!}',
             modal: true,
