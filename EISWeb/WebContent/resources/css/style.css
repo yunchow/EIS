@@ -4,12 +4,6 @@
 }
 
 a {
-	color: Black;
-	text-decoration: none;
-}
-
-a:hover {
-	color: blue;
 	text-decoration: none;
 }
 
@@ -48,8 +42,8 @@ a:hover {
 }
 
 .easyui-accordion ul li div:hover {
-	border: 1px dashed #99BBE8;
-	background: #E0ECFF;
+	border: 0px;
+	background: #EEE;
 	cursor: pointer;
 }
 
@@ -58,14 +52,8 @@ a:hover {
 	text-decoration: none
 }
 
-.easyui-accordion ul li div.selected {
-	border: 1px solid #99BBE8;
-	background: #E0ECFF;
-	cursor: default;
-}
-
 .easyui-accordion ul li div.selected a {
-	color: #416AA3;
+	/*color: #416AA3;*/
 	text-decoration: none;
 	font-weight: bold;
 }

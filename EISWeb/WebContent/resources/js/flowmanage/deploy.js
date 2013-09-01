@@ -73,6 +73,10 @@ jQuery.define(flowmanage.deploy, base, {
         });
     },
     
+    onDialogCancelClick: function() {
+    	this.reload();
+    },
+    
     onDblClickRow: function(index, rowData){
     	
     },

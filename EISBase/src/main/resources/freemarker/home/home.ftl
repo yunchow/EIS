@@ -3,18 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Ubuntu</title>
-    <style type="text/css">
-		a {
-			color: Black;
-			text-decoration: none;
-		}
-		
-		a:hover {
-			color: black;
-			text-decoration: none;
-		}
-		
-    </style>
     <script type="text/javascript" src="resources/plugins/jquery/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="resources/plugins/jquery/jquery-migrate-1.2.1.js"></script>
     <script type="text/javascript" src="resources/js/ext/cookie.js"></script>
