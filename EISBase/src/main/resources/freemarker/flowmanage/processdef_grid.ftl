@@ -6,7 +6,7 @@
     <th data-options="field:'id',width:50">ID</th>
     <th data-options="field:'key',width:40">标识</th>
     <#--<th data-options="field:'name',width:40">名称</th>-->
-    <th data-options="field:'resourceName',width:40">资源</th>
+    <th data-options="field:'resourceName',width:40,formatter:flowmanage.processdef.formatXML">流程文档</th>
     <th data-options="field:'diagramResourceName',width:50,formatter:flowmanage.processdef.formatDiagram">流程图</th>
     <th data-options="field:'category',width:60">类别</th>
     <th data-options="field:'version',width:20">版本号</th>

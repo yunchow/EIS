@@ -74,7 +74,7 @@
 		</div>
     </div>
     
-    <div data-options="region:'west',split:true" href="home/menu/list.htm" title="导航菜单" style="width:150px;padding:1px;">
+    <div data-options="region:'west',split:true" href="home/menu/list.htm" title="功能导航" style="width:150px;padding:1px;">
         
     </div>
     

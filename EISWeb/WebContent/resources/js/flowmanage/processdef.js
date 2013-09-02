@@ -66,6 +66,10 @@ jQuery.define(flowmanage.processdef, base, {
 		})
 	},
 	
+	formatXML: function(value, row, index) {
+		return "<a href='javascript:window.open(\"flowmanage/processdef/xml/"+ row.id +".htm\");' style='text-decoration:underline;'>"+ value +"</a>";
+	},
+	
 	formatDiagram: function(value, row, index) {
 		return "<a href='javascript:flowmanage.processdef.viewFlowPicture(\""+ row.id +"\");' style='text-decoration:underline;'>"+ value +"</a>";
 	},
