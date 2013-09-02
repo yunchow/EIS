@@ -20,6 +20,7 @@
     <script type="text/javascript" src="resources/plugins/jquery-easyui-1.3.4/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="resources/plugins/jquery-easyui-1.3.4/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="resources/plugins/jquery-file-download-1.4.2/jquery.fileDownload-1.4.2.js"></script>
+    <script type="text/javascript" src="resources/plugins/blockui/jquery.blockUI.js"></script>
     <script type="text/javascript" src="resources/js/ext/combotree-ext.js"></script>
     <script type="text/javascript" src="resources/js/ext/date.js"></script>
     <script type="text/javascript" src="resources/js/sup/jns.js"></script>
