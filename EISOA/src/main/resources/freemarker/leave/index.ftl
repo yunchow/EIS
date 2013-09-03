@@ -1,0 +1,12 @@
+<div class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'west',split:true,border:true,lines:true" title="请假" style="width:180px;padding:10px;line-height:20px;">
+    	<ul class="easyui-tree">
+		    <li><span><a href="#">待处理</a></span></li>
+		    <li><span><a href="#">已处理</a></span></li>
+		    <li><span><a href="#">请假申请</a></span></li>
+		</ul>
+    </div>
+    <div data-options="region:'center',border:true" href="oa/leave/form.htm"  title='请假申请' style="padding:5px;">
+    </div>
+</div>
+

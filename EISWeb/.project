@@ -62,6 +62,16 @@
 			<location>C:/EIS/Workspaces/Git/EISBase/src/main/resources</location>
 		</link>
 		<link>
+			<name>oa_java</name>
+			<type>2</type>
+			<location>C:/EIS/Workspaces/Git/EISOA/src/main/java</location>
+		</link>
+		<link>
+			<name>oa_resources</name>
+			<type>2</type>
+			<location>C:/EIS/Workspaces/Git/EISOA/src/main/resources</location>
+		</link>
+		<link>
 			<name>platform_java</name>
 			<type>2</type>
 			<location>C:/EIS/Workspaces/Git/EISPlatform/src/main/java</location>
