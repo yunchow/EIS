@@ -22,6 +22,6 @@
 </@toolbar>
 
 <div id="processdefSearchBoxMenu" style="width:auto">
-    <div data-options="name:'name'">流程定义名称</div>
+    <div data-options="name:'name'">流程名称</div>
 </div>
 

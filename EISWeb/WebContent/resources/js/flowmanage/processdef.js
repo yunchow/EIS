@@ -2,7 +2,8 @@ jQuery.ns("flowmanage.processdef");
 
 jQuery.define(flowmanage.processdef, base, {
 	dgId: "processdefGrid",
-    
+	searchField: "name",
+	
     init: function() {
     	context.log("flowmanage.processdef.init called");
     },
