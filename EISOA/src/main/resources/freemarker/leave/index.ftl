@@ -1,6 +1,6 @@
 <div class="easyui-layout" data-options="fit:true">
-    <div data-options="region:'west',split:true,border:true,lines:true" title="请假" style="width:180px;padding:10px;line-height:20px;">
-    	<ul class="easyui-tree">
+    <div data-options="region:'west',split:true,border:true" title="请假业务导航" style="width:180px;padding:10px;line-height:20px;">
+    	<ul class="easyui-tree" data-options="lines:true">
 		    <li><span><a href="#">待处理</a></span></li>
 		    <li><span><a href="#">已处理</a></span></li>
 		    <li><span><a href="#">请假申请</a></span></li>

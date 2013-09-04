@@ -57,16 +57,29 @@ public class ProcessdefController {
 	@RequestMapping(value = "/{resourceType}/{pdid}")
 	public void downloadResourceBy(@PathVariable String resourceType, @PathVariable String pdid, 
 			HttpServletResponse response) throws JsonProcessingException, IOException {
+		logger.info("process definition id is {}", pdid);
 		InputStream is = null;
 		ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().processDefinitionId(pdid).singleResult();
+		
+		if (processDefinition == null) {
+			response.setContentType("text/html;charset=UTF-8");
+			response.getWriter().println("未查到流程定义文件，ID = " + pdid);
+			return;
+		}
+		
 		if ("xml".equals(resourceType)) {
 			is = repositoryService.getResourceAsStream(processDefinition.getDeploymentId(), processDefinition.getResourceName());
 		}
 		else if ("img".equals(resourceType)) {
 			is = repositoryService.getResourceAsStream(processDefinition.getDeploymentId(), processDefinition.getDiagramResourceName());
 		}
-		IOUtils.copy(is, response.getOutputStream());
-		response.getOutputStream().close();
+		
+		if (is != null) {
+			IOUtils.copy(is, response.getOutputStream());
+		} else {
+			response.setContentType("text/html;charset=UTF-8");
+			response.getWriter().println("未查到相关资源，ID = " + pdid);
+		}
 	}
 	
 	@RequestMapping(value = "/suspend", method = RequestMethod.POST)
