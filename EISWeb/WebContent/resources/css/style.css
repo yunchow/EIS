@@ -67,8 +67,8 @@ a {
 }
 /* 上传进度条 */
 .bar {
-    height: 18px;
-    background: green;
+	height: 18px;
+	background: green;
 }
 
 .alert {
@@ -88,4 +88,42 @@ a {
 	color: #b94a48;
 	background-color: #f2dede;
 	border-color: #eed3d7;
+}
+
+/* form */
+.eistable {
+	margin: auto;
+	width: 96%;
+}
+
+.eistable td {
+	text-align: left;
+}
+
+.eistable td input {
+	width: 95%;
+}
+
+.eistable tr .title {
+	width: 7%;
+}
+
+.eistable td textarea {
+	width: 95%;
+}
+
+fieldset {
+	display: block;
+	padding: 0 0 0 20px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #DDD;
+	width: 96%;
+	margin: 0px;
+	margin-top: 10px;
+}
+
+fieldset legend {
+	padding: 5px;
+	font-weight: bold;
 }
