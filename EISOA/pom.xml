@@ -127,8 +127,8 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.eis.platform</groupId>
-			<artifactId>EISPlatform</artifactId>
+			<groupId>com.eis.bos</groupId>
+			<artifactId>EISBOS</artifactId>
 		</dependency>
 	</dependencies>	
 	<build>
@@ -137,8 +137,8 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>com.eis.platform</groupId>
-				<artifactId>EISPlatform</artifactId>
+				<groupId>com.eis.bos</groupId>
+				<artifactId>EISBOS</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 		</dependencies>

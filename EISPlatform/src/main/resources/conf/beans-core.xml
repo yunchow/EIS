@@ -68,7 +68,7 @@
 		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
 	</bean>
 	
-	<bean class="com.eis.platcom.eis.core.web.freemarkeriguer"></bean>
+	<bean class="com.eis.core.web.freemarker.LoggingConfiguer"></bean>
 	
 	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 		<description>Required for Freemarker to work in web tier</description>
@@ -112,27 +112,27 @@
 		</property>
 	</bean>
 	
-	<bean id="directiveModelSupport" abstract="true" class="com.eis.platcom.eis.core.web.directiveectiveModelSupport">
+	<bean id="directiveModelSupport" abstract="true" class="com.eis.core.web.directive.TemplateDirectiveModelSupport">
 		<property name="configuration" ref="templateConfiguration"></property>		
 	</bean>
 	
-	<bean id="toolbarDirective" parent="directiveModelSupport" class="com.eis.platcom.eis.core.web.directivective" />
+	<bean id="toolbarDirective" parent="directiveModelSupport" class="com.eis.core.web.directive.ToolbarDirective" />
 	
-	<bean id="dataGridDirective" parent="directiveModelSupport" class="com.eis.platcom.eis.core.web.directiveective" />
+	<bean id="dataGridDirective" parent="directiveModelSupport" class="com.eis.core.web.directive.DataGridDirective" />
 	
-	<bean id="treeGridDirective" parent="directiveModelSupport" class="com.eis.platcom.eis.core.web.directiveective">
+	<bean id="treeGridDirective" parent="directiveModelSupport" class="com.eis.core.web.directive.DataGridDirective">
 		<property name="templateName" value="treegrid.ftl"></property>
 	</bean>
 	
-	<bean id="menuDirective" parent="directiveModelSupport" class="com.eis.platcom.eis.core.web.directiveective">
+	<bean id="menuDirective" parent="directiveModelSupport" class="com.eis.core.web.directive.TemplateDirective">
 		<property name="template" value="menu.ftl"></property>
 	</bean>
 	
-	<bean id="dialogDirective" parent="directiveModelSupport" class="com.eis.platcom.eis.core.web.directiveective">
+	<bean id="dialogDirective" parent="directiveModelSupport" class="com.eis.core.web.directive.TemplateDirective">
 		<property name="template" value="dialog.ftl"></property>
 	</bean>
 	
-	<bean id="requireDirective" class="com.eis.platcom.eis.core.web.directivective" />
+	<bean id="requireDirective" class="com.eis.core.web.directive.RequireDirective" />
 	<bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />
 	<bean id="fmHtmlEscape" class="freemarker.template.utility.HtmlEscape" />
 
