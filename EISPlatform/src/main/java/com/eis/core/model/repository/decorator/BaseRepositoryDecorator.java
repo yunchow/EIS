@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+
 import com.eis.core.model.repository.BaseRepository;
 /**
  * <p>Please comment here
@@ -16,7 +18,7 @@ import com.eis.core.model.repository.BaseRepository;
  * @author nick.chow
  * @date: Sep 5, 2-113
  */
-public class BaseRepositoryDecorator implements BaseRepository {
+public class BaseRepositoryDecorator extends SqlSessionDaoSupport implements BaseRepository {
 
 	@Override
 	public int save(Map<String, Object> model) {

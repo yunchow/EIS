@@ -8,13 +8,15 @@ package com.eis.core.model.repository;
 import java.util.List;
 import java.util.Map;
 
+import com.eis.core.model.Entity;
+
  /**
  * <p>Please comment here
  * 
  * @author nick.chow
  * @date: Sep 5, 2013
  */
-public interface GenericRepository<T> {
+public interface GenericRepository<T extends Entity<T>> {
 
 	/**
 	 * @param entity
@@ -32,7 +34,7 @@ public interface GenericRepository<T> {
 	 * @param ids
 	 * @return
 	 */
-	int delete(String... ids);
+	int deleteFor(String... ids);
 	
 	/**
 	 * @param entity
@@ -50,7 +52,7 @@ public interface GenericRepository<T> {
 	 * @param ids
 	 * @return
 	 */
-	List<T> findById(String... ids);
+	List<T> findByIds(String... ids);
 	
 	/**
 	 * query by page

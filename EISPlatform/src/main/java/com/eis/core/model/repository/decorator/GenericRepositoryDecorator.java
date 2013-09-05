@@ -5,13 +5,16 @@
  */
 package com.eis.core.model.repository.decorator;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.eis.core.model.Entity;
 import com.eis.core.model.repository.GenericRepository;
 /**
  * <p>Please comment here
@@ -19,49 +22,68 @@ import com.eis.core.model.repository.GenericRepository;
  * @author nick.chow
  * @date: Sep 5, 2013
  */
-public abstract class GenericRepositoryDecorator<T> implements GenericRepository<T> {
+public abstract class GenericRepositoryDecorator<T extends Entity<T>> extends SqlSessionDaoSupport implements GenericRepository<T> {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
+	
+	protected String namespace;
+	protected String saveStatement;
+	protected String updateStatement;
+	protected String deleteStatement;
+	protected String deleteForStatement;
+	protected String findByIdStatement;
+	protected String findByIdsStatement;
+	protected String findByPageStatement;
 
+	protected GenericRepositoryDecorator() {
+		namespace = getClass().getName();
+		saveStatement = namespace + ".save";
+		updateStatement = namespace + ".update";
+		deleteStatement = namespace + ".delete";
+		deleteForStatement = namespace + ".deleteFor";
+		findByIdStatement = namespace + ".findById";
+		findByIdsStatement = namespace + ".findByIds";
+		findByPageStatement = namespace + ".findByPage";
+	}
+	
+	@Override
+	@Autowired
+	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
+		super.setSqlSessionFactory(sqlSessionFactory);
+	}
+	
 	@Override
 	public int save(T entity) {
-		logger.warn("method save not implemented");
-		return -1;
+		return getSqlSession().insert(saveStatement, entity);
 	}
 
 	@Override
 	public int delete(String id) {
-		logger.warn("method delete not implemented");
-		return -1;
+		return getSqlSession().delete(deleteStatement, id);
 	}
 
 	@Override
-	public int delete(String... ids) {
-		logger.warn("method delete... not implemented");
-		return -1;
+	public int deleteFor(String... ids) {
+		return getSqlSession().delete(deleteForStatement, ids);
 	}
 
 	@Override
 	public int update(T entity) {
-		logger.warn("method update not implemented");
-		return -1;
+		return getSqlSession().update(updateStatement, entity);
 	}
 
 	@Override
 	public T findById(String id) {
-		logger.warn("method findById not implemented");
-		return null;
+		return getSqlSession().selectOne(findByIdStatement, id);
 	}
 
 	@Override
-	public List<T> findById(String... ids) {
-		logger.warn("method findById... not implemented");
-		return Collections.emptyList();
+	public List<T> findByIds(String... ids) {
+		return getSqlSession().selectList(findByIdsStatement, ids);
 	}
 
 	@Override
 	public List<T> findByPage(Map<String, Object> model) {
-		logger.warn("method findByPage not implemented");
-		return Collections.emptyList();
+		return getSqlSession().selectList(findByIdsStatement, model);
 	}
 
 }

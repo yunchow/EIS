@@ -10,15 +10,6 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/base_resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/oa_resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/oa_java"/>
-        <dependent-module archiveName="EISBase-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/EISBase/EISBase">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="EISOA-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/EISOA/EISOA">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="EISBOS-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/EISBOS/EISBOS">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="context-root" value="EISWeb"/>
         <property name="java-output-path" value="/EISWeb/build/classes"/>
     </wb-module>
