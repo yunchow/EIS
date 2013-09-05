@@ -6,7 +6,11 @@
  */
 package com.eis.oa.domain.model.leave;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
 
 import com.eis.core.model.Entity;
 import com.eis.core.model.support.EntitySupport;
@@ -29,7 +33,31 @@ public class LeaveForm extends EntitySupport<LeaveForm> implements Entity<LeaveF
 	 */
 	private String reason;
 	
+	private String processInstanceId;
+	
 	private Date createTime;
+	
+	public LeaveForm() {
+		
+	}
+	
+	public LeaveForm(Map<String, ?> model) {
+		try {
+			BeanUtils.populate(this, model);
+		} catch (IllegalAccessException e) {
+			logger.error(e.getMessage(), e);
+		} catch (InvocationTargetException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+
+	public String getProcessInstanceId() {
+		return processInstanceId;
+	}
+
+	public void setProcessInstanceId(String processInstanceId) {
+		this.processInstanceId = processInstanceId;
+	}
 
 	public String getType() {
 		return type;

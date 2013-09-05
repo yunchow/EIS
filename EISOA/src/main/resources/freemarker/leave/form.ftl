@@ -2,12 +2,12 @@
 <div class="easyui-layout" data-options="fit:true">
     <div data-options="region:'north',fit:false,border:false" style="height:35px;">
     	<div style="padding:0px;padding-bottom:5px;width:100%;border-bottom:1px dashed #369;">
-		    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">提交</a>
+		    <a href="#" onclick="javascript:oa.leave.form.doApplyLeaveFormSubmit();" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">提交</a>
 		    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
 		</div>
     </div>
     <div data-options="region:'center',border:false" style="padding:0px;margin:0px;">
-    	<form id="leaveForm" action="?" method="post">
+    	<form id="leaveForm" action="oa/leave/do/apply.htm" method="post">
 			<fieldset>
 			    <legend><span class="icon pictures">&nbsp;</span>基本信息</legend>
 					<table cellspacing="0" cellpadding="3" class="eistable">

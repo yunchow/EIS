@@ -6,7 +6,12 @@
  */
 package com.eis.oa.domain.model.leave;
 
- /**
+import org.springframework.stereotype.Repository;
+
+import com.eis.core.model.repository.GenericRepository;
+import com.eis.core.model.repository.decorator.GenericRepositoryDecorator;
+
+/**
  * Title: LeaveRepository.java
  * <p>
  * Please comment here
@@ -15,6 +20,7 @@ package com.eis.oa.domain.model.leave;
  * @author nick.chow
  * @date: Sep 3, 2013
  */
-public class LeaveRepository {
+@Repository
+public class LeaveRepository extends GenericRepositoryDecorator<LeaveForm> implements GenericRepository<LeaveForm> {
 
 }

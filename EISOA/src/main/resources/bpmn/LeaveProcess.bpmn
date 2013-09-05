@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/eis">
-  <process id="leaveProcess" name="请假流程" isExecutable="true">
+  <process id="LeaveProcess" name="请假流程" isExecutable="true">
     <startEvent id="startevent1" name="开始"></startEvent>
     <userTask id="managerReview" name="部门经理审批" activiti:assignee="manager" activiti:candidateUsers="admin" activiti:formKey="leaveForm"></userTask>
     <userTask id="hrReview" name="人事审批" activiti:assignee="hr" activiti:candidateUsers="admin" activiti:formKey="leaveForm"></userTask>
@@ -11,16 +11,10 @@
     <sequenceFlow id="flow4" sourceRef="fillLeaveForm" targetRef="managerReview"></sequenceFlow>
     <sequenceFlow id="flow5" sourceRef="startevent1" targetRef="fillLeaveForm"></sequenceFlow>
   </process>
-  <bpmndi:BPMNDiagram id="BPMNDiagram_leaveProcess">
-    <bpmndi:BPMNPlane bpmnElement="leaveProcess" id="BPMNPlane_leaveProcess">
+  <bpmndi:BPMNDiagram id="BPMNDiagram_LeaveProcess">
+    <bpmndi:BPMNPlane bpmnElement="LeaveProcess" id="BPMNPlane_LeaveProcess">
       <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
         <omgdc:Bounds height="35.0" width="35.0" x="80.0" y="140.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="210.0" y="130.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="usertask2" id="BPMNShape_usertask2">
-        <omgdc:Bounds height="55.0" width="105.0" x="370.0" y="130.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
         <omgdc:Bounds height="35.0" width="35.0" x="660.0" y="140.0"></omgdc:Bounds>
