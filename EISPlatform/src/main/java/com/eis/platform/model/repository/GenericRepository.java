@@ -18,23 +18,27 @@ public interface GenericRepository<T> {
 
 	/**
 	 * @param entity
+	 * @return
 	 */
-	void save(T entity);
+	int save(T entity);
 	
 	/**
 	 * @param id
+	 * @return
 	 */
-	void delete(String id);
+	int delete(String id);
 	
 	/**
 	 * @param ids
+	 * @return
 	 */
-	void delete(String... ids);
+	int delete(String... ids);
 	
 	/**
 	 * @param entity
+	 * @return
 	 */
-	void update(T entity);
+	int update(T entity);
 	
 	/**
 	 * @param id
