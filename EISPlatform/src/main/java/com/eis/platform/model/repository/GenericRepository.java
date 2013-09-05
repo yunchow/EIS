@@ -27,6 +27,11 @@ public interface GenericRepository<T> {
 	void delete(String id);
 	
 	/**
+	 * @param ids
+	 */
+	void delete(String... ids);
+	
+	/**
 	 * @param entity
 	 */
 	void update(T entity);
@@ -36,6 +41,12 @@ public interface GenericRepository<T> {
 	 * @return
 	 */
 	T findById(String id);
+	
+	/**
+	 * @param ids
+	 * @return
+	 */
+	List<T> findById(String... ids);
 	
 	/**
 	 * query by page
