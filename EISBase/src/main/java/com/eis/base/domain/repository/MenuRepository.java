@@ -8,15 +8,13 @@ package com.eis.base.domain.repository;
 
 import org.springframework.stereotype.Repository;
 
-import com.eis.platform.model.repository.TreeRepository;
+import com.eis.core.model.repository.TreeRepository;
+
  /**
- * Title: MenuRepository.java
- * <p>
- * Please comment here
- * </p>
+ * <p>Please comment here
  * 
  * @author nick.chow
- * @date: Aug 13, 2013
+ * @date: Sep 5, 2013
  */
 @Repository
 public interface MenuRepository extends TreeRepository {

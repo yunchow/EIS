@@ -72,8 +72,8 @@
 	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
 		<property name="converters">
 			<list>
-				<bean class="com.eis.platform.web.conversion.StringDateConverter" />
-				<bean class="com.eis.platform.web.conversion.DateStringConverter" />
+				<bean class="com.eis.core.web.conversion.StringDateConverter" />
+				<bean class="com.eis.core.web.conversion.DateStringConverter" />
 			</list>
 		</property>
 	</bean>

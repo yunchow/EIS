@@ -19,9 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eis.base.domain.repository.UserRepository;
-import com.eis.platform.model.repository.BaseRepository;
-import com.eis.platform.web.controller.BaseController;
-
+import com.eis.core.model.repository.BaseRepository;
+import com.eis.core.web.controller.BaseController;
  /**
  * Title: UserAction.java
  * <p>

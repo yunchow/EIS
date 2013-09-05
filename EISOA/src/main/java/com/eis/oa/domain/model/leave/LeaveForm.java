@@ -8,10 +8,9 @@ package com.eis.oa.domain.model.leave;
 
 import java.util.Date;
 
-import com.eis.platform.model.Entity;
-import com.eis.platform.model.support.EntitySupport;
-
- /**
+import com.eis.core.model.Entity;
+import com.eis.core.model.support.EntitySupport;
+/**
  * Please comment here
  * 
  * @author nick.chow

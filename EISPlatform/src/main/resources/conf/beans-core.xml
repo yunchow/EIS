@@ -30,7 +30,7 @@
 		<property name="plugins" ref="paginationPlugin"></property>
 	</bean>
 	
-	<bean id="paginationPlugin" class="com.eis.platform.plugin.PaginationPlugin">
+	<bean id="paginationPlugin" class="com.eis.core.plugin.PaginationPlugin">
 		<property name="dialect" value="${dialect}"></property>
 		<property name="dialectMap">
 			<map>
@@ -39,12 +39,12 @@
 		</property>
 	</bean>
 	
-	<bean class="com.eis.platform.plugin.PaginationPluginAware">
+	<bean class="com.eis.core.plugin.PaginationPluginAware">
 		<constructor-arg ref="paginationPlugin"></constructor-arg>
 		<constructor-arg ref="sqlSessionFactory"></constructor-arg>
 	</bean>
 	
-	<bean id="mySqlDialect" class="com.eis.platform.plugin.MySqlDialect"></bean>
+	<bean id="mySqlDialect" class="com.eis.core.plugin.MySqlDialect"></bean>
 	
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.eis.**.repository,com.eis.**.*Repository" />
@@ -68,7 +68,7 @@
 		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
 	</bean>
 	
-	<bean class="com.eis.platform.web.freemarker.LoggingConfiguer"></bean>
+	<bean class="com.eis.platcom.eis.core.web.freemarkeriguer"></bean>
 	
 	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 		<description>Required for Freemarker to work in web tier</description>
@@ -112,27 +112,27 @@
 		</property>
 	</bean>
 	
-	<bean id="directiveModelSupport" abstract="true" class="com.eis.platform.web.directive.TemplateDirectiveModelSupport">
+	<bean id="directiveModelSupport" abstract="true" class="com.eis.platcom.eis.core.web.directiveectiveModelSupport">
 		<property name="configuration" ref="templateConfiguration"></property>		
 	</bean>
 	
-	<bean id="toolbarDirective" parent="directiveModelSupport" class="com.eis.platform.web.directive.ToolbarDirective" />
+	<bean id="toolbarDirective" parent="directiveModelSupport" class="com.eis.platcom.eis.core.web.directivective" />
 	
-	<bean id="dataGridDirective" parent="directiveModelSupport" class="com.eis.platform.web.directive.DataGridDirective" />
+	<bean id="dataGridDirective" parent="directiveModelSupport" class="com.eis.platcom.eis.core.web.directiveective" />
 	
-	<bean id="treeGridDirective" parent="directiveModelSupport" class="com.eis.platform.web.directive.DataGridDirective">
+	<bean id="treeGridDirective" parent="directiveModelSupport" class="com.eis.platcom.eis.core.web.directiveective">
 		<property name="templateName" value="treegrid.ftl"></property>
 	</bean>
 	
-	<bean id="menuDirective" parent="directiveModelSupport" class="com.eis.platform.web.directive.TemplateDirective">
+	<bean id="menuDirective" parent="directiveModelSupport" class="com.eis.platcom.eis.core.web.directiveective">
 		<property name="template" value="menu.ftl"></property>
 	</bean>
 	
-	<bean id="dialogDirective" parent="directiveModelSupport" class="com.eis.platform.web.directive.TemplateDirective">
+	<bean id="dialogDirective" parent="directiveModelSupport" class="com.eis.platcom.eis.core.web.directiveective">
 		<property name="template" value="dialog.ftl"></property>
 	</bean>
 	
-	<bean id="requireDirective" class="com.eis.platform.web.directive.RequireDirective" />
+	<bean id="requireDirective" class="com.eis.platcom.eis.core.web.directivective" />
 	<bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />
 	<bean id="fmHtmlEscape" class="freemarker.template.utility.HtmlEscape" />
 

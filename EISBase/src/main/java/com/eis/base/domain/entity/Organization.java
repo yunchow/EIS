@@ -10,9 +10,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.eis.platform.vo.Tree;
-
- /**
+import com.eis.core.vo.Tree;
+/**
  * Title: Organization.java
  * <p>
  * Please comment here

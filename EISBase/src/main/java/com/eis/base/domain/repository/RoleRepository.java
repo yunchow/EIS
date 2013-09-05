@@ -11,9 +11,8 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.eis.platform.model.repository.BaseRepository;
-
- /**
+import com.eis.core.model.repository.BaseRepository;
+/**
  * <p>Please comment here
  * 
  * @author nick.chow

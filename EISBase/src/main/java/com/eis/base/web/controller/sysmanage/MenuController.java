@@ -11,10 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.eis.base.domain.repository.MenuRepository;
-import com.eis.platform.model.repository.BaseRepository;
-import com.eis.platform.web.controller.TreeController;
-
- /**
+import com.eis.core.model.repository.BaseRepository;
+import com.eis.core.web.controller.TreeController;
+/**
  * Title: MenuController.java
  * <p>
  * Please comment here

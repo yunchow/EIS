@@ -14,10 +14,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.eis.base.domain.repository.MenuRepository;
-import com.eis.platform.util.TreeUtil;
-import com.eis.platform.vo.Tree;
-
- /**
+import com.eis.core.util.TreeUtil;
+import com.eis.core.vo.Tree;
+/** 
  * Title: UserAction.java
  * <p>
  * Please comment here
