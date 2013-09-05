@@ -11,7 +11,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.eis.platform.repository.TreeRepository;
+import com.eis.platform.model.repository.TreeRepository;
 import com.eis.platform.util.TreeUtil;
 import com.eis.platform.vo.Tree;
 

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.eis.base.domain.repository.OrganizationRepository;
-import com.eis.platform.repository.BaseRepository;
+import com.eis.platform.model.repository.BaseRepository;
 import com.eis.platform.web.controller.TreeController;
 
  /**

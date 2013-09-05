@@ -4,10 +4,11 @@
  * author: nick.chow
  * date: Aug 25, 2013
  */
-package com.eis.platform.repository;
+package com.eis.platform.model.repository;
 
 import java.util.List;
 
+import com.eis.platform.model.repository.BaseRepository;
 import com.eis.platform.vo.Tree;
 
 

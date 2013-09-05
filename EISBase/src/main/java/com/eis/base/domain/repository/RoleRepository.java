@@ -11,24 +11,13 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.eis.platform.repository.BaseRepository;
+import com.eis.platform.model.repository.BaseRepository;
+
  /**
- * Title: DataDicRepository.java
- * <p>
- * Please comment here
- * </p>
+ * <p>Please comment here
  * 
  * @author nick.chow
- * @date: Aug 13, 2013
- */
-/**
- * Title: DataDicRepository.java
- * <p>
- * Please comment here
- * </p>
- * 
- * @author nick.chow
- * @date: Aug 13, 2013
+ * @date: Sep 5, 2013
  */
 @Repository
 public interface RoleRepository extends BaseRepository {

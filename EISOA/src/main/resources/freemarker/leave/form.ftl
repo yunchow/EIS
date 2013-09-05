@@ -15,23 +15,23 @@
 							<td class="title">姓名：</td>
 							<td><input class="easyui-validatebox" type="text" name="name" value="value" data-options="required:true,tipPosition:'top'" /></td>
 							<td class="title">工号：</td>
-							<td><input class="easyui-validatebox" type="text" name="no" value="value" data-options="required:true" /></td>
+							<td><input class="easyui-validatebox" type="text" name="empno" value="value" data-options="required:true" /></td>
 							<td class="title">公司：</td>
-							<td><input class="easyui-validatebox" type="text" name="name" value="value" data-options="required:true" /></td>
+							<td><input class="easyui-validatebox" type="text" name="company" value="value" data-options="required:true" /></td>
 						</tr>
 						<tr>
 							<td class="title">部门：</td>
-							<td><input class="easyui-validatebox" type="text" name="no" value="value" data-options="required:true" /></td>
+							<td><input class="easyui-validatebox" type="text" name="department" value="value" data-options="required:true" /></td>
 							<td class="title">联系电话：</td>
-							<td><input class="easyui-validatebox" type="text" name="name" value="value" data-options="required:true" /></td>
+							<td><input class="easyui-validatebox" type="text" name="phone" value="value" data-options="required:true" /></td>
 							<td class="title">邮件地址：</td>
-							<td><input class="easyui-validatebox" type="text" name="no" value="value" data-options="required:true" /></td>
+							<td><input class="easyui-validatebox" type="text" name="email" value="value" data-options="required:true" /></td>
 						</tr>
 						<tr>
 							<td class="title">申请时间：</td>
-							<td><input class="easyui-validatebox" type="text" name="name" value="value" data-options="required:true" /></td>
+							<td><input class="easyui-validatebox" type="text" name="createTime" value="value" data-options="required:true" /></td>
 							<td class="title">申请编号：</td>
-							<td><input class="easyui-validatebox" type="text" name="no" value="value" data-options="required:true" /></td>
+							<td><input class="easyui-validatebox" type="text" name="leaveNo" value="value" data-options="required:true" /></td>
 						</tr>
 					</table>
 			</fieldset>
@@ -41,7 +41,7 @@
 						<tr>
 							<td class="title">类型：</td>
 							<td>
-								<select id="cc" class="easyui-combobox" name="dept" style="width:200px;">
+								<select id="cc" class="easyui-combobox" name="type" style="width:200px;">
 								    <option>病假</option>
 								    <option>事假</option>
 								    <option>年假</option>
@@ -52,7 +52,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td class="title">理由：</td>
+							<td class="reason">理由：</td>
 							<td><textarea rows="5">val</textarea></td>
 						</tr>
 					</table>
@@ -72,8 +72,8 @@
 					            rownumbers: true">
 					    <thead>
 					        <tr>
-					           <th data-options="field:'name',width:40">开始时间</th>
-							   <th data-options="field:'gender',width:40">结束时间</th>
+					           <th data-options="field:'startTime',width:40">开始时间</th>
+							   <th data-options="field:'endTime',width:40">结束时间</th>
 							   <th data-options="field:'comment',width:80,editor:'text'">备注</th>
 					        </tr>
 					    </thead>
@@ -98,7 +98,7 @@
 						<tr>
 							<td class="title">审核：</td>
 							<td>
-								<select id="cc" class="easyui-combobox" name="dept" style="width:200px;">
+								<select id="cc" class="easyui-combobox" name="approveType" style="width:200px;">
 								    <option>通过</option>
 								    <option>拒绝</option>
 								    <option>挂起</option>
@@ -108,7 +108,7 @@
 						</tr>
 						<tr>
 							<td class="title">意见说明：</td>
-							<td><textarea rows="5">平时表现不好，继续努力</textarea></td>
+							<td><textarea name="approveContent" rows="5">平时表现不好，继续努力</textarea></td>
 						</tr>
 					</table>
 			</fieldset>

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eis.base.domain.repository.DataDicRepository;
-import com.eis.platform.repository.BaseRepository;
+import com.eis.platform.model.repository.BaseRepository;
 import com.eis.platform.web.controller.BaseController;
 
  /**

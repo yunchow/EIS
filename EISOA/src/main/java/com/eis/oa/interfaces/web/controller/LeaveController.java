@@ -6,8 +6,13 @@
  */
 package com.eis.oa.interfaces.web.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
  /**
  * Title: LeaveController.java
@@ -37,5 +42,12 @@ public class LeaveController {
 		return "leave/grid.ftl";
 	}
 	
+	@RequestMapping("/do/apply")
+	@ResponseBody
+	public Map<String, Object> doApplyLeaveForm(@RequestParam Map<String, String> model) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		return result;
+	}
 	
 }

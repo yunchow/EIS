@@ -1,4 +1,7 @@
-package com.eis.platform.model;
+package com.eis.platform.model.support;
+
+import com.eis.platform.model.AbstractSpecification;
+import com.eis.platform.model.Specification;
 
 /**
  * AND specification, used to create a new specifcation that is the AND of two other specifications.

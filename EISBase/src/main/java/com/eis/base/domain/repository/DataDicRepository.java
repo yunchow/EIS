@@ -11,7 +11,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.eis.platform.repository.BaseRepository;
+import com.eis.platform.model.repository.BaseRepository;
  /**
  * Title: DataDicRepository.java
  * <p>

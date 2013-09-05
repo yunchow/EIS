@@ -47,7 +47,7 @@ public class MenuRepositoryTest {
 	}
 
 	/**
-	 * Test method for {@link com.eis.platform.repository.BaseRepository#save(java.lang.Object)}.
+	 * Test method for {@link com.eis.platform.model.repository.BaseRepository#save(java.lang.Object)}.
 	 */
 	@Test
 	public void testAdd() {
@@ -55,7 +55,7 @@ public class MenuRepositoryTest {
 	}
 
 	/**
-	 * Test method for {@link com.eis.platform.repository.BaseRepository#delete(java.lang.String)}.
+	 * Test method for {@link com.eis.platform.model.repository.BaseRepository#delete(java.lang.String)}.
 	 */
 	@Test
 	public void testDelete() {
@@ -63,7 +63,7 @@ public class MenuRepositoryTest {
 	}
 
 	/**
-	 * Test method for {@link com.eis.platform.repository.BaseRepository#update(java.lang.Object)}.
+	 * Test method for {@link com.eis.platform.model.repository.BaseRepository#update(java.lang.Object)}.
 	 */
 	@Test
 	public void testUpdate() {
@@ -71,7 +71,7 @@ public class MenuRepositoryTest {
 	}
 
 	/**
-	 * Test method for {@link com.eis.platform.repository.BaseRepository#findById(java.lang.String)}.
+	 * Test method for {@link com.eis.platform.model.repository.BaseRepository#findById(java.lang.String)}.
 	 */
 	@Test
 	public void testFindById() {

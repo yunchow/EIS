@@ -1,5 +1,9 @@
 package com.eis.platform.model;
 
+import com.eis.platform.model.support.AndSpecification;
+import com.eis.platform.model.support.NotSpecification;
+import com.eis.platform.model.support.OrSpecification;
+
 
 /**
  * Abstract base implementation of composite {@link Specification} with default

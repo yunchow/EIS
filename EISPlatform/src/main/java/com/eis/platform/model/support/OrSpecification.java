@@ -1,4 +1,7 @@
-package com.eis.platform.model;
+package com.eis.platform.model.support;
+
+import com.eis.platform.model.AbstractSpecification;
+import com.eis.platform.model.Specification;
 
 /**
  * OR specification, used to create a new specifcation that is the OR of two other specifications.

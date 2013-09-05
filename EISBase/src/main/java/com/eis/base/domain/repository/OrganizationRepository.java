@@ -8,7 +8,7 @@ package com.eis.base.domain.repository;
 
 import org.springframework.stereotype.Repository;
 
-import com.eis.platform.repository.TreeRepository;
+import com.eis.platform.model.repository.TreeRepository;
  /**
  * Title: OrganizationRepository.java
  * <p>
