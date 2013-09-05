@@ -91,7 +91,7 @@ jQuery.define(flowmanage.processdef, base, {
             css: { 
                 top:  '100px', 
                 left: ($(window).width() - 400) /2 + 'px', 
-                width: '400px' 
+                width: 'auto' 
             } 
         });
 	}
