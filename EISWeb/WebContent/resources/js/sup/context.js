@@ -46,6 +46,19 @@ jQuery.define(context, {
 		$.cookie("theme", theme);
 		$("link:first").prop('href', 'resources/plugins/jquery-easyui-1.3.4/themes/'+ theme +'/easyui.css');
 	},
+	blockUI: function(message) {
+		$.blockUI({css:{
+			border: 'none', 
+            padding: '20px 0px', 
+            width: '15%',
+            left: '42%',
+            '-webkit-border-radius': '5px', 
+            '-moz-border-radius': '5px', 
+		}, message: "<img src='resources/image/loading.gif' style='vertical-align:middle;'>&nbsp;"+ message +"..."}); 
+	},
+	unblockUI: function() {
+		$.unblockUI();
+	},
 	confirm: function() {
 		this.openDialog(arguments, "confirm");
 	},
