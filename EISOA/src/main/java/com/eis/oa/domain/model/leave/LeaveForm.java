@@ -33,8 +33,12 @@ public class LeaveForm extends EntitySupport<LeaveForm> implements Entity<LeaveF
 	 */
 	private String reason;
 	
-	private String processInstanceId;
+	private String applicant;
 	
+	private String processInstanceKey;
+	
+	private Date startTime;
+	private Date endTime;
 	private Date createTime;
 	
 	public LeaveForm() {
@@ -51,12 +55,36 @@ public class LeaveForm extends EntitySupport<LeaveForm> implements Entity<LeaveF
 		}
 	}
 
-	public String getProcessInstanceId() {
-		return processInstanceId;
+	public String getApplicant() {
+		return applicant;
 	}
 
-	public void setProcessInstanceId(String processInstanceId) {
-		this.processInstanceId = processInstanceId;
+	public void setApplicant(String applicant) {
+		this.applicant = applicant;
+	}
+
+	public String getProcessInstanceKey() {
+		return processInstanceKey;
+	}
+
+	public void setProcessInstanceKey(String processInstanceKey) {
+		this.processInstanceKey = processInstanceKey;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
 
 	public String getType() {

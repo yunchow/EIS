@@ -7,16 +7,17 @@
 package com.eis.oa.interfaces.web.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eis.oa.application.LeaveManager;
+import com.eis.oa.interfaces.dto.LeaveFormDTO;
 
  /**
  * Title: LeaveController.java
@@ -49,11 +50,24 @@ public class LeaveController {
 		return "leave/grid.ftl";
 	}
 	
+	@RequestMapping("/current/pending")
+	@ResponseBody
+	public List<LeaveFormDTO> findPendingLeaveFormByUser(LeaveFormDTO leaveDto) {
+		return null;
+	}
+	
+	@RequestMapping("/apply/list")
+	@ResponseBody
+	public List<LeaveFormDTO> findMyApplingLeaveList() {
+		return null;
+	}
+	
 	@RequestMapping("/do/apply")
 	@ResponseBody
-	public Map<String, Object> doApplyLeaveForm(@RequestParam Map<String, String> model) {
+	public Map<String, Object> doApplyLeaveForm(LeaveFormDTO leaveDto) {
+		leaveDto.setApplicant("user");
 		Map<String, Object> result = new HashMap<String, Object>();
-		Task task = leaveManager.doLeaveFor(model);
+		Task task = leaveManager.doLeaveFor(leaveDto);
 		result.put("result", true);
 		result.put("nextTaskName", task.getName());
 		result.put("nextAssignee", task.getAssignee());

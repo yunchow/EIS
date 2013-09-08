@@ -1,6 +1,27 @@
 <div class="easyui-accordion" data-options="fit:true,border:false">
 <#list menus as menu >
     <div title="${menu.name}" data-options="iconCls:'${menu.icon}'" style="padding:0px">
+        <ul id="tt" class="easyui-tree" data-options="lines:false">
+        <#list menu.children as child>
+        <#if  child.status == 'Y'>
+		    <li>
+		    	<#if child.children?size gt 0>
+			        <span>${child.name}</span>
+			        <ul>
+			        <#list child.children as grandson>
+			            <li>
+			                <span><a href="javascript:;" onclick="context.addTab('${grandson.name}','${grandson.url}','${grandson.icon}')">${grandson.name}</a></span>
+			            </li>
+			        </#list>
+			        </ul>
+		        <#else>
+		        	<span><a href="javascript:;" onclick="context.addTab('${child.name}','${child.url}','${child.icon}')">${child.name}</a></span>
+		        </#if>
+		    </li>
+        </#if>
+        </#list>
+        </ul>
+        <#-- 
         <ul>
         <#list menu.children as child>
         	<li>
@@ -13,6 +34,7 @@
 			</li>
         </#list>
         </ul>
+        -->
     </div>	
 </#list>
 </div>

@@ -4,7 +4,8 @@
 	<cache></cache>
 	
 	<insert id="save" parameterType="com.eis.oa.domain.model.leave.LeaveForm">
-		insert into oa_leave(id, type, reason) values(#{id}, 'sick', #{reason})
+		insert into oa_leave(id, type, reason, applicant, startTime, endTime, createTime) 
+		values(#{id}, #{type}, #{reason}, #{applicant}, #{startTime}, #{endTime}, #{createTime})
 	</insert>
 
 </mapper>

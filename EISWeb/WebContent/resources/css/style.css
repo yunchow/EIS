@@ -20,7 +20,13 @@ a {
 	color: White;
 	text-decoration: none;
 }
-
+.easyui-accordion a {
+	color: #333;
+}
+.easyui-accordion li {
+	padding: 2px 5px;
+}
+/*
 .easyui-accordion ul {
 	list-style-type: none;
 	margin: 0px;
@@ -46,7 +52,7 @@ a {
 	background: #EEE;
 	cursor: pointer;
 }
-
+*/
 .icon {
 	width: 18px;
 	line-height: 18px;
@@ -120,10 +126,15 @@ fieldset {
 	border-color: #DDD;
 	width: 96%;
 	margin: 0px;
-	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 fieldset legend {
 	padding: 5px;
 	font-weight: bold;
+}
+
+form {
+	margin: 0px;
+	padding: 0px;
 }
