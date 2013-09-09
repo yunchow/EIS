@@ -3,9 +3,21 @@
 <mapper namespace="com.eis.oa.domain.model.leave.LeaveRepository">
 	<cache></cache>
 	
+	<resultMap type="com.eis.oa.domain.model.leave.LeaveForm" id="leaveFormResult">
+		<id/>
+	</resultMap>
+	
 	<insert id="save" parameterType="com.eis.oa.domain.model.leave.LeaveForm">
 		insert into oa_leave(id, type, reason, applicant, startTime, endTime, createTime) 
 		values(#{id}, #{type}, #{reason}, #{applicant}, #{startTime}, #{endTime}, #{createTime})
 	</insert>
+	
+	<select id="findLeaveByPage" parameterType="hashmap" resultMap="leaveFormResult">
+		select * from oa_leave where applicant = #{applicant}
+	</select>
+	
+	<select id="findLeaveTotalCount" parameterType="hashmap" resultMap="leaveFormResult">
+		select count(*) from oa_leave where applicant = #{applicant}
+	</select>
 
 </mapper>

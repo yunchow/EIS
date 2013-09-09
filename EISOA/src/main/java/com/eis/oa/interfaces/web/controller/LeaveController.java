@@ -7,7 +7,6 @@
 package com.eis.oa.interfaces.web.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.activiti.engine.task.Task;
@@ -17,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eis.oa.application.LeaveManager;
-import com.eis.oa.interfaces.dto.LeaveFormDTO;
+import com.eis.oa.application.dto.LeaveFormDTO;
+import com.eis.oa.domain.service.LeaveService;
+import com.eis.oa.interfaces.assembler.LeaveMapAssembler;
 
  /**
  * Title: LeaveController.java
@@ -35,6 +36,9 @@ public class LeaveController {
 	@Autowired
 	private LeaveManager leaveManager;
 
+	@Autowired
+	private LeaveService leaveService;
+
 	@RequestMapping("/index")
 	public String index() {
 		return "leave/index.ftl";
@@ -50,16 +54,22 @@ public class LeaveController {
 		return "leave/grid.ftl";
 	}
 	
-	@RequestMapping("/current/pending")
+	@RequestMapping("/my/pending")
 	@ResponseBody
-	public List<LeaveFormDTO> findPendingLeaveFormByUser(LeaveFormDTO leaveDto) {
-		return null;
+	public Map<String, Object> findPendingLeaveFormByUser(LeaveFormDTO leaveDto) {
+		return LeaveMapAssembler.asMap(leaveDto, leaveService.findPendingLeaveFormByUser(leaveDto));
+	}
+	
+	@RequestMapping("/my/history")
+	@ResponseBody
+	public Map<String, Object> findHistoryLeaveFormByUser(LeaveFormDTO leaveDto) {
+		return LeaveMapAssembler.asMap(leaveDto, leaveService.findHistoryLeaveFormByUser(leaveDto));
 	}
 	
 	@RequestMapping("/apply/list")
 	@ResponseBody
-	public List<LeaveFormDTO> findMyApplingLeaveList() {
-		return null;
+	public Map<String, Object> findMyApplingLeaveList(LeaveFormDTO leaveDto) {
+		return LeaveMapAssembler.asMap(leaveDto, leaveService.findMyApplyLeaveList(leaveDto));
 	}
 	
 	@RequestMapping("/do/apply")

@@ -18,6 +18,7 @@ import java.util.List;
  * @author nick.chow
  * @date: Aug 18, 2013
  */
+@Deprecated
 public class PageVO<T> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

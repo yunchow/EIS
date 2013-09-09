@@ -20,7 +20,7 @@ import com.eis.core.model.support.EntitySupport;
  * @author nick.chow
  * @date: Sep 5, 2013
  */
-public class LeaveForm extends EntitySupport<LeaveForm> implements Entity<LeaveForm> {
+public class LeaveFormEntity extends EntitySupport<LeaveFormEntity> implements Entity<LeaveFormEntity> {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -41,11 +41,11 @@ public class LeaveForm extends EntitySupport<LeaveForm> implements Entity<LeaveF
 	private Date endTime;
 	private Date createTime;
 	
-	public LeaveForm() {
+	public LeaveFormEntity() {
 		
 	}
 	
-	public LeaveForm(Map<String, ?> model) {
+	public LeaveFormEntity(Map<String, ?> model) {
 		try {
 			BeanUtils.populate(this, model);
 		} catch (IllegalAccessException e) {

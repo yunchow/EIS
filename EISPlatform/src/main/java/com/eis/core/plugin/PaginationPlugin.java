@@ -97,12 +97,17 @@ public class PaginationPlugin implements InitializingBean, Interceptor {
 	
 	protected String getTotalCountStatementId(final MappedStatement mappedStatement) {
 		String pageStatementId = mappedStatement.getId();
-		String ns = "";
+		/*String ns = "";
 		int index = pageStatementId.lastIndexOf(".");
 		if (index >= 0) {
 			ns = pageStatementId.substring(0, index);
 		}
 		return ns + ".findTotalCount";
+		*/
+		logger.info("find page list statement id is {}", pageStatementId);
+		String totalCountStatement = pageStatementId.substring(0, pageStatementId.indexOf("ByPage")) + "TotalCount";
+		logger.info("find page total count statement id is {}", totalCountStatement);
+		return totalCountStatement;
 	}
 
 	@Override
