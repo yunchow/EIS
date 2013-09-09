@@ -6,14 +6,13 @@
  */
 package com.eis.oa.domain.model.leave;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
-import java.util.Map;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.BeanUtils;
 
 import com.eis.core.model.Entity;
 import com.eis.core.model.support.EntitySupport;
+import com.eis.oa.infrastructure.dto.LeaveFormDTO;
 /**
  * Please comment here
  * 
@@ -41,74 +40,45 @@ public class LeaveFormEntity extends EntitySupport<LeaveFormEntity> implements E
 	private Date endTime;
 	private Date createTime;
 	
-	public LeaveFormEntity() {
-		
+	public LeaveFormEntity(String id, String processInstanceKey, LeaveFormDTO leaveDto) {
+		this.createTime = new Date();
+		this.id = id;
+		this.processInstanceKey = processInstanceKey;
+		BeanUtils.copyProperties(leaveDto, this);
 	}
 	
-	public LeaveFormEntity(Map<String, ?> model) {
-		try {
-			BeanUtils.populate(this, model);
-		} catch (IllegalAccessException e) {
-			logger.error(e.getMessage(), e);
-		} catch (InvocationTargetException e) {
-			logger.error(e.getMessage(), e);
-		}
-	}
-
-	public String getApplicant() {
-		return applicant;
-	}
-
-	public void setApplicant(String applicant) {
-		this.applicant = applicant;
-	}
-
-	public String getProcessInstanceKey() {
-		return processInstanceKey;
-	}
-
-	public void setProcessInstanceKey(String processInstanceKey) {
-		this.processInstanceKey = processInstanceKey;
-	}
-
-	public Date getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
+	public LeaveFormDTO copy() {
+		LeaveFormDTO dto = new LeaveFormDTO();
+		BeanUtils.copyProperties(this, dto);
+		return dto;
 	}
 
 	public String getType() {
 		return type;
 	}
 
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	public String getReason() {
 		return reason;
 	}
 
-	public void setReason(String reason) {
-		this.reason = reason;
+	public String getApplicant() {
+		return applicant;
+	}
+
+	public String getProcessInstanceKey() {
+		return processInstanceKey;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
 	}
 
 	public Date getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	
 }

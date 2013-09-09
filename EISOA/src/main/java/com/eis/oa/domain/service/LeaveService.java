@@ -6,7 +6,6 @@
 package com.eis.oa.domain.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,12 +109,7 @@ public class LeaveService extends ActivitiAwareSupport {
 		variables.put("starter", leaveDto.getApplicant());
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("LeaveProcess", id, variables);
 		
-		LeaveFormEntity leaveForm = new LeaveFormEntity();
-		//leaveForm.setReason(model.get("reason"));
-		BeanUtils.copyProperties(leaveDto, leaveForm);
-		leaveForm.setId(id);
-		leaveForm.setCreateTime(new Date());
-		leaveForm.setProcessInstanceKey(processInstance.getProcessInstanceId());		
+		LeaveFormEntity leaveForm = new LeaveFormEntity(id, processInstance.getProcessInstanceId(), leaveDto);
 		int count = leaveRepository.save(leaveForm);
 		logger.info("count = {}", count);
 		
