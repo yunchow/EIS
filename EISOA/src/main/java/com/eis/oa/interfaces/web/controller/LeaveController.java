@@ -12,6 +12,7 @@ import java.util.Map;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -49,14 +50,15 @@ public class LeaveController {
 		return "leave/form.ftl";
 	}
 	
-	@RequestMapping("/grid")
-	public String grid() {
-		return "leave/grid.ftl";
+	@RequestMapping("/grid/{type}")
+	public String grid(@PathVariable String type) {
+		return "leave/grid_"+ type +".ftl";
 	}
 	
 	@RequestMapping("/my/pending")
 	@ResponseBody
 	public Map<String, Object> findPendingLeaveFormByUser(LeaveFormDTO leaveDto) {
+		leaveDto.setApplicant("user");
 		return LeaveMapAssembler.asMap(leaveDto, leaveService.findPendingLeaveFormByUser(leaveDto));
 	}
 	

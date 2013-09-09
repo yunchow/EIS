@@ -17,6 +17,7 @@ import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.eis.core.context.ActivitiAwareSupport;
@@ -31,6 +32,7 @@ import com.eis.oa.domain.model.leave.LeaveRepository;
  * @author nick.chow
  * @date: Sep 9, 2013
  */
+@Component
 public class LeaveService extends ActivitiAwareSupport {
 	
 	@Autowired

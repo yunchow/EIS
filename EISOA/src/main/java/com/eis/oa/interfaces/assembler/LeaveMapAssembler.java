@@ -17,7 +17,7 @@ import com.eis.oa.application.dto.LeaveFormDTO;
  * @author nick.chow
  * @date: Sep 9, 2013
  */
-public class LeaveMapAssembler {
+public abstract class LeaveMapAssembler {
 
 	private LeaveMapAssembler () {
 		
