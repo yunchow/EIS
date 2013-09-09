@@ -7,13 +7,15 @@ package com.eis.core.dto;
 
 import java.io.Serializable;
 
+import com.eis.core.model.support.DataTransferObjectSupport;
+
  /**
  * <p>Please comment here
  * 
  * @author nick.chow
  * @date: Sep 9, 2013
  */
-public class PageDTO implements Serializable {
+public class PageDTO extends DataTransferObjectSupport implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**

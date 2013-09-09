@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.eis.core.model.repository.GenericRepository;
 import com.eis.core.model.repository.decorator.GenericRepositoryDecorator;
-import com.eis.oa.application.dto.LeaveFormDTO;
+import com.eis.oa.infrastructure.dto.LeaveFormDTO;
 
 /**
  * Title: LeaveRepository.java

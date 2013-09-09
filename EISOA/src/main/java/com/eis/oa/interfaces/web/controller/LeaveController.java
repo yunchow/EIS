@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eis.oa.application.LeaveManager;
-import com.eis.oa.application.dto.LeaveFormDTO;
 import com.eis.oa.domain.service.LeaveService;
+import com.eis.oa.infrastructure.dto.LeaveFormDTO;
 import com.eis.oa.interfaces.assembler.LeaveMapAssembler;
 
  /**

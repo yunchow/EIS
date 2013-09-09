@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.eis.oa.application.dto.LeaveFormDTO;
 import com.eis.oa.domain.service.LeaveService;
+import com.eis.oa.infrastructure.dto.LeaveFormDTO;
 
  /**
  * Title: LeaveManager.java

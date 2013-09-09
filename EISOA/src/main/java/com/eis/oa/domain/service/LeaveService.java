@@ -22,9 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.eis.core.context.ActivitiAwareSupport;
 import com.eis.core.helper.UUIDHelper;
-import com.eis.oa.application.dto.LeaveFormDTO;
 import com.eis.oa.domain.model.leave.LeaveFormEntity;
 import com.eis.oa.domain.model.leave.LeaveRepository;
+import com.eis.oa.infrastructure.dto.LeaveFormDTO;
 
  /**
  * <p>Please comment here

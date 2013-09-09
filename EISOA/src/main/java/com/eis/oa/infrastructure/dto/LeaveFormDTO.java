@@ -3,7 +3,7 @@
  * author: nick.chow
  * date: Sep 6, 2013
  */
-package com.eis.oa.application.dto;
+package com.eis.oa.infrastructure.dto;
 
 import java.io.Serializable;
 import java.util.Date;
