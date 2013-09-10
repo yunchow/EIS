@@ -43,10 +43,23 @@ public class PageDTO extends DataTransferObjectSupport implements Serializable {
 	 */
 	protected int end;
 	
+	/**
+	 * 记录条数
+	 */
+	protected long total;
+	
 	protected void initPaginationInfo() {
 		offset = (page - 1) * rows;
 		start = offset;
 		end = start + rows;
+	}
+
+	public long getTotal() {
+		return total;
+	}
+
+	public void setTotal(long total) {
+		this.total = total;
 	}
 
 	public int getOffset() {

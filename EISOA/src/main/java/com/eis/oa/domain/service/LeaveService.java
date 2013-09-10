@@ -18,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import com.eis.core.context.ActivitiAwareSupport;
 import com.eis.core.helper.UUIDHelper;
@@ -33,6 +34,10 @@ import com.eis.oa.infrastructure.dto.LeaveFormDTO;
  */
 @Component
 public class LeaveService extends ActivitiAwareSupport {
+	/**
+	 * 请假流程ID
+	 */
+	public static final String LEAVE_PROCESS_KEY = "LeaveProcess";
 	
 	@Autowired
 	private LeaveRepository leaveRepository;
@@ -42,7 +47,23 @@ public class LeaveService extends ActivitiAwareSupport {
 	 * @return
 	 */
 	public List<LeaveFormDTO> findPendingLeaveFormByUser(LeaveFormDTO leaveDto) {
-		List<ProcessInstance> processInstances = runtimeService.createProcessInstanceQuery().processDefinitionKey("LeaveProcess").involvedUser(leaveDto.getApplicant()).list();
+		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
+		long count = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).count();
+		leaveDto.setTotal(count);
+		List<Task> tasks = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).listPage(leaveDto.getOffset(), leaveDto.getRows());
+		ArrayList<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(tasks.size());
+		for (Task task : tasks) {
+			LeaveFormDTO dto = new LeaveFormDTO();
+			dto.setProcessDefinitionId(task.getProcessDefinitionId());
+			dto.setProcessInstanceId(task.getProcessInstanceId());
+			Map<String, Object> processVariables = task.getProcessVariables();
+			dto.setApplicant((String) processVariables.get("starter"));
+			resultList.add(dto);
+		}
+		
+		taskService.createNativeTaskQuery().sql("select * from " + managementService.getTableName(Task.class) + " where " );
+		return resultList;
+		/*List<ProcessInstance> processInstances = runtimeService.createProcessInstanceQuery().processDefinitionKey(LEAVE_PROCESS_KEY).involvedUser(leaveDto.getApplicant()).list();
 		ArrayList<LeaveFormDTO> list = new ArrayList<LeaveFormDTO>();
 		for (ProcessInstance processInstance : processInstances) {
 			LeaveFormDTO dto = new LeaveFormDTO();
@@ -55,7 +76,7 @@ public class LeaveService extends ActivitiAwareSupport {
 			list.add(dto);
 		}
 		list.trimToSize();
-		return list;
+		return list;*/
 	}
 	
 	/**
@@ -107,7 +128,7 @@ public class LeaveService extends ActivitiAwareSupport {
 		String id = UUIDHelper.uuid();
 		Map<String, Object> variables = new HashMap<String, Object>(1);
 		variables.put("starter", leaveDto.getApplicant());
-		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("LeaveProcess", id, variables);
+		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(LEAVE_PROCESS_KEY, id, variables);
 		
 		LeaveFormEntity leaveForm = new LeaveFormEntity(id, processInstance.getProcessInstanceId(), leaveDto);
 		int count = leaveRepository.save(leaveForm);
