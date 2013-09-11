@@ -26,6 +26,7 @@ public abstract class LeaveMapAssembler {
 	public static Map<String, Object> asMap(LeaveFormDTO requestParam, List<LeaveFormDTO> resultDtoList) {
 		Map<String, Object> result = new HashMap<String, Object>(2);
 		result.put("page", requestParam.getPage());
+		result.put("total", requestParam.getTotal());
 		result.put("rows", resultDtoList);
 		return result;
 	}

@@ -40,6 +40,10 @@ public class LeaveFormEntity extends EntitySupport<LeaveFormEntity> implements E
 	private Date endTime;
 	private Date createTime;
 	
+	public LeaveFormEntity() {
+		
+	}
+	
 	public LeaveFormEntity(String id, String processInstanceKey, LeaveFormDTO leaveDto) {
 		this.createTime = new Date();
 		this.id = id;

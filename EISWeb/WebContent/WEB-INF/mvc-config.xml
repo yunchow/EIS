@@ -16,9 +16,13 @@
              </list>   
         </property> 
 	</bean>
+	
+
+	<bean id="objectMapper" class="com.eis.core.context.ObjectMapper" />
 
 	<bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-		<property name = "supportedMediaTypes">
+		<property name="objectMapper" ref="objectMapper"></property>
+		<property name="supportedMediaTypes">
               <list>
                   <value>text/plain;charset=UTF-8</value>   
                   <value>text/html;charset=UTF-8</value>

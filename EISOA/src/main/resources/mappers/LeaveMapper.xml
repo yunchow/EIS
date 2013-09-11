@@ -16,7 +16,7 @@
 		select * from oa_leave where applicant = #{applicant}
 	</select>
 	
-	<select id="findLeaveTotalCount" parameterType="hashmap" resultMap="leaveFormResult">
+	<select id="findLeaveTotalCount" resultType="long">
 		select count(*) from oa_leave where applicant = #{applicant}
 	</select>
 

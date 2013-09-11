@@ -36,12 +36,21 @@ public class LeaveFormDTO extends PageDTO implements Serializable {
 	private String applicant;
 	private Date startTime;
 	private Date endTime;
+	private Date createTime;
 
 	/**
 	 * 流程开始和结束时间，与业务时间不同，只有历史流程才会有这2个字段
 	 */
 	private Date processStartTime;
 	private Date processEndTime;
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
 	public Date getProcessStartTime() {
 		return processStartTime;

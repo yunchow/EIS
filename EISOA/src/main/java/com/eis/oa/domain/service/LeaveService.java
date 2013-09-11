@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.NativeTaskQuery;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.BeanUtils;
@@ -43,14 +45,25 @@ public class LeaveService extends ActivitiAwareSupport {
 	private LeaveRepository leaveRepository;
 	
 	/**
-	 * 我的请假待办
+	 * 我的请假待办，包括未签收和已签收但未处理的申请单
 	 * @return
 	 */
 	public List<LeaveFormDTO> findPendingLeaveFormByUser(LeaveFormDTO leaveDto) {
+		logger.info("Enter LeaveService.findPendingLeaveFormByUser");
+		logger.info("leaveDto = {}", leaveDto);
 		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
-		long count = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).count();
-		leaveDto.setTotal(count);
-		List<Task> tasks = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).listPage(leaveDto.getOffset(), leaveDto.getRows());
+		//long count = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).count();
+		//leaveDto.setTotal(count);
+		//List<Task> tasks = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).listPage(leaveDto.getOffset(), leaveDto.getRows());
+		
+		final String sql = "from " + managementService.getTableName(Task.class) + " where OWNER_=#{applicant} or ASSIGNEE_=#{applicant}";
+		logger.info("sql = {}", sql);
+		
+		NativeTaskQuery nativeTaskQueryCount = taskService.createNativeTaskQuery().sql("select count(*) " + sql).parameter("applicant", leaveDto.getApplicant());;
+		NativeTaskQuery nativeTaskQueryList = taskService.createNativeTaskQuery().sql("select * " + sql).parameter("applicant", leaveDto.getApplicant());;
+		leaveDto.setTotal(nativeTaskQueryCount.count());
+		List<Task> tasks = nativeTaskQueryList.listPage(leaveDto.getOffset(), leaveDto.getRows());
+		
 		ArrayList<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(tasks.size());
 		for (Task task : tasks) {
 			LeaveFormDTO dto = new LeaveFormDTO();
@@ -60,8 +73,8 @@ public class LeaveService extends ActivitiAwareSupport {
 			dto.setApplicant((String) processVariables.get("starter"));
 			resultList.add(dto);
 		}
-		
-		taskService.createNativeTaskQuery().sql("select * from " + managementService.getTableName(Task.class) + " where " );
+		logger.info("resultList = {}", resultList);
+		logger.info("Exit LeaveService.findPendingLeaveFormByUser");
 		return resultList;
 		/*List<ProcessInstance> processInstances = runtimeService.createProcessInstanceQuery().processDefinitionKey(LEAVE_PROCESS_KEY).involvedUser(leaveDto.getApplicant()).list();
 		ArrayList<LeaveFormDTO> list = new ArrayList<LeaveFormDTO>();
@@ -80,13 +93,20 @@ public class LeaveService extends ActivitiAwareSupport {
 	}
 	
 	/**
-	 * 我的请假已办
+	 * 我参与近的历史请假已办
 	 * @return
 	 */
-	public List<LeaveFormDTO> findHistoryLeaveFormByUser(LeaveFormDTO leaveDto) {
-		List<HistoricProcessInstance> processInstances = historyService.createHistoricProcessInstanceQuery()
-				.processDefinitionKey("Leaveprocess").involvedUser(leaveDto.getApplicant()).list();
-		ArrayList<LeaveFormDTO> list = new ArrayList<LeaveFormDTO>();
+	public List<LeaveFormDTO> findInvolvedHistoryLeave(LeaveFormDTO leaveDto) {
+		logger.info("Enter LeaveService.findInvolvedHistoryLeaveForm");
+		logger.info("leaveDto = {}", leaveDto);
+		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
+		HistoricProcessInstanceQuery historicProcessInstanceQuery = historyService.createHistoricProcessInstanceQuery()
+				.processDefinitionKey(LEAVE_PROCESS_KEY).involvedUser(leaveDto.getApplicant());
+		
+		leaveDto.setTotal(historicProcessInstanceQuery.count());
+		List<HistoricProcessInstance> processInstances = historicProcessInstanceQuery.listPage(leaveDto.getOffset(), leaveDto.getRows());
+		ArrayList<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(processInstances.size());
+		
 		for (HistoricProcessInstance processInstance : processInstances) {
 			LeaveFormDTO dto = new LeaveFormDTO();
 			String leaveId = processInstance.getBusinessKey();
@@ -96,10 +116,11 @@ public class LeaveService extends ActivitiAwareSupport {
 			dto.setProcessDefinitionId(processInstance.getProcessDefinitionId());
 			Map<String, Object> processVariables = processInstance.getProcessVariables();
 			dto.setApplicant((String) processVariables.get("starter"));
-			list.add(dto);
+			resultList.add(dto);
 		}
-		list.trimToSize();
-		return list;
+		logger.info("returned resultList = {}", resultList);
+		logger.info("Exit LeaveService.findInvolvedHistoryLeaveForm");
+		return resultList;
 	}
 	
 	/**
@@ -107,13 +128,18 @@ public class LeaveService extends ActivitiAwareSupport {
 	 * @return
 	 */
 	public List<LeaveFormDTO> findMyApplyLeaveList(LeaveFormDTO leaveDto) {
+		logger.info("Enter LeaveService.findMyApplyLeaveList");
+		logger.info("leaveDto = {}", leaveDto);
 		List<LeaveFormEntity> leaveEntityList = leaveRepository.findLeaveByPage(leaveDto);
 		ArrayList<LeaveFormDTO> leaveDtoList = new ArrayList<LeaveFormDTO>(leaveEntityList.size());
 		for (LeaveFormEntity entity : leaveEntityList) {
 			LeaveFormDTO dto = new LeaveFormDTO();
 			BeanUtils.copyProperties(entity, dto);
+			dto.setLeaveId(entity.getId());
 			leaveDtoList.add(dto);
 		}
+		logger.info("returned leaveDtoList = {}", leaveDtoList);
+		logger.info("Exit LeaveService.findMyApplyLeaveList");
 		return leaveDtoList;
 	}
 	
@@ -124,7 +150,8 @@ public class LeaveService extends ActivitiAwareSupport {
 	 */
 	@Transactional
 	public Task doLeaveFor(LeaveFormDTO leaveDto) {
-		logger.info("Enter LeaveManager.doLeaveFor");
+		logger.info("Enter LeaveService.doLeaveFor");
+		logger.info("leaveDto = {}", leaveDto);
 		String id = UUIDHelper.uuid();
 		Map<String, Object> variables = new HashMap<String, Object>(1);
 		variables.put("starter", leaveDto.getApplicant());
@@ -140,8 +167,9 @@ public class LeaveService extends ActivitiAwareSupport {
 		taskService.complete(task.getId());
 		
 		task = taskQuery.processInstanceId(processInstance.getProcessInstanceId()).singleResult();
-		
-		logger.info("Exit LeaveManager.doLeaveFor");
+
+		logger.info("Next task = {}", task);
+		logger.info("Exit LeaveService.doLeaveFor");
 		return task;
 	}
 }

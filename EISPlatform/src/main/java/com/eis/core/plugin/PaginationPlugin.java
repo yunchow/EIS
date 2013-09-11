@@ -34,8 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
-import com.eis.core.plugin.Dialect;
-import com.eis.core.plugin.PaginationPlugin;
+import com.eis.core.dto.PageDTO;
 
 /**
  * Title: PaginationPlugin.java
@@ -109,6 +108,11 @@ public class PaginationPlugin implements InitializingBean, Interceptor {
 		logger.info("find page total count statement id is {}", totalCountStatement);
 		return totalCountStatement;
 	}
+	
+	@SuppressWarnings("unchecked")
+	private Map<String, Object> getParamMap(BoundSql boundSql) {
+		return (Map<String, Object>) boundSql.getParameterObject();
+	}
 
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
@@ -122,22 +126,27 @@ public class PaginationPlugin implements InitializingBean, Interceptor {
 	    	return invocation.proceed();
 	    }
 	    
-	    @SuppressWarnings("unchecked")
-		Map<String, Object> param = (Map<String, Object>) boundSql.getParameterObject();
-		String pageSizeParam = (String) param.get("rows");
-		String pageNoParam = (String) param.get("page");
-		
-		if (pageSizeParam == null || pageNoParam == null) {
-			return invocation.proceed();
-		}
-		
-		Integer pageSize = Integer.valueOf(pageSizeParam);
-		Integer pageNo = Integer.valueOf(pageNoParam);
-		param.put("offset", (pageNo - 1) * pageSize);
-		param.put("pageSize", pageSize);
+		Map<String, Object> param = null;
+		PageDTO pageDto = null;
+		Integer pageSize = 0;
+		Integer pageNo = 0;
+	    
+	    Object paramObject = boundSql.getParameterObject();
+	    if (paramObject instanceof Map) {
+	    	param = getParamMap(boundSql);
+			pageSize = Integer.valueOf((String) param.get("rows"));
+			pageNo = Integer.valueOf((String) param.get("page"));
+			param.put("offset", (pageNo - 1) * pageSize);
+			param.put("pageSize", pageSize);
+	    } else if (paramObject instanceof PageDTO) {
+	    	pageDto = (PageDTO) paramObject;
+	    	pageSize = pageDto.getRows();
+			pageNo = pageDto.getPage();
+	    }
 		
 		if (pageNo <= 0 || pageSize <= 0) {
-			logger.warn("pagination sql need valid pager arguments");
+			logger.warn("pagination don't need becuase pageNo <= 0 || pageSize <= 0");
+			return invocation.proceed();
 		}
 		
 		if (logger.isDebugEnabled()) {
@@ -167,9 +176,17 @@ public class PaginationPlugin implements InitializingBean, Interceptor {
 		}
 		else {
 			logger.debug("findTotalCount param = {}", param);
-			Object total = sqlSessionTemplate.selectOne(totalCountStatementId, param);
+			logger.debug("findTotalCount pageDto = {}", pageDto);
+			Object totalParam = param == null ? pageDto : param;
+			
+			Object total = sqlSessionTemplate.selectOne(totalCountStatementId, totalParam);
 			logger.debug("total = {}", total);
-			param.put("total", total);
+			Assert.notNull(total, "Please confirm mapper file is configured correctly: " + totalCountStatementId);
+			if (param != null) {
+				param.put("total", total);
+			} else if (pageDto != null) {
+				pageDto.setTotal((Long) total);
+			}
 		}
 		
 		recordMetaObject.setValue("parameterMappings", rebuildParameterMappings(configuration, parameterMappings));
@@ -195,7 +212,7 @@ public class PaginationPlugin implements InitializingBean, Interceptor {
 		}	
 		ParameterMapping parameterMapping = new ParameterMapping.Builder(configuration, "offset", Integer.class).build();
 		paramList.add(parameterMapping);
-		parameterMapping = new ParameterMapping.Builder(configuration, "pageSize", Integer.class).build();
+		parameterMapping = new ParameterMapping.Builder(configuration, "rows", Integer.class).build();
 		paramList.add(parameterMapping);
 		return paramList;
 	}

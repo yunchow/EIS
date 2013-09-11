@@ -65,12 +65,14 @@ public class LeaveController {
 	@RequestMapping("/my/history")
 	@ResponseBody
 	public Map<String, Object> findHistoryLeaveFormByUser(LeaveFormDTO leaveDto) {
-		return LeaveMapAssembler.asMap(leaveDto, leaveService.findHistoryLeaveFormByUser(leaveDto));
+		leaveDto.setApplicant("user");
+		return LeaveMapAssembler.asMap(leaveDto, leaveService.findInvolvedHistoryLeave(leaveDto));
 	}
 	
-	@RequestMapping("/apply/list")
+	@RequestMapping("/my/list")
 	@ResponseBody
 	public Map<String, Object> findMyApplingLeaveList(LeaveFormDTO leaveDto) {
+		leaveDto.setApplicant("user");
 		return LeaveMapAssembler.asMap(leaveDto, leaveService.findMyApplyLeaveList(leaveDto));
 	}
 	
