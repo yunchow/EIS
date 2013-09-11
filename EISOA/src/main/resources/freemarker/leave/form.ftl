@@ -2,14 +2,15 @@
 <div class="easyui-layout" data-options="fit:true">
     <div data-options="region:'north',fit:false,border:false">
     	<div class="datagrid-toolbar">
-		    <a href="#" onclick="javascript:oa.leave.form.doApplyLeaveFormSubmit();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">提交</a>
-		    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true">取消</a>
+		    <a href="javascript:;" onclick="javascript:oa.leave.form.doApplyLeaveFormSubmit();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">提交</a>
+		    <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true">取消</a>
 		</div>
     </div>
     <div data-options="region:'center',border:false" style="padding:5px;margin:0px;">
     	<form id="leaveForm" action="oa/leave/do/apply.htm" method="post">
+			<#-- 
 			<fieldset>
-			    <legend><span class="icon pictures">&nbsp;</span>基本信息</legend>
+			    <legend>基本信息</legend>
 					<table cellspacing="0" cellpadding="3" class="eistable">
 						<tr>
 							<td class="title">姓名：</td>
@@ -35,8 +36,9 @@
 						</tr>
 					</table>
 			</fieldset>
+			-->
 			<fieldset>
-			    <legend><span class="icon icon-edit">&nbsp;</span>请假理由</legend>
+			    <legend>请假理由</legend>
 					<table width="95%" border="0" cellspacing="0" cellpadding="0" class="eistable">
 						<tr>
 							<td class="title">类型：</td>
@@ -58,19 +60,19 @@
 			</fieldset>
 			
 			<fieldset>
-			    <legend><span class="icon icon-edit">&nbsp;</span>请假时间</legend>
+			    <legend>请假时间</legend>
 					<table width="95%" border="0" cellspacing="0" cellpadding="0" class="eistable">
 						<tr>
 							<td class="title">开始时间：</td>
 							<td>
-								<input class="easyui-datebox" type="text" name="startTime" data-options="required:true" />
+								<input class="easyui-datetimebox" type="text" name="startTime" data-options="required:true,width:300" />
 							</td>
 							<td class="title">结束时间：</td>
-							<td><input class="easyui-datebox" type="text" name="endTime" data-options="required:true" /></td>
+							<td><input class="easyui-datetimebox" type="text" name="endTime" data-options="required:true,width:300" /></td>
 						</tr>
 					</table>
+					<div>&nbsp;</div>
 			</fieldset>
-			
 			<#-- 
 			<div style="width:98%;padding:0px;margin:0px;margin-top:10px;height:auto;">
 				<div class="easyui-panel" title="请假时间明细" data-options="collapsible:true">
@@ -100,15 +102,16 @@
 			-->
 			
 			<fieldset>
-			    <legend><span class="icon icon-edit">&nbsp;</span>变动日志</legend>
+			    <legend>变动日志</legend>
 			    <div style="padding:10px;">
 					<div>部门经理于9-10号审批通过，审批意见：同意</div>
 					<div>人事专员于9-12号审批通过，审批意见：已确认</div>
 				</div>
 			</fieldset>
 			
+			<#--
 			<fieldset>
-			    <legend><span class="icon icon-edit">&nbsp;</span>审核</legend>
+			    <legend>审核</legend>
 					<table width="95%" border="0" cellspacing="0" cellpadding="0" class="eistable">
 						<tr>
 							<td class="title">审核：</td>
@@ -127,6 +130,7 @@
 						</tr>
 					</table>
 			</fieldset>
+			-->
 		</form>
 		<div style="margin:50px;"></div>
     </div>

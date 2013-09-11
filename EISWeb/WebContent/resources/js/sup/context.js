@@ -23,8 +23,10 @@ jQuery.define(context, {
 	init: function() {
 		$.ajaxSetup({
 			global: true,
-			error: function (XMLHttpRequest, textStatus, errorThrown) {
-				jQuery.messager.alert("系统消息", "系统产生内部错误！", "error");
+			error: function (xhr, textStatus, errorThrown) {
+				context.log(xhr);
+				var msg = "<p>"+ xhr.response.responseText +"</p>"
+				jQuery.messager.alert("系统消息", "服务器内部错误！" + msg, "error");
 			}
 		});
 		/*$("body").bind("dblclick", function(e) {

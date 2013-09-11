@@ -48,7 +48,12 @@ public class LeaveFormEntity extends EntitySupport<LeaveFormEntity> implements E
 		this.createTime = new Date();
 		this.id = id;
 		this.processInstanceKey = processInstanceKey;
-		BeanUtils.copyProperties(leaveDto, this);
+		applicant = leaveDto.getApplicant();
+		type = leaveDto.getType();
+		reason = leaveDto.getReason();
+		startTime = leaveDto.getStartTime();
+		endTime = leaveDto.getEndTime();
+		createTime = new Date(System.currentTimeMillis());
 	}
 	
 	public LeaveFormDTO copy() {

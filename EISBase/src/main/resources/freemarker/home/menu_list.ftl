@@ -1,7 +1,7 @@
 <div class="easyui-accordion" data-options="fit:true,border:false">
 <#list menus as menu >
-    <div title="${menu.name}" data-options="iconCls:'${menu.icon}'" style="padding:0px">
-        <ul id="tt" class="easyui-tree" data-options="lines:false">
+    <div title="${menu.name}" style="padding:0px">
+        <ul id="tt" class="easyui-tree" data-options="lines:false,iconCls:'icon-reload'">
         <#list menu.children as child>
         <#if  child.status == 'Y'>
 		    <li>

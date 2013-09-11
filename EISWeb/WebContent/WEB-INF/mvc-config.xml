@@ -17,6 +17,7 @@
         </property> 
 	</bean>
 	
+	<bean class="com.eis.core.context.JsonExceptionResolver"></bean>
 
 	<bean id="objectMapper" class="com.eis.core.context.ObjectMapper" />
 

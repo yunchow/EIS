@@ -93,7 +93,7 @@ public class LeaveService extends ActivitiAwareSupport {
 	}
 	
 	/**
-	 * 我参与近的历史请假已办
+	 * 我参与过的历史请假已办
 	 * @return
 	 */
 	public List<LeaveFormDTO> findInvolvedHistoryLeave(LeaveFormDTO leaveDto) {
