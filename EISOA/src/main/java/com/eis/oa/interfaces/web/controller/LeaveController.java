@@ -58,7 +58,7 @@ public class LeaveController {
 	@RequestMapping("/my/pending")
 	@ResponseBody
 	public Map<String, Object> findPendingLeaveFormByUser(LeaveFormDTO leaveDto) {
-		leaveDto.setApplicant("user");
+		leaveDto.setApplicant("manager");
 		return LeaveMapAssembler.asMap(leaveDto, leaveService.findPendingLeaveFormByUser(leaveDto));
 	}
 	

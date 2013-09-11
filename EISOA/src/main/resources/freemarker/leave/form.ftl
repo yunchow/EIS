@@ -1,9 +1,9 @@
 <@require ns="oa.leave.form"/>
 <div class="easyui-layout" data-options="fit:true">
-    <div data-options="region:'north',fit:false,border:false" style="height:45px;padding:5px;">
-    	<div style="padding:0px;padding-bottom:5px;width:100%;border-bottom:1px dashed #369;">
-		    <a href="#" onclick="javascript:oa.leave.form.doApplyLeaveFormSubmit();" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">提交</a>
-		    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+    <div data-options="region:'north',fit:false,border:false">
+    	<div class="datagrid-toolbar">
+		    <a href="#" onclick="javascript:oa.leave.form.doApplyLeaveFormSubmit();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">提交</a>
+		    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true">取消</a>
 		</div>
     </div>
     <div data-options="region:'center',border:false" style="padding:5px;margin:0px;">

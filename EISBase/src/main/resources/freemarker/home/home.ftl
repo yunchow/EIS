@@ -81,7 +81,7 @@
     
     <div data-options="region:'center'" style="overflow: hidden;">
         <div id="homeTabBar" class="easyui-tabs" data-options="border:false,fit:true" style="width:700px;height:250px">
-	        <div class="centerTabButton" data-options="closable:true,iconCls:'icon-ok'" title="About" style="padding:10px">
+	        <div class="centerTabButton" data-options="closable:true,iconCls:'icon-reload'" title="About" style="padding:10px">
 	            <p style="font-size:14px">jQuery EasyUI framework help you build your web page easily.</p>
 	            <ul>
 	                <li>easyui is a collection of user-interface plugin based on jQuery.</li>

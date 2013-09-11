@@ -138,6 +138,7 @@ public class PaginationPlugin implements InitializingBean, Interceptor {
 			pageNo = Integer.valueOf((String) param.get("page"));
 			param.put("offset", (pageNo - 1) * pageSize);
 			param.put("pageSize", pageSize);
+			param.put("rows", pageSize);
 	    } else if (paramObject instanceof PageDTO) {
 	    	pageDto = (PageDTO) paramObject;
 	    	pageSize = pageDto.getRows();
