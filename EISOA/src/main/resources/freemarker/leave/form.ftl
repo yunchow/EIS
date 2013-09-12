@@ -43,7 +43,7 @@
 						<tr>
 							<td class="title">类型：</td>
 							<td>
-								<select id="cc" class="easyui-combobox" name="type" style="width:200px;">
+								<select id="cc" class="easyui-combobox" name="type" style="width:200px;value:'${leaveForm.type}'">
 								    <option value="病假">病假</option>
 								    <option value="事假">事假</option>
 								    <option value="年假">年假</option>
@@ -54,7 +54,7 @@
 						</tr>
 						<tr>
 							<td class="title">理由：</td>
-							<td><textarea name="reason" rows="5">理由你妹啊</textarea></td>
+							<td><textarea name="reason" rows="5">${leaveForm.reason}</textarea></td>
 						</tr>
 					</table>
 			</fieldset>
@@ -65,10 +65,10 @@
 						<tr>
 							<td class="title">开始时间：</td>
 							<td>
-								<input class="easyui-datetimebox" type="text" name="startTime" data-options="required:true,width:300" />
+								<input class="easyui-datetimebox" type="text" name="startTime" data-options="required:true,width:300,value:'<#if (leaveForm.startTime)??>${leaveForm.startTime?datetime}</#if>'" />
 							</td>
 							<td class="title">结束时间：</td>
-							<td><input class="easyui-datetimebox" type="text" name="endTime" data-options="required:true,width:300" /></td>
+							<td><input class="easyui-datetimebox" type="text" name="endTime" data-options="required:true,width:300,value:'<#if (leaveForm.endTime)??>${leaveForm.endTime?datetime}</#if>'"/></td>
 						</tr>
 					</table>
 					<div>&nbsp;</div>

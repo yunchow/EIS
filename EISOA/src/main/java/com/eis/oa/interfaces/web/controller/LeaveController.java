@@ -12,11 +12,14 @@ import java.util.Map;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eis.oa.application.LeaveManager;
+import com.eis.oa.domain.model.leave.LeaveFormEntity;
+import com.eis.oa.domain.model.leave.LeaveRepository;
 import com.eis.oa.domain.service.LeaveService;
 import com.eis.oa.infrastructure.dto.LeaveFormDTO;
 import com.eis.oa.interfaces.assembler.LeaveMapAssembler;
@@ -39,6 +42,9 @@ public class LeaveController {
 
 	@Autowired
 	private LeaveService leaveService;
+	
+	@Autowired
+	private LeaveRepository leaveRepository;
 
 	@RequestMapping("/index")
 	public String index() {
@@ -53,6 +59,13 @@ public class LeaveController {
 	@RequestMapping("/grid/{type}")
 	public String grid(@PathVariable String type) {
 		return "leave/grid_"+ type +".ftl";
+	}
+	
+	@RequestMapping("/detail/{id}")
+	public String viewLeaveDetail(@PathVariable String id, ModelMap model) {
+		LeaveFormEntity entity = leaveRepository.findById(id);
+		model.addAttribute("leaveForm", entity);
+		return "leave/form.ftl";
 	}
 	
 	@RequestMapping("/my/pending")

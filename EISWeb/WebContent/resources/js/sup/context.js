@@ -173,6 +173,9 @@ jQuery.define(context, {
 	echo: function() {
 		alert(this.getCopyright());
 	},
+	openTab: function(title, url) {
+		context.addTab(title, url, "table");
+	},
 	/**
 	 * create new tab
 	 * @param subtitle
@@ -202,7 +205,7 @@ jQuery.define(context, {
 		this.enableHomeTabRightClickMenue();
 	},
 	
-	openTab: function(subtitle, url, icon) {
+	openTabIframe: function(subtitle, url, icon) {
 		if (!$('#homeTabBar').tabs('exists', subtitle)) {
 			$('#homeTabBar').tabs('add', {
 				title : subtitle,

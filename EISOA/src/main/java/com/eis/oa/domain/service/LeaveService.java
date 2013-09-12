@@ -13,6 +13,7 @@ import java.util.Map;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.NativeTaskQuery;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
@@ -64,6 +65,9 @@ public class LeaveService extends ActivitiAwareSupport {
 		leaveDto.setTotal(nativeTaskQueryCount.count());
 		List<Task> tasks = nativeTaskQueryList.listPage(leaveDto.getOffset(), leaveDto.getRows());
 		
+		
+		ProcessInstanceQuery processInstanceQuery = runtimeService.createProcessInstanceQuery();
+		
 		ArrayList<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(tasks.size());
 		for (Task task : tasks) {
 			LeaveFormDTO dto = new LeaveFormDTO();
@@ -71,6 +75,11 @@ public class LeaveService extends ActivitiAwareSupport {
 			dto.setProcessInstanceId(task.getProcessInstanceId());
 			Map<String, Object> processVariables = task.getProcessVariables();
 			dto.setApplicant((String) processVariables.get("starter"));
+			
+			// N + 1 查询问题，有空再优化
+			String leaveId = processInstanceQuery.processInstanceId(task.getProcessInstanceId()).singleResult().getBusinessKey();
+			dto.setLeaveId(leaveId);
+			
 			resultList.add(dto);
 		}
 		logger.info("resultList = {}", resultList);
@@ -93,7 +102,7 @@ public class LeaveService extends ActivitiAwareSupport {
 	}
 	
 	/**
-	 * 我参与过的历史请假已办
+	 * 我参与过的流程
 	 * @return
 	 */
 	public List<LeaveFormDTO> findInvolvedHistoryLeave(LeaveFormDTO leaveDto) {
