@@ -11,7 +11,11 @@
     <th data-options="field:'createTime',width:80">申请时间</th>
 </@datagrid>
 
-<@toolbar id="listLeaveToolbar" ns="oa.leave.list" menu="#listLeaveSearchBoxMenu"/>
+<div id="listLeaveToolbar" style="height:auto;">
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'text',plain:true" onclick="oa.leave.list.viewDetail()">查看明细</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="oa.leave.list.reload()">刷新</a>
+	<input class="easyui-searchbox" data-options="prompt:'请输入关键字',searcher:oa.leave.list.doSearch,menu:'#listLeaveSearchBoxMenu'" style="width:300px;float:right;"></input>
+</div>
 
 <div id="listLeaveSearchBoxMenu" style="width:auto">
     <div data-options="name:'status'">请假描述</div>

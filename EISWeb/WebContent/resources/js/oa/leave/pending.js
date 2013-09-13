@@ -20,6 +20,27 @@ jQuery.define(oa.leave.pending, base, {
 	onDblClickRow: function(index, rowData){
     	context.openTab("请假单", "oa/leave/detail/"+ rowData.leaveId +".htm");
     },
+    
+    /**
+     * 查看明细
+     */
+    viewDetail: function() {
+    	
+    },
+    
+    /**
+     * 挂起
+     */
+    pend: function() {
+    	
+    },
+    
+    /**
+     * 激活
+     */
+    active: function() {
+    	
+    },
 	
 	formatMenu: function(value, row, index) {
 		return value;

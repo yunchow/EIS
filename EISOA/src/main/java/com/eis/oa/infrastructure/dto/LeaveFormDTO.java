@@ -43,6 +43,91 @@ public class LeaveFormDTO extends PageDTO implements Serializable {
 	 */
 	private Date processStartTime;
 	private Date processEndTime;
+	
+	/**
+	 * Task 相关属性
+	 */
+	private String taskId;
+	private String owner;
+	private String assignee;
+	private String parentTaskId;
+	private String name;
+	private String description;
+	private int priority;
+	private Date taskCreateTime; // The time when the task has been created
+	private Date dueDate;
+
+	public String getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
+	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	public String getAssignee() {
+		return assignee;
+	}
+
+	public void setAssignee(String assignee) {
+		this.assignee = assignee;
+	}
+
+	public String getParentTaskId() {
+		return parentTaskId;
+	}
+
+	public void setParentTaskId(String parentTaskId) {
+		this.parentTaskId = parentTaskId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+
+	public Date getTaskCreateTime() {
+		return taskCreateTime;
+	}
+
+	public void setTaskCreateTime(Date taskCreateTime) {
+		this.taskCreateTime = taskCreateTime;
+	}
+
+	public Date getDueDate() {
+		return dueDate;
+	}
+
+	public void setDueDate(Date dueDate) {
+		this.dueDate = dueDate;
+	}
 
 	public Date getCreateTime() {
 		return createTime;

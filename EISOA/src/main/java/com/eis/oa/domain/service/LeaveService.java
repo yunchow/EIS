@@ -57,11 +57,15 @@ public class LeaveService extends ActivitiAwareSupport {
 		//leaveDto.setTotal(count);
 		//List<Task> tasks = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).listPage(leaveDto.getOffset(), leaveDto.getRows());
 		
-		final String sql = "from " + managementService.getTableName(Task.class) + " where OWNER_=#{applicant} or ASSIGNEE_=#{applicant}";
+		final String sql = "from " + managementService.getTableName(Task.class) + " where (OWNER_=#{applicant} or ASSIGNEE_=#{applicant}) and PROC_DEF_ID_ like #{processDefKey}";
 		logger.info("sql = {}", sql);
 		
-		NativeTaskQuery nativeTaskQueryCount = taskService.createNativeTaskQuery().sql("select count(*) " + sql).parameter("applicant", leaveDto.getApplicant());;
-		NativeTaskQuery nativeTaskQueryList = taskService.createNativeTaskQuery().sql("select * " + sql).parameter("applicant", leaveDto.getApplicant());;
+		NativeTaskQuery nativeTaskQueryCount = taskService.createNativeTaskQuery().sql("select count(*) " + sql)
+				.parameter("applicant", leaveDto.getApplicant())
+				.parameter("processDefKey", LEAVE_PROCESS_KEY +"%");
+		NativeTaskQuery nativeTaskQueryList = taskService.createNativeTaskQuery().sql("select * " + sql)
+				.parameter("applicant", leaveDto.getApplicant())
+				.parameter("processDefKey", LEAVE_PROCESS_KEY +"%");
 		leaveDto.setTotal(nativeTaskQueryCount.count());
 		List<Task> tasks = nativeTaskQueryList.listPage(leaveDto.getOffset(), leaveDto.getRows());
 		
@@ -79,6 +83,16 @@ public class LeaveService extends ActivitiAwareSupport {
 			// N + 1 查询问题，有空再优化
 			String leaveId = processInstanceQuery.processInstanceId(task.getProcessInstanceId()).singleResult().getBusinessKey();
 			dto.setLeaveId(leaveId);
+			
+			// task properties
+			dto.setAssignee(task.getAssignee());
+			dto.setOwner(task.getOwner());
+			dto.setName(task.getName());
+			dto.setDescription(task.getDescription());
+			dto.setTaskCreateTime(task.getCreateTime());
+			dto.setPriority(task.getPriority());
+			dto.setTaskId(task.getId());
+			dto.setDueDate(task.getDueDate());
 			
 			resultList.add(dto);
 		}
