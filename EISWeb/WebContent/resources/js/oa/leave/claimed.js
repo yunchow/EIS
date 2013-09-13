@@ -1,14 +1,14 @@
-jQuery.ns("oa.leave.pending");
+jQuery.ns("oa.leave.claimed");
 
-jQuery.define(oa.leave.pending, base, {
-	dgId: "leavePendingGrid",
+jQuery.define(oa.leave.claimed, base, {
+	dgId: "leaveClaimedGrid",
     
     init: function() {
     	
     },
     
 	onReady: function() {
-		context.log("oa.leave.pending is ready");
+		context.log("oa.leave.claimed is ready");
 	},
 	
 	/**

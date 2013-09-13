@@ -1,6 +1,6 @@
 <div class="easyui-accordion" data-options="fit:true,border:false">
 <#list menus as menu >
-    <div title="${menu.name}" style="padding:0px">
+    <div title="${menu.name}" style="padding:0px" data-options="iconCls:'${menu.icon}'">
         <ul id="tt" class="easyui-tree" data-options="lines:false,iconCls:'icon-reload'">
         <#list menu.children as child>
         <#if  child.status == 'Y'>
@@ -9,9 +9,11 @@
 			        <span>${child.name}</span>
 			        <ul>
 			        <#list child.children as grandson>
+			        <#if  grandson.status == 'Y'>
 			            <li>
 			                <span><a href="javascript:;" onclick="context.addTab('${grandson.name}','${grandson.url}','${grandson.icon}')">${grandson.name}</a></span>
 			            </li>
+			        </#if>
 			        </#list>
 			        </ul>
 		        <#else>

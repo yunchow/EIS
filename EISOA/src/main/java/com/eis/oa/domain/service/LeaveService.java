@@ -13,14 +13,11 @@ import java.util.Map;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.runtime.ProcessInstanceQuery;
-import org.activiti.engine.task.NativeTaskQuery;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.eis.core.context.ActivitiAwareSupport;
@@ -46,73 +43,128 @@ public class LeaveService extends ActivitiAwareSupport {
 	private LeaveRepository leaveRepository;
 	
 	/**
+	 * 根据用户查等待签收的任务
+	 * @return
+	 */
+	public List<LeaveFormDTO> findCandidateLeaveTasks(LeaveFormDTO leaveDto) {
+		logger.info("Enter LeaveService.findPendingLeaveFormByUser");
+		logger.info("leaveDto = {}", leaveDto);
+		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
+
+		long count = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).count();
+		leaveDto.setTotal(count);
+		List<Task> tasks = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant())
+				.orderByTaskPriority().desc().orderByTaskCreateTime().desc().listPage(leaveDto.getOffset(), leaveDto.getRows());
+		
+		ArrayList<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(tasks.size());
+
+		for (Task task : tasks) {
+			LeaveFormDTO dto = asDtoFrom(task);
+			resultList.add(dto);
+		}
+		logger.info("resultList = {}", resultList);
+		logger.info("Exit LeaveService.findPendingLeaveFormByUser");
+		return resultList;
+	}
+	
+	/**
+	 * 根据用户查询已签收的任务
+	 * @return
+	 */
+	public List<LeaveFormDTO> findClaimedLeaveTasks(LeaveFormDTO leaveDto) {
+		logger.info("Enter LeaveService.findPendingLeaveFormByUser");
+		logger.info("leaveDto = {}", leaveDto);
+		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
+
+		long count = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskAssignee(leaveDto.getApplicant()).count();
+		leaveDto.setTotal(count);
+		List<Task> tasks = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskAssignee(leaveDto.getApplicant())
+				.orderByTaskPriority().desc().orderByTaskCreateTime().desc().listPage(leaveDto.getOffset(), leaveDto.getRows());
+		
+		ArrayList<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(tasks.size());
+
+		for (Task task : tasks) {
+			LeaveFormDTO dto = asDtoFrom(task);
+			resultList.add(dto);
+		}
+		logger.info("resultList = {}", resultList);
+		logger.info("Exit LeaveService.findPendingLeaveFormByUser");
+		return resultList;
+	}
+
+	/**
+	 * @param task
+	 * @return
+	 */
+	protected LeaveFormDTO asDtoFrom(Task task) {
+		LeaveFormDTO dto = new LeaveFormDTO();
+		dto.setProcessDefinitionId(task.getProcessDefinitionId());
+		dto.setProcessInstanceId(task.getProcessInstanceId());
+		
+		Map<String, Object> processVariables = task.getProcessVariables();
+		dto.setApplicant((String) processVariables.get("starter"));
+		
+		Object day = processVariables.get("leaveDays");
+		if (day == null) {
+			dto.setLeaveDays(0);
+		} else {
+			dto.setLeaveDays((Integer)day);
+		}
+		
+		// N + 1 查询问题，有空再优化
+		String leaveId = runtimeService.createProcessInstanceQuery()
+				.processInstanceId(task.getProcessInstanceId()).singleResult().getBusinessKey();
+		dto.setLeaveId(leaveId);
+		
+		// task properties
+		dto.setAssignee(task.getAssignee());
+		dto.setOwner(task.getOwner());
+		dto.setName(task.getName());
+		dto.setDescription(task.getDescription());
+		dto.setTaskCreateTime(task.getCreateTime());
+		dto.setPriority(task.getPriority());
+		dto.setTaskId(task.getId());
+		dto.setDueDate(task.getDueDate());
+		dto.setSuspend(task.isSuspended());
+		return dto;
+	}
+	
+	/**
 	 * 我的请假待办，包括未签收和已签收但未处理的申请单
+	 * 
+	 * 只查等签收的任务
 	 * @return
 	 */
 	public List<LeaveFormDTO> findPendingLeaveFormByUser(LeaveFormDTO leaveDto) {
 		logger.info("Enter LeaveService.findPendingLeaveFormByUser");
 		logger.info("leaveDto = {}", leaveDto);
 		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
-		//long count = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).count();
-		//leaveDto.setTotal(count);
-		//List<Task> tasks = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).listPage(leaveDto.getOffset(), leaveDto.getRows());
+
+		long count = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).count();
+		leaveDto.setTotal(count);
+		List<Task> tasks = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).listPage(leaveDto.getOffset(), leaveDto.getRows());
 		
-		final String sql = "from " + managementService.getTableName(Task.class) + " where (OWNER_=#{applicant} or ASSIGNEE_=#{applicant}) and PROC_DEF_ID_ like #{processDefKey}";
+		/*final String sql = "from " + managementService.getTableName(Task.class) + " t left outer join act_ru_variable v on v.PROC_INST_ID_ = t.PROC_INST_ID_ where (OWNER_=#{applicant} or ASSIGNEE_=#{applicant}) and PROC_DEF_ID_ like #{processDefKey}";
 		logger.info("sql = {}", sql);
 		
 		NativeTaskQuery nativeTaskQueryCount = taskService.createNativeTaskQuery().sql("select count(*) " + sql)
 				.parameter("applicant", leaveDto.getApplicant())
 				.parameter("processDefKey", LEAVE_PROCESS_KEY +"%");
-		NativeTaskQuery nativeTaskQueryList = taskService.createNativeTaskQuery().sql("select * " + sql)
+		NativeTaskQuery nativeTaskQueryList = taskService.createNativeTaskQuery().sql("select t.*, v.* " + sql + " order by PRIORITY_ desc, CREATE_TIME_ desc")
 				.parameter("applicant", leaveDto.getApplicant())
 				.parameter("processDefKey", LEAVE_PROCESS_KEY +"%");
 		leaveDto.setTotal(nativeTaskQueryCount.count());
-		List<Task> tasks = nativeTaskQueryList.listPage(leaveDto.getOffset(), leaveDto.getRows());
-		
-		
-		ProcessInstanceQuery processInstanceQuery = runtimeService.createProcessInstanceQuery();
+		List<Task> tasks = nativeTaskQueryList.listPage(leaveDto.getOffset(), leaveDto.getRows());*/
 		
 		ArrayList<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(tasks.size());
+
 		for (Task task : tasks) {
-			LeaveFormDTO dto = new LeaveFormDTO();
-			dto.setProcessDefinitionId(task.getProcessDefinitionId());
-			dto.setProcessInstanceId(task.getProcessInstanceId());
-			Map<String, Object> processVariables = task.getProcessVariables();
-			dto.setApplicant((String) processVariables.get("starter"));
-			
-			// N + 1 查询问题，有空再优化
-			String leaveId = processInstanceQuery.processInstanceId(task.getProcessInstanceId()).singleResult().getBusinessKey();
-			dto.setLeaveId(leaveId);
-			
-			// task properties
-			dto.setAssignee(task.getAssignee());
-			dto.setOwner(task.getOwner());
-			dto.setName(task.getName());
-			dto.setDescription(task.getDescription());
-			dto.setTaskCreateTime(task.getCreateTime());
-			dto.setPriority(task.getPriority());
-			dto.setTaskId(task.getId());
-			dto.setDueDate(task.getDueDate());
-			
+			LeaveFormDTO dto = asDtoFrom(task);
 			resultList.add(dto);
 		}
 		logger.info("resultList = {}", resultList);
 		logger.info("Exit LeaveService.findPendingLeaveFormByUser");
 		return resultList;
-		/*List<ProcessInstance> processInstances = runtimeService.createProcessInstanceQuery().processDefinitionKey(LEAVE_PROCESS_KEY).involvedUser(leaveDto.getApplicant()).list();
-		ArrayList<LeaveFormDTO> list = new ArrayList<LeaveFormDTO>();
-		for (ProcessInstance processInstance : processInstances) {
-			LeaveFormDTO dto = new LeaveFormDTO();
-			String leaveId = processInstance.getBusinessKey();
-			dto.setLeaveId(leaveId);
-			dto.setProcessDefinitionId(processInstance.getProcessDefinitionId());
-			dto.setProcessInstanceId(processInstance.getProcessInstanceId());
-			Map<String, Object> processVariables = processInstance.getProcessVariables();
-			dto.setApplicant((String) processVariables.get("starter"));
-			list.add(dto);
-		}
-		list.trimToSize();
-		return list;*/
 	}
 	
 	/**
@@ -171,13 +223,17 @@ public class LeaveService extends ActivitiAwareSupport {
 	 * @param leaveDto
 	 * @return
 	 */
-	@Transactional
 	public Task doLeaveFor(LeaveFormDTO leaveDto) {
 		logger.info("Enter LeaveService.doLeaveFor");
 		logger.info("leaveDto = {}", leaveDto);
 		String id = UUIDHelper.uuid();
-		Map<String, Object> variables = new HashMap<String, Object>(1);
+		long start = leaveDto.getStartTime().getTime();
+		long end = leaveDto.getEndTime().getTime();
+		double days = (end - start) / 3600 / 8;
+		
+		Map<String, Object> variables = new HashMap<String, Object>(2);
 		variables.put("starter", leaveDto.getApplicant());
+		variables.put("leaveDays", days);
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(LEAVE_PROCESS_KEY, id, variables);
 		
 		LeaveFormEntity leaveForm = new LeaveFormEntity(id, processInstance.getProcessInstanceId(), leaveDto);

@@ -1,14 +1,14 @@
-jQuery.ns("oa.leave.pending");
+jQuery.ns("oa.leave.candidate");
 
-jQuery.define(oa.leave.pending, base, {
-	dgId: "leavePendingGrid",
+jQuery.define(oa.leave.candidate, base, {
+	dgId: "leaveCandidateGrid",
     
     init: function() {
     	
     },
     
 	onReady: function() {
-		context.log("oa.leave.pending is ready");
+		context.log("oa.leave.candidate is ready");
 	},
 	
 	/**

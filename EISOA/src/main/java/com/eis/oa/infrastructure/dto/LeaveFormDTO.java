@@ -56,6 +56,25 @@ public class LeaveFormDTO extends PageDTO implements Serializable {
 	private int priority;
 	private Date taskCreateTime; // The time when the task has been created
 	private Date dueDate;
+	private boolean suspend;
+	
+	private int leaveDays;
+
+	public int getLeaveDays() {
+		return leaveDays;
+	}
+
+	public void setLeaveDays(int leaveDays) {
+		this.leaveDays = leaveDays;
+	}
+
+	public boolean isSuspend() {
+		return suspend;
+	}
+
+	public void setSuspend(boolean suspend) {
+		this.suspend = suspend;
+	}
 
 	public String getTaskId() {
 		return taskId;

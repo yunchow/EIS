@@ -75,6 +75,20 @@ public class LeaveController {
 		return LeaveMapAssembler.asMap(leaveDto, leaveService.findPendingLeaveFormByUser(leaveDto));
 	}
 	
+	@RequestMapping("/claimed/task")
+	@ResponseBody
+	public Map<String, Object> findClaimedLeaveTasks(LeaveFormDTO leaveDto) {
+		leaveDto.setApplicant("manager");
+		return LeaveMapAssembler.asMap(leaveDto, leaveService.findClaimedLeaveTasks(leaveDto));
+	}
+	
+	@RequestMapping("/candidate/task")
+	@ResponseBody
+	public Map<String, Object> findCandidateLeaveTasks(LeaveFormDTO leaveDto) {
+		leaveDto.setApplicant("manager");
+		return LeaveMapAssembler.asMap(leaveDto, leaveService.findCandidateLeaveTasks(leaveDto));
+	}
+	
 	@RequestMapping("/my/history")
 	@ResponseBody
 	public Map<String, Object> findHistoryLeaveFormByUser(LeaveFormDTO leaveDto) {

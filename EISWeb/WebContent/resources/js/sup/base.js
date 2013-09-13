@@ -32,6 +32,11 @@ jQuery.define(base, {
 		return this.$dg;
 	},
 	
+	getSelectedRow: function() {
+		var row = this.$dg.datagrid('getSelected');
+		return row;
+	},
+	
 	getTreeNodeName: function(treeNode, value, names) {
 		if (!!!treeNode) {
 			return;
