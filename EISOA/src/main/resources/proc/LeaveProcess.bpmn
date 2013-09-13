@@ -3,8 +3,8 @@
   <process id="LeaveProcess" name="请假流程" isExecutable="true">
     <documentation>这是测试</documentation>
     <startEvent id="startevent1" name="开始"></startEvent>
-    <userTask id="managerReview" name="部门经理审批" activiti:assignee="manager" activiti:candidateUsers="admin" activiti:formKey="leaveForm"></userTask>
-    <userTask id="hrReview" name="人事审批1" activiti:assignee="hr" activiti:candidateUsers="admin" activiti:formKey="leaveForm"></userTask>
+    <userTask id="managerReview" name="部门经理审批" activiti:candidateUsers="manager" activiti:formKey="leaveForm"></userTask>
+    <userTask id="hrReview" name="人事审批1" activiti:candidateUsers="hr" activiti:formKey="leaveForm"></userTask>
     <sequenceFlow id="flow2" sourceRef="managerReview" targetRef="hrReview"></sequenceFlow>
     <endEvent id="endevent1" name="结束"></endEvent>
     <sequenceFlow id="flow3" sourceRef="hrReview" targetRef="endevent1"></sequenceFlow>

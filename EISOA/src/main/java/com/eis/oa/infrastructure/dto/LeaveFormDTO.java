@@ -58,13 +58,13 @@ public class LeaveFormDTO extends PageDTO implements Serializable {
 	private Date dueDate;
 	private boolean suspend;
 	
-	private int leaveDays;
+	private double leaveDays;
 
-	public int getLeaveDays() {
+	public double getLeaveDays() {
 		return leaveDays;
 	}
 
-	public void setLeaveDays(int leaveDays) {
+	public void setLeaveDays(double leaveDays) {
 		this.leaveDays = leaveDays;
 	}
 

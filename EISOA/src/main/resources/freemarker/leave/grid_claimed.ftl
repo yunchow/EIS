@@ -9,10 +9,10 @@
 	<th data-options="field:'applicant',width:60">申请人</th>
 	<th data-options="field:'leaveDays',width:40">请假天数</th>
 	<th data-options="field:'owner',width:80">任务所有人</th>
-	<th data-options="field:'assignee',width:80">任务签收人</th>
+	<th data-options="field:'assignee',width:80">任务处理人</th>
 	<th data-options="field:'description',width:80">任务描述</th>
 	<th data-options="field:'taskCreateTime',width:80">任务创建时间</th>
-	<th data-options="field:'dueDate',width:80">任务过期日期</th>
+	<th data-options="field:'dueDate',width:80">任务过期时间</th>
 	<th data-options="field:'priority',width:40">任务优先级</th>
 	<th data-options="field:'suspend',width:40">是否挂起</th>
     <th data-options="field:'processDefinitionId',width:80">流程定义编号</th>

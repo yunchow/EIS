@@ -54,7 +54,7 @@ public class LeaveService extends ActivitiAwareSupport {
 		long count = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).count();
 		leaveDto.setTotal(count);
 		List<Task> tasks = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant())
-				.orderByTaskPriority().desc().orderByTaskCreateTime().desc().listPage(leaveDto.getOffset(), leaveDto.getRows());
+				.includeProcessVariables().orderByTaskPriority().desc().orderByTaskCreateTime().desc().listPage(leaveDto.getOffset(), leaveDto.getRows());
 		
 		ArrayList<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(tasks.size());
 
@@ -79,7 +79,7 @@ public class LeaveService extends ActivitiAwareSupport {
 		long count = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskAssignee(leaveDto.getApplicant()).count();
 		leaveDto.setTotal(count);
 		List<Task> tasks = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskAssignee(leaveDto.getApplicant())
-				.orderByTaskPriority().desc().orderByTaskCreateTime().desc().listPage(leaveDto.getOffset(), leaveDto.getRows());
+				.includeProcessVariables().orderByTaskPriority().desc().orderByTaskCreateTime().desc().listPage(leaveDto.getOffset(), leaveDto.getRows());
 		
 		ArrayList<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(tasks.size());
 
@@ -108,7 +108,7 @@ public class LeaveService extends ActivitiAwareSupport {
 		if (day == null) {
 			dto.setLeaveDays(0);
 		} else {
-			dto.setLeaveDays((Integer)day);
+			dto.setLeaveDays(Double.valueOf("" + day));
 		}
 		
 		// N + 1 查询问题，有空再优化
@@ -229,7 +229,7 @@ public class LeaveService extends ActivitiAwareSupport {
 		String id = UUIDHelper.uuid();
 		long start = leaveDto.getStartTime().getTime();
 		long end = leaveDto.getEndTime().getTime();
-		double days = (end - start) / 3600 / 8;
+		double days = (end - start) / 1000 / 3600 / 24;
 		
 		Map<String, Object> variables = new HashMap<String, Object>(2);
 		variables.put("starter", leaveDto.getApplicant());
