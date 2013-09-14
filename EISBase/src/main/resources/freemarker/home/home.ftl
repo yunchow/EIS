@@ -3,20 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Ubuntu</title>
-    <script type="text/javascript" src="resources/plugins/jquery/jquery-1.10.2.js"></script>
-    <script type="text/javascript" src="resources/plugins/jquery/jquery-migrate-1.2.1.js"></script>
-    <script type="text/javascript" src="resources/js/ext/cookie.js"></script>
-    <script type="text/javascript">
-    	var theme = $.cookie("theme");
-    	if (!theme) {
-    		theme = "metro";
-    	}
-    	document.write('<link rel="stylesheet" type="text/css" href="resources/plugins/jquery-easyui-1.3.4/themes/'+ theme +'/easyui.css">');
-    </script>
+    <link rel="stylesheet" type="text/css" href="resources/plugins/jquery-easyui-1.3.4/themes/${theme!'default'}/easyui.css">
     <link rel="stylesheet" type="text/css" href="resources/plugins/jquery-easyui-1.3.4/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="resources/plugins/fine-uploader-3.8.2/fineuploader.css">
     <link rel="stylesheet" type="text/css" href="resources/css/icons.css">
 	<link rel="stylesheet" type="text/css" href="resources/css/style.css">
+	
+	<script type="text/javascript" src="resources/plugins/jquery/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="resources/plugins/jquery/jquery-migrate-1.2.1.js"></script>
+    <script type="text/javascript" src="resources/js/ext/cookie.js"></script>
     <script type="text/javascript" src="resources/plugins/jquery-easyui-1.3.4/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="resources/plugins/jquery-easyui-1.3.4/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="resources/plugins/jquery-file-download-1.4.2/jquery.fileDownload-1.4.2.js"></script>
@@ -43,20 +38,20 @@
     				<span style="color: #369">职务</span>:<span style="color: #666633">管理员&nbsp;&nbsp;</span>
     				<span style="color: #369">主题</span>:
     				<select class="easyui-combobox" data-options="editable:false,panelHeight:'auto',onChange:context.onChangeTheme">
-    					<option value="metro">Win8</option>
-    					<option value="metro-blue">蓝色</option>
-    					<option value="metro-gray">深灰</option>
-    					<option value="metro-green">绿色</option>
-    					<option value="metro-orange">橙色</option>
-    					<option value="metro-red">红色</option>
-    					<option value="default">经典</option>
-    					<option value="pepper-grinder">磨砂</option>
-    					<option value="black">黑色</option>
-    					<option value="bootstrap">银灰</option>
-    					<option value="gray">灰色</option>
-    					<option value="dark-hive">深黑</option>
-    					<option value="sunny">阳光</option>
-    					<option value="cupertino">库比</option>
+    					<option value="metro" <#if theme == 'metro'>selected</#if>>Win8</option>
+    					<option value="metro-blue" <#if theme == 'metro-blue'>selected</#if>>蓝色</option>
+    					<option value="metro-gray" <#if theme == 'metro-gray'>selected</#if>>深灰</option>
+    					<option value="metro-green" <#if theme == 'metro-green'>selected</#if>>绿色</option>
+    					<option value="metro-orange" <#if theme == 'metro-orange'>selected</#if>>橙色</option>
+    					<option value="metro-red" <#if theme == 'metro-red'>selected</#if>>红色</option>
+    					<option value="default" <#if theme == 'default'>selected</#if>>经典</option>
+    					<option value="pepper-grinder" <#if theme == 'pepper-grinder'>selected</#if>>磨砂</option>
+    					<option value="black" <#if theme == 'black'>selected</#if>>黑色</option>
+    					<option value="bootstrap" <#if theme == 'bootstrap'>selected</#if>>银灰</option>
+    					<option value="gray" <#if theme == 'gray'>selected</#if>>灰色</option>
+    					<option value="dark-hive" <#if theme == 'dark-hive'>selected</#if>>深黑</option>
+    					<option value="sunny" <#if theme == 'sunny'>selected</#if>>阳光</option>
+    					<option value="cupertino" <#if theme == 'cupertino'>selected</#if>>库比</option>
     				</select>
     			</dd>
     			<dd style="text-align:right;">

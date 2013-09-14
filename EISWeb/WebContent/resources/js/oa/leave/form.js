@@ -1,14 +1,46 @@
 jQuery.ns("oa.leave.form");
 
-jQuery.define(oa.leave.form, base, {
-	dgId: "leaveTimeDetailGrid",
+jQuery.define(oa.leave.form, {
     
     init: function() {
     	context.log("oa.leave.form.init called");
     },
     
-	onReady: function() {
+	ready: function() {
+		var status = $("#status").val();
+		if (status != 'new') {
+			$("input").disable();
+		}
 		context.log("oa.leave.form is ready");
+	},
+	
+	doClose: function(taskId) {
+		
+	},
+	
+	/**
+	 * 签收任务
+	 * @param taskId
+	 */
+	doClaim: function(taskId) {
+		var me = this;
+		$.post("oa/leave/task/claim/"+ taskId +".htm", function(data) {
+			var r = eval("("+ data +")");
+			if (r.result) {
+				me.onClaimSuccess(r);
+			} else {
+				me.onClaimFailed(r.message);
+			}
+		});
+	},
+	
+	onClaimSuccess: function(r) {
+		context.info("签收成功，请尽快处理此任务");
+		
+	},
+	
+	onClaimFailed: function(message) {
+		context.error("签收失败：" + message);
 	},
 	
 	doApplyLeaveFormSubmit: function() {

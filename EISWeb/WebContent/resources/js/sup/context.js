@@ -39,19 +39,15 @@ jQuery.define(context, {
 	/**
 	 * 修改主题
 	 */
-	onChangeTheme: function(theme) {
-		if (theme =='dark-hive') {
-			$(".nav").css("color", "#FFF");
-		} else {
-			$(".nav").css("color", "#333");
-		}
+	onChangeTheme: function(newValue, oldValue) {
+		var theme = newValue;
 		$.cookie("theme", theme);
 		$("link:first").prop('href', 'resources/plugins/jquery-easyui-1.3.4/themes/'+ theme +'/easyui.css');
 	},
 	blockUI: function(message) {
 		$.blockUI({css:{
 			border: 'none', 
-            padding: '20px 0px', 
+            padding: '10px 0px', 
             width: '15%',
             left: '42%',
             '-webkit-border-radius': '5px', 

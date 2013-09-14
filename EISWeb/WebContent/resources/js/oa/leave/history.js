@@ -18,7 +18,7 @@ jQuery.define(oa.leave.history, base, {
 	 * @returns {Boolean}
 	 */
 	onDblClickRow: function(index, rowData){
-    	context.openTab("请假单", "oa/leave/detail/"+ rowData.leaveId +".htm");
+    	context.openTab("请假单", "oa/leave/detail/history/"+ rowData.leaveId +".htm");
     },
 	formatMenu: function(value, row, index) {
 		return value;

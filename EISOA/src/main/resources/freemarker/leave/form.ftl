@@ -1,9 +1,21 @@
 <@require ns="oa.leave.form"/>
+<input type="hidden" id="status" value="${status}">
 <div class="easyui-layout" data-options="fit:true">
     <div data-options="region:'north',fit:false,border:false">
     	<div class="datagrid-toolbar">
-		    <a href="javascript:;" onclick="javascript:oa.leave.form.doApplyLeaveFormSubmit();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">提交</a>
-		    <a href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true">取消</a>
+    		<#if status == 'candidate'>
+    			<a href="javascript:;" onclick="javascript:oa.leave.form.doClaim();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">签收</a>
+    		<#elseif status == 'claimed'>
+    			<a href="javascript:;" onclick="javascript:oa.leave.form.doApprove();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">批准</a>
+    			<a href="javascript:;" onclick="javascript:oa.leave.form.doReject();" class="easyui-linkbutton" data-options="iconCls:'icon-back',plain:true">拒绝</a>
+    		<#elseif status == 'history'>
+    			 
+    		<#elseif status == 'new'>
+    			<a href="javascript:;" onclick="javascript:oa.leave.form.doApplyLeaveFormSubmit();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">提交</a>
+    		<#else>
+    			<a href="javascript:;" onclick="javascript:oa.leave.form.doApplyLeaveFormSubmit();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">提交</a>
+    		</#if>
+		    <a href="javascript:;" onclick="javascript:oa.leave.form.doClose();" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true">关闭</a>
 		</div>
     </div>
     <div data-options="region:'center',border:false" style="padding:5px;margin:0px;">

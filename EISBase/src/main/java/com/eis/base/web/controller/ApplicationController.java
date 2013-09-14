@@ -8,9 +8,12 @@ package com.eis.base.web.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.eis.base.domain.repository.MenuRepository;
@@ -27,11 +30,15 @@ import com.eis.core.vo.Tree;
  */
 @Controller
 public class ApplicationController {
+	private final  Logger logger = LoggerFactory.getLogger(getClass());
+	
 	@Autowired
 	private MenuRepository menuRepository;
 	
 	@RequestMapping("/home")
-	public String homeUI() {
+	public String homeUI(@CookieValue(required = false) String theme, ModelMap model) {
+		logger.info("theme = {}", theme);
+		model.addAttribute("theme", theme);
 		return "home/home.ftl";
 	}
 	

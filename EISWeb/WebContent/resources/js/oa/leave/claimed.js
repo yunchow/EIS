@@ -18,7 +18,7 @@ jQuery.define(oa.leave.claimed, base, {
 	 * @returns {Boolean}
 	 */
 	onDblClickRow: function(index, rowData){
-    	context.openTab("请假单("+ rowData.taskId +")", "oa/leave/detail/"+ rowData.leaveId +".htm");
+    	context.openTab("请假单("+ rowData.taskId +")", "oa/leave/detail/claimed/"+ rowData.leaveId +".htm");
     },
     
     /**

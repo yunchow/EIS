@@ -9,6 +9,9 @@ package com.eis.oa.interfaces.web.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.activiti.engine.ActivitiObjectNotFoundException;
+import org.activiti.engine.ActivitiTaskAlreadyClaimedException;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,6 +47,9 @@ public class LeaveController {
 	private LeaveService leaveService;
 	
 	@Autowired
+	private TaskService taskService;
+	
+	@Autowired
 	private LeaveRepository leaveRepository;
 
 	@RequestMapping("/index")
@@ -61,12 +67,31 @@ public class LeaveController {
 		return "leave/grid_"+ type +".ftl";
 	}
 	
-	@RequestMapping("/detail/{id}")
-	public String viewLeaveDetail(@PathVariable String id, ModelMap model) {
+	@RequestMapping("/detail/{status}/{id}")
+	public String viewLeaveDetail(@PathVariable String status, @PathVariable String id, ModelMap model) {
 		LeaveFormEntity entity = leaveRepository.findById(id);
 		model.addAttribute("leaveForm", entity);
+		//model.addAttribute("status", status);
 		return "leave/form.ftl";
 	}
+	
+	@RequestMapping("/task/claim/{taskId}")
+	@ResponseBody
+	public Map<String, Object> claimTaskBy(@PathVariable String taskId) {
+		String userId = "manager";
+		Map<String, Object> map = new HashMap<String, Object>(2);
+		try {
+			taskService.claim(taskId, userId);
+			map.put("result", true);
+		} catch (ActivitiObjectNotFoundException e) {
+			map.put("result", false);
+			map.put("message", "任务不存在");
+		} catch (ActivitiTaskAlreadyClaimedException ex) {
+			map.put("result", false);
+			map.put("message", "任务已签收");
+		}
+		return map;
+	} 
 	
 	@RequestMapping("/my/pending")
 	@ResponseBody
