@@ -13,6 +13,8 @@ import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.runtime.ExecutionQuery;
+import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.TaskQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +56,15 @@ public abstract class ActivitiAwareSupport {
 	public TaskQuery createTaskQuery() {
 		return taskService.createTaskQuery();
 	}
-
+	
+	public ProcessInstanceQuery createProcessInstanceQuery() {
+		return runtimeService.createProcessInstanceQuery();
+	}
+	
+	public ExecutionQuery createExecutionQuery() {
+		return runtimeService.createExecutionQuery();
+	}
+	
 	public ProcessEngine getProcessEngine() {
 		return processEngine;
 	}

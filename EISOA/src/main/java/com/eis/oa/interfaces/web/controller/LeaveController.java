@@ -20,6 +20,7 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.engine.impl.context.Context;
+import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.apache.commons.io.IOUtils;
@@ -89,6 +90,10 @@ public class LeaveController extends ActivitiAwareSupport {
 		LeaveFormEntity entity = leaveRepository.findById(leaveId);
 		model.addAttribute("leaveForm", entity);
 		//model.addAttribute("status", status);
+		
+		Execution execution = createExecutionQuery().processInstanceBusinessKey(leaveId).singleResult();
+		model.addAttribute("execution", execution);
+		
 		Task task = createTaskQuery().taskId(taskId).singleResult();
 		model.addAttribute("task", task);
 		return "leave/form.ftl";

@@ -8,7 +8,7 @@
     		<#elseif task?? && task.assignee??>
     			<a href="javascript:;" onclick="javascript:oa.leave.form.doCompleteTask('${task.id}', true);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">批准</a>
     			<a href="javascript:;" onclick="javascript:oa.leave.form.doCompleteTask('${task.id}', false);" class="easyui-linkbutton" data-options="iconCls:'icon-back',plain:true">拒绝</a>
-    		<#else>
+    		<#elseif !execution??>
     			<a href="javascript:;" onclick="javascript:oa.leave.form.doFormSubmit();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">提交</a>
     		</#if>
     		<#-- 
@@ -60,10 +60,10 @@
 					</table>
 			</fieldset>
 			-->
-			<#if status != 'new'>
+			<#if execution??>
 				<fieldset>
 				    <legend>流程进度</legend>
-					<img src="oa/leave/runtime/image/${task.executionId}.htm">	
+					<img src="oa/leave/runtime/image/${execution.id}.htm">	
 				</fieldset>
 			</#if>
 			<fieldset>
