@@ -1,7 +1,7 @@
 jQuery.ns("oa.leave.history");
 
 jQuery.define(oa.leave.history, base, {
-	dgId: "leavePendingGrid",
+	dgId: "leaveHistoryGrid",
     
     init: function() {
     	
@@ -19,7 +19,7 @@ jQuery.define(oa.leave.history, base, {
 	 */
 	onDblClickRow: function(index, rowData){
 		var url = "oa/leave/detail/history/"+ rowData.leaveId +".htm?taskId=" + rowData.taskId;
-    	context.openTab("请假单("+ rowData.taskId +")", url);
+    	context.openTab("已办请假单("+ rowData.taskId +")", url);
     },
     
     /**
@@ -31,7 +31,8 @@ jQuery.define(oa.leave.history, base, {
     		context.warn("请选择你要查看的记录");
     		return;
     	}
-    	context.openTab("请假单("+ row.taskId +")", "oa/leave/detail/"+ row.leaveId +".htm");
+    	var url = "oa/leave/detail/history/"+ row.leaveId +".htm?taskId=" + row.taskId;
+    	context.openTab("已办请假单("+ row.taskId +")", url);
     },
 	formatMenu: function(value, row, index) {
 		return value;

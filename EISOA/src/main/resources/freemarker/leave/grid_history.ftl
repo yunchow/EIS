@@ -1,6 +1,6 @@
 <@require ns="oa.leave.history"/>
 <@datagrid ns="oa.leave.history"
-		   id="leavePendingGrid"
+		   id="leaveHistoryGrid"
 		   toolbar="#historyLeaveToolbar" 
 		   url="oa/leave/my/history.htm">
 	<th data-options="field:'taskId',width:40">任务标识</th>

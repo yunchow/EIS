@@ -67,7 +67,7 @@ a {
 	color: #333;
 }
 
-.searchbox {
+.datagrid-toolbar .searchbox {
 	float: right;
 	margin: 2px 18px;
 }

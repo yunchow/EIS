@@ -93,8 +93,8 @@
     
     <div data-options="region:'south',split:false,border:false" style="height:30px;overflow:hidden;">
 		<div align="left" style="color:#333;padding:4px 0px">
-			<input class="easyui-searchbox" data-options="prompt:'请输入单号'" style="width:300px;clear:both;"></input>
-			&copy;2013&nbsp; nick chow all rights reserved
+			&nbsp;&nbsp;<input class="easyui-searchbox" data-options="prompt:'请输入单号'" style="width:300px;clear:both;"></input>
+			<span style="float:right;padding-right:10px;">&copy;2013&nbsp; nick chow all rights reserved</span>
 		</div>
     </div>
     

@@ -1,6 +1,6 @@
 <@require ns="oa.leave.list"/>
 <@datagrid ns="oa.leave.list"
-		   id="leavePendingGrid"
+		   id="leaveListGrid"
 		   toolbar="#listLeaveToolbar" 
 		   url="oa/leave/my/list.htm">
 	<th data-options="field:'leaveId',width:120">请假单编号</th>

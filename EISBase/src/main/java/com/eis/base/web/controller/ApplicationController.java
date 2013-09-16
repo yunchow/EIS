@@ -66,9 +66,14 @@ public class ApplicationController {
 		response.sendRedirect("index.html");
 	}
 	
-	
 	@RequestMapping("/home")
-	public String homeUI(@CookieValue(required = false) String theme, ModelMap model) {
+	public String homeUI(HttpSession session, HttpServletResponse response, 
+			@CookieValue(required = false) String theme, ModelMap model) throws IOException {
+		Object user = session.getAttribute("user");
+		if (user == null) {
+			response.sendRedirect("index.html");
+			return null;
+		}
 		logger.info("theme = {}", theme);
 		model.addAttribute("theme", theme);
 		return "home/home.ftl";

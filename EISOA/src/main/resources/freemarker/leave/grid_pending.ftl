@@ -21,10 +21,8 @@
 
 <div id="pendingLeaveToolbar" style="height:auto;">
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'text',plain:true" onclick="oa.leave.pending.viewDetail()">查看明细</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true" onclick="oa.leave.pending.suspend()">挂起</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="oa.leave.pending.active()">激活</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="oa.leave.pending.reload()">刷新</a>
-	<input class="easyui-searchbox" data-options="prompt:'请输入关键字',searcher:oa.leave.pending.doSearch,menu:'#pendingLeaveSearchBoxMenu'" style="width:300px;float:right;"></input>
+	<input class="easyui-searchbox" data-options="prompt:'请输入关键字',searcher:oa.leave.pending.doSearch,menu:'#claimedLeaveSearchBoxMenu'" style="width:300px;float:right;"></input>
 </div>
 
 <div id="pendingLeaveSearchBoxMenu" style="width:auto">

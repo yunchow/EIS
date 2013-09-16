@@ -1,9 +1,10 @@
 <div class="easyui-accordion" data-options="fit:true,border:false">
 <#list menus as menu >
+<#if menu.status == 'Y'>
     <div title="${menu.name}" style="padding:0px" data-options="iconCls:'${menu.icon}'">
         <ul id="tt" class="easyui-tree" data-options="lines:false,iconCls:'icon-reload'">
         <#list menu.children as child>
-        <#if  child.status == 'Y'>
+        <#if child.status == 'Y'>
 		    <li>
 		    	<#if child.children?size gt 0>
 			        <span>${child.name}</span>
@@ -38,6 +39,7 @@
         </ul>
         -->
     </div>	
+</#if>
 </#list>
 </div>
   

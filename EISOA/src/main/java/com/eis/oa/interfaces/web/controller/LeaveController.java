@@ -18,7 +18,6 @@ import org.activiti.engine.ActivitiObjectNotFoundException;
 import org.activiti.engine.ActivitiTaskAlreadyClaimedException;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
-import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
@@ -95,10 +94,10 @@ public class LeaveController extends ActivitiAwareSupport {
 		//model.addAttribute("status", status);
 		
 		if ("history".equals(status)) {
-			HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceBusinessKey(leaveId).singleResult();
-			HistoricActivityInstance historicActivityInstance = historyService.createHistoricActivityInstanceQuery().processInstanceId(historicProcessInstance.getId()).singleResult();
+			//HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceBusinessKey(leaveId).singleResult();
+			HistoricActivityInstance historicActivityInstance = historyService.createHistoricActivityInstanceQuery().executionId(taskId).singleResult();
 			model.addAttribute("execution", historicActivityInstance);
-			HistoricTaskInstance  historicTaskInstance = historyService.createHistoricTaskInstanceQuery().processInstanceBusinessKey(leaveId).singleResult();
+			HistoricTaskInstance  historicTaskInstance = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
 			model.addAttribute("task", historicTaskInstance);
 		} else {
 			Execution execution = createExecutionQuery().processInstanceBusinessKey(leaveId).singleResult();
@@ -130,8 +129,15 @@ public class LeaveController extends ActivitiAwareSupport {
 	
 	@RequestMapping("/runtime/image/{executionId}")
 	public void readResource(@PathVariable("executionId") String executionId, HttpServletResponse response) throws Exception {
+		String defid = null;
 		ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(executionId).singleResult();
-		BpmnModel bpmnModel = repositoryService.getBpmnModel(processInstance.getProcessDefinitionId());
+		if (processInstance == null) {
+			defid = historyService.createHistoricProcessInstanceQuery().processInstanceId(executionId).singleResult().getProcessDefinitionId();
+		}
+		else {
+			defid = processInstance.getProcessDefinitionId();
+		}
+		BpmnModel bpmnModel = repositoryService.getBpmnModel(defid);
 		List<String> activeActivityIds = runtimeService.getActiveActivityIds(executionId);
 		if (processEngineConfiguration instanceof ProcessEngineConfigurationImpl) {
 			Context.setProcessEngineConfiguration((ProcessEngineConfigurationImpl)processEngineConfiguration);

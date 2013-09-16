@@ -18,7 +18,8 @@ jQuery.define(oa.leave.pending, base, {
 	 * @returns {Boolean}
 	 */
 	onDblClickRow: function(index, rowData){
-    	context.openTab("请假单("+ rowData.taskId +")", "oa/leave/detail/"+ rowData.leaveId +".htm");
+		var url = "oa/leave/detail/pending/"+ rowData.leaveId +".htm?taskId=" + rowData.taskId;
+    	context.openTab("待办请假单("+ rowData.taskId +")", url);
     },
     
     /**
@@ -30,7 +31,8 @@ jQuery.define(oa.leave.pending, base, {
     		context.warn("请选择你要查看的记录");
     		return;
     	}
-    	context.openTab("请假单("+ row.taskId +")", "oa/leave/detail/"+ row.leaveId +".htm");
+    	var url = "oa/leave/detail/pending/"+ row.leaveId +".htm?taskId=" + row.taskId;
+    	context.openTab("待办请假单("+ row.taskId +")", url);
     },
     
     /**

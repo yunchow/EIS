@@ -140,9 +140,10 @@ public class LeaveService extends ActivitiAwareSupport {
 		logger.info("leaveDto = {}", leaveDto);
 		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
 
-		long count = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).count();
-		leaveDto.setTotal(count);
-		List<Task> tasks = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).listPage(leaveDto.getOffset(), leaveDto.getRows());
+		TaskQuery taskQuery = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskInvolvedUser(leaveDto.getApplicant());
+		leaveDto.setTotal(taskQuery.count());
+		List<Task> tasks = taskQuery.orderByTaskPriority().desc().orderByTaskCreateTime().desc()
+				.includeProcessVariables().listPage(leaveDto.getOffset(), leaveDto.getRows());
 		
 		/*final String sql = "from " + managementService.getTableName(Task.class) + " t left outer join act_ru_variable v on v.PROC_INST_ID_ = t.PROC_INST_ID_ where (OWNER_=#{applicant} or ASSIGNEE_=#{applicant}) and PROC_DEF_ID_ like #{processDefKey}";
 		logger.info("sql = {}", sql);
@@ -176,7 +177,7 @@ public class LeaveService extends ActivitiAwareSupport {
 		logger.info("leaveDto = {}", leaveDto);
 		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
 		
-		HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
+		HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery().finished()
 				.taskInvolvedUser(leaveDto.getApplicant()).processDefinitionKey(LEAVE_PROCESS_KEY).includeProcessVariables();
 		
 		leaveDto.setTotal(historicTaskInstanceQuery.count());
