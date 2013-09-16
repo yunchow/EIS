@@ -34,8 +34,8 @@
     	<div style="float:right;padding-right:10px;">
     		<dl>
     			<dd>
-    				<span style="color: #369">当前用户:</span><span style="color: #666633">张三&nbsp;&nbsp;</span>
-    				<span style="color: #369">职务</span>:<span style="color: #666633">管理员&nbsp;&nbsp;</span>
+    				<span style="color: #369">当前用户:</span><span style="color: #333;font-weight:bold;">&nbsp;&nbsp;${Session.user}&nbsp;&nbsp;</span>
+    				<a href="logout.htm" class="easyui-linkbutton" data-options="plain:true" iconCls="icon-back">注销</a>
     				<span style="color: #369">主题</span>:
     				<select class="easyui-combobox" data-options="editable:false,panelHeight:'auto',onChange:context.onChangeTheme">
     					<option value="metro" <#if theme == 'metro'>selected</#if>>Win8</option>
@@ -54,20 +54,8 @@
     					<option value="cupertino" <#if theme == 'cupertino'>selected</#if>>库比</option>
     				</select>
     			</dd>
-    			<dd style="text-align:right;">
-    				<a href="javascript:void(0);" class="easyui-menubutton" menu="#controlPanelMenue" iconCls="icon-help">控制面板</a>
-    				<a href="javascript:void(0);" class="easyui-menubutton" menu="#logoutMenue" iconCls="icon-back">注销</a>
-    			</dd>
     		</dl>
     	</div>
-		<div id="controlPanelMenue" style="width: 100px; display: none;">
-			<div onclick="openwindow('用户信息','userController.do?userinfo')">个人信息</div>
-			<div class="menu-sep"></div>
-			<div onclick="add('修改密码','userController.do?changepassword')">修改密码</div>
-		</div>
-		<div id="logoutMenue" style="width: 100px; display: none;">
-			<div onclick="exit('loginController.do?logout','确定退出该系统吗 ?',1);">退出系统</div>
-		</div>
     </div>
     
     <div data-options="region:'west',split:true" href="home/menu/list.htm" title="功能导航" style="width:150px;padding:1px;">
@@ -103,8 +91,9 @@
         </div>
     </div>
     
-    <div data-options="region:'south',split:false,border:false" style="height:25px;overflow:hidden;">
-		<div align="left" style="color:#333;padding-top:4px">
+    <div data-options="region:'south',split:false,border:false" style="height:30px;overflow:hidden;">
+		<div align="left" style="color:#333;padding:4px 0px">
+			<input class="easyui-searchbox" data-options="prompt:'请输入关键字'" style="width:300px;clear:both;"></input>
 			&copy;2013&nbsp; nick chow all rights reserved
 		</div>
     </div>

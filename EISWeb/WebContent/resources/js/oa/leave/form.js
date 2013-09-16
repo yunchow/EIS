@@ -16,6 +16,30 @@ jQuery.define(oa.leave.form, {
 		context.log("oa.leave.form is ready");
 	},
 	
+	doCompleteTask: function(taskId, approve) {
+		context.blockUI();
+		var p = {taskId: taskId, approve: approve};
+		var me = this;
+		$.post("oa/leave/task/complete.htm", p, function(data) {
+			context.unblockUI();
+			var r = eval("("+ data +")");
+			if (r.result) {
+				me.onCompleteTaskSuccess(r);
+			} else {
+				me.onCompleteTaskFailed(r.message);
+			}
+		});
+	},
+	
+	onCompleteTaskSuccess: function(r) {
+		context.info("审批成功");
+		context.closeTab();
+	},
+	
+	onCompleteTaskFailed: function(message) {
+		context.error("处理失败：" + message);
+	},
+	
 	doClose: function() {
 		context.closeTab();
 	},
@@ -24,10 +48,10 @@ jQuery.define(oa.leave.form, {
 	 * 签收任务
 	 * @param taskId
 	 */
-	doClaim: function() {
+	doClaim: function(taskId) {
 		context.blockUI();
 		var me = this;
-		$.post("oa/leave/task/claim/"+ this.taskId +".htm", function(data) {
+		$.post("oa/leave/task/claim/"+ taskId +".htm", function(data) {
 			context.unblockUI();
 			var r = eval("("+ data +")");
 			if (r.result) {
@@ -47,7 +71,7 @@ jQuery.define(oa.leave.form, {
 		context.error("签收失败：" + message);
 	},
 	
-	doApplyLeaveFormSubmit: function() {
+	doFormSubmit: function() {
 		var isValid = $("#leaveForm").form('validate');
 		if (!isValid){
 			context.error("请正确填写请假申请单！");

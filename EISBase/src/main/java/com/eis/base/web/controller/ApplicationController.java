@@ -6,7 +6,13 @@
  */
 package com.eis.base.web.controller;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +21,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eis.base.domain.repository.MenuRepository;
 import com.eis.core.util.TreeUtil;
@@ -34,6 +42,30 @@ public class ApplicationController {
 	
 	@Autowired
 	private MenuRepository menuRepository;
+	
+	@RequestMapping("/login")
+	@ResponseBody
+	public Map<String, Object> login(HttpSession session,
+						@RequestParam String userName,
+						@RequestParam String password) {
+		session.setAttribute("user", userName);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userName", userName);
+		map.put("password", password);
+		map.put("success", true);
+		return map;
+	}
+	
+	@RequestMapping("/logout")
+	public void logout(HttpSession session, HttpServletResponse response) throws IOException {
+		//Object user = session.getAttribute("user");
+		//System.out.println("##########3 " + user);
+		session.removeAttribute("user");
+		session.invalidate();
+		//return "redirect:/index.htm";
+		response.sendRedirect("index.html");
+	}
+	
 	
 	@RequestMapping("/home")
 	public String homeUI(@CookieValue(required = false) String theme, ModelMap model) {

@@ -4,12 +4,12 @@
     <div data-options="region:'north',fit:false,border:false">
     	<div class="datagrid-toolbar">
     		<#if task?? && !task.assignee??>
-    			<a href="javascript:;" onclick="javascript:oa.leave.form.doClaim();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">签收</a>
+    			<a href="javascript:;" onclick="javascript:oa.leave.form.doClaim('${task.id}');" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">签收</a>
     		<#elseif task?? && task.assignee??>
-    			<a href="javascript:;" onclick="javascript:oa.leave.form.doApprove();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">批准</a>
-    			<a href="javascript:;" onclick="javascript:oa.leave.form.doReject();" class="easyui-linkbutton" data-options="iconCls:'icon-back',plain:true">拒绝</a>
+    			<a href="javascript:;" onclick="javascript:oa.leave.form.doCompleteTask('${task.id}', true);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">批准</a>
+    			<a href="javascript:;" onclick="javascript:oa.leave.form.doCompleteTask('${task.id}', false);" class="easyui-linkbutton" data-options="iconCls:'icon-back',plain:true">拒绝</a>
     		<#else>
-    			<a href="javascript:;" onclick="javascript:oa.leave.form.doApplyLeaveFormSubmit();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">提交</a>
+    			<a href="javascript:;" onclick="javascript:oa.leave.form.doFormSubmit();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">提交</a>
     		</#if>
     		<#-- 
     		<#if status == 'candidate'>
