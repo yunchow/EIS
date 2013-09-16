@@ -18,7 +18,7 @@ jQuery.define(oa.leave.history, base, {
 	 * @returns {Boolean}
 	 */
 	onDblClickRow: function(index, rowData){
-		var url = "oa/leave/detail/candidate/"+ rowData.leaveId +".htm?taskId=" + rowData.taskId;
+		var url = "oa/leave/detail/history/"+ rowData.leaveId +".htm?taskId=" + rowData.taskId;
     	context.openTab("请假单("+ rowData.taskId +")", url);
     },
     

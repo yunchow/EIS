@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.history.HistoricProcessInstanceQuery;
+import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
@@ -175,7 +175,43 @@ public class LeaveService extends ActivitiAwareSupport {
 		logger.info("Enter LeaveService.findInvolvedHistoryLeaveForm");
 		logger.info("leaveDto = {}", leaveDto);
 		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
-		HistoricProcessInstanceQuery historicProcessInstanceQuery = historyService.createHistoricProcessInstanceQuery()
+		
+		HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
+				.taskInvolvedUser(leaveDto.getApplicant()).processDefinitionKey(LEAVE_PROCESS_KEY).includeProcessVariables();
+		
+		leaveDto.setTotal(historicTaskInstanceQuery.count());
+		List<HistoricTaskInstance> historyTasks = historicTaskInstanceQuery.listPage(leaveDto.getOffset(), leaveDto.getRows());
+		List<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(historyTasks.size());
+		
+		for (HistoricTaskInstance task : historyTasks) {
+			LeaveFormDTO dto = new LeaveFormDTO();
+			dto.setStartTime(task.getStartTime());
+			dto.setEndTime(task.getEndTime());
+			dto.setAssignee(task.getAssignee());
+			dto.setOwner(task.getOwner());
+			dto.setName(task.getName());
+			dto.setDescription(task.getDescription());
+			dto.setPriority(task.getPriority());
+			dto.setTaskId(task.getId());
+			dto.setDueDate(task.getDueDate());
+			
+			// N + 1 查询问题，有空再优化
+			String leaveId = historyService.createHistoricProcessInstanceQuery()
+					.processInstanceId(task.getProcessInstanceId()).singleResult().getBusinessKey();
+			dto.setLeaveId(leaveId);
+			
+			Map<String, Object> processVariables = task.getProcessVariables();
+			dto.setApplicant((String) processVariables.get("starter"));
+			
+			Object day = processVariables.get("leaveDays");
+			if (day == null) {
+				dto.setLeaveDays(0);
+			} else {
+				dto.setLeaveDays(Double.valueOf("" + day));
+			}				
+			resultList.add(dto);
+		}
+		/*HistoricProcessInstanceQuery historicProcessInstanceQuery = historyService.createHistoricProcessInstanceQuery()
 				.processDefinitionKey(LEAVE_PROCESS_KEY).involvedUser(leaveDto.getApplicant());
 		
 		leaveDto.setTotal(historicProcessInstanceQuery.count());
@@ -192,7 +228,7 @@ public class LeaveService extends ActivitiAwareSupport {
 			Map<String, Object> processVariables = processInstance.getProcessVariables();
 			dto.setApplicant((String) processVariables.get("starter"));
 			resultList.add(dto);
-		}
+		}*/
 		logger.info("returned resultList = {}", resultList);
 		logger.info("Exit LeaveService.findInvolvedHistoryLeaveForm");
 		return resultList;
