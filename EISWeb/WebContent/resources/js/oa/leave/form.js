@@ -1,30 +1,32 @@
 jQuery.ns("oa.leave.form");
 
 jQuery.define(oa.leave.form, {
+    taskId: undefined,
     
     init: function() {
     	context.log("oa.leave.form.init called");
     },
     
 	ready: function() {
-		var status = $("#status").val();
+		/*var status = $("#status").val();
 		if (status != 'new') {
 			$("input").disable();
-		}
+		}*/
+		this.taskId = $("#taskId").val();
 		context.log("oa.leave.form is ready");
 	},
 	
-	doClose: function(taskId) {
-		
+	doClose: function() {
+		context.closeTab();
 	},
 	
 	/**
 	 * 签收任务
 	 * @param taskId
 	 */
-	doClaim: function(taskId) {
+	doClaim: function() {
 		var me = this;
-		$.post("oa/leave/task/claim/"+ taskId +".htm", function(data) {
+		$.post("oa/leave/task/claim/"+ this.taskId +".htm", function(data) {
 			var r = eval("("+ data +")");
 			if (r.result) {
 				me.onClaimSuccess(r);
@@ -36,7 +38,7 @@ jQuery.define(oa.leave.form, {
 	
 	onClaimSuccess: function(r) {
 		context.info("签收成功，请尽快处理此任务");
-		
+		context.reloadTab();
 	},
 	
 	onClaimFailed: function(message) {

@@ -6,20 +6,30 @@
  */
 package com.eis.oa.interfaces.web.controller;
 
+import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.ActivitiObjectNotFoundException;
 import org.activiti.engine.ActivitiTaskAlreadyClaimedException;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.eis.core.context.ActivitiAwareSupport;
 import com.eis.oa.application.LeaveManager;
 import com.eis.oa.domain.model.leave.LeaveFormEntity;
 import com.eis.oa.domain.model.leave.LeaveRepository;
@@ -38,7 +48,7 @@ import com.eis.oa.interfaces.assembler.LeaveMapAssembler;
  */
 @Controller
 @RequestMapping("/oa/leave/")
-public class LeaveController {
+public class LeaveController extends ActivitiAwareSupport {
 	
 	@Autowired
 	private LeaveManager leaveManager;
@@ -58,7 +68,8 @@ public class LeaveController {
 	}
 	
 	@RequestMapping("/form")
-	public String form() {
+	public String form(ModelMap model) {
+		model.addAttribute("status", "new");
 		return "leave/form.ftl";
 	}
 	
@@ -67,12 +78,27 @@ public class LeaveController {
 		return "leave/grid_"+ type +".ftl";
 	}
 	
-	@RequestMapping("/detail/{status}/{id}")
-	public String viewLeaveDetail(@PathVariable String status, @PathVariable String id, ModelMap model) {
-		LeaveFormEntity entity = leaveRepository.findById(id);
+	@RequestMapping("/detail/{status}/{leaveId}")
+	public String viewLeaveDetail(@PathVariable String status, @PathVariable String leaveId, 
+			@RequestParam String taskId, ModelMap model) {
+		LeaveFormEntity entity = leaveRepository.findById(leaveId);
 		model.addAttribute("leaveForm", entity);
 		//model.addAttribute("status", status);
+		Task task = createTaskQuery().taskId(taskId).singleResult();
+		model.addAttribute("task", task);
 		return "leave/form.ftl";
+	}
+	
+	@RequestMapping("/runtime/image/{executionId}")
+	public void readResource(@PathVariable("executionId") String executionId, HttpServletResponse response) throws Exception {
+		ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(executionId).singleResult();
+		BpmnModel bpmnModel = repositoryService.getBpmnModel(processInstance.getProcessDefinitionId());
+		List<String> activeActivityIds = runtimeService.getActiveActivityIds(executionId);
+		//if (processEngineConfiguration instanceof ProcessEngineConfigurationImpl) {
+			//Context.setProcessEngineConfiguration((ProcessEngineConfigurationImpl)processEngineConfiguration);
+		//}
+		InputStream is = ProcessDiagramGenerator.generateDiagram(bpmnModel, "png", activeActivityIds);
+		IOUtils.copy(is, response.getOutputStream());
 	}
 	
 	@RequestMapping("/task/claim/{taskId}")

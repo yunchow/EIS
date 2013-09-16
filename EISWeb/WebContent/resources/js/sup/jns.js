@@ -87,6 +87,7 @@ jQuery.extend({
 	    	}
 	    	catch (e)  {
 	    		jQuery.log("Error: init exception");
+        		jQuery.log(e);
 	    	}
 		}
     	$(function() {
@@ -96,6 +97,7 @@ jQuery.extend({
             	}
             	catch (e)  {
             		jQuery.log("Error: ready exception");
+            		jQuery.log(e);
             	}
     		}
     	});

@@ -8,9 +8,12 @@ package com.eis.core.context;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.ManagementService;
+import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.task.TaskQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,32 @@ public abstract class ActivitiAwareSupport {
 	
 	@Autowired
 	protected ManagementService managementService;
+	
+	@Autowired
+	protected ProcessEngine processEngine;
+	
+	@Autowired
+	protected ProcessEngineConfiguration processEngineConfiguration;
+	
+	public TaskQuery createTaskQuery() {
+		return taskService.createTaskQuery();
+	}
+
+	public ProcessEngine getProcessEngine() {
+		return processEngine;
+	}
+
+	public void setProcessEngine(ProcessEngine processEngine) {
+		this.processEngine = processEngine;
+	}
+
+	public ProcessEngineConfiguration getProcessEngineConfiguration() {
+		return processEngineConfiguration;
+	}
+
+	public void setProcessEngineConfiguration(ProcessEngineConfiguration processEngineConfiguration) {
+		this.processEngineConfiguration = processEngineConfiguration;
+	}
 
 	public RepositoryService getRepositoryService() {
 		return repositoryService;

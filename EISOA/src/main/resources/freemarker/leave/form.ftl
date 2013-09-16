@@ -1,8 +1,17 @@
 <@require ns="oa.leave.form"/>
-<input type="hidden" id="status" value="${status}">
+<input type="hidden" id="taskId" value="${task.id}">
 <div class="easyui-layout" data-options="fit:true">
     <div data-options="region:'north',fit:false,border:false">
     	<div class="datagrid-toolbar">
+    		<#if task?? && !task.assignee??>
+    			<a href="javascript:;" onclick="javascript:oa.leave.form.doClaim();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">签收</a>
+    		<#elseif task?? && task.assignee??>
+    			<a href="javascript:;" onclick="javascript:oa.leave.form.doApprove();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">批准</a>
+    			<a href="javascript:;" onclick="javascript:oa.leave.form.doReject();" class="easyui-linkbutton" data-options="iconCls:'icon-back',plain:true">拒绝</a>
+    		<#else>
+    			<a href="javascript:;" onclick="javascript:oa.leave.form.doApplyLeaveFormSubmit();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">提交</a>
+    		</#if>
+    		<#-- 
     		<#if status == 'candidate'>
     			<a href="javascript:;" onclick="javascript:oa.leave.form.doClaim();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">签收</a>
     		<#elseif status == 'claimed'>
@@ -15,6 +24,7 @@
     		<#else>
     			<a href="javascript:;" onclick="javascript:oa.leave.form.doApplyLeaveFormSubmit();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">提交</a>
     		</#if>
+    		-->
 		    <a href="javascript:;" onclick="javascript:oa.leave.form.doClose();" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true">关闭</a>
 		</div>
     </div>
@@ -49,13 +59,19 @@
 					</table>
 			</fieldset>
 			-->
+			<#if status != 'new'>
+				<fieldset>
+				    <legend>流程进度</legend>
+					<img src="oa/leave/runtime/image/${task.executionId}.htm">	
+				</fieldset>
+			</#if>
 			<fieldset>
 			    <legend>请假理由</legend>
 					<table width="95%" border="0" cellspacing="0" cellpadding="0" class="eistable">
 						<tr>
 							<td class="title">类型：</td>
 							<td>
-								<select id="cc" class="easyui-combobox" name="type" style="width:200px;value:'${leaveForm.type}'">
+								<select id="cc" class="easyui-combobox" name="type" <#if status != 'new'>disabled</#if> style="width:200px;value:'${leaveForm.type}'">
 								    <option value="病假">病假</option>
 								    <option value="事假">事假</option>
 								    <option value="年假">年假</option>
@@ -66,7 +82,7 @@
 						</tr>
 						<tr>
 							<td class="title">理由：</td>
-							<td><textarea name="reason" rows="5">${leaveForm.reason}</textarea></td>
+							<td><textarea name="reason" <#if status != 'new'>disabled</#if> rows="5">${leaveForm.reason}</textarea></td>
 						</tr>
 					</table>
 			</fieldset>
@@ -77,10 +93,10 @@
 						<tr>
 							<td class="title">开始时间：</td>
 							<td>
-								<input class="easyui-datetimebox" type="text" name="startTime" data-options="required:true,width:300,value:'<#if (leaveForm.startTime)??>${leaveForm.startTime?datetime}</#if>'" />
+								<input class="easyui-datetimebox" <#if status != 'new'>disabled</#if> type="text" name="startTime" data-options="required:true,width:300,value:'<#if (leaveForm.startTime)??>${leaveForm.startTime?datetime}</#if>'" />
 							</td>
 							<td class="title">结束时间：</td>
-							<td><input class="easyui-datetimebox" type="text" name="endTime" data-options="required:true,width:300,value:'<#if (leaveForm.endTime)??>${leaveForm.endTime?datetime}</#if>'"/></td>
+							<td><input class="easyui-datetimebox" <#if status != 'new'>disabled</#if> type="text" name="endTime" data-options="required:true,width:300,value:'<#if (leaveForm.endTime)??>${leaveForm.endTime?datetime}</#if>'"/></td>
 						</tr>
 					</table>
 					<div>&nbsp;</div>

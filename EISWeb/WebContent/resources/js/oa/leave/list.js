@@ -18,7 +18,8 @@ jQuery.define(oa.leave.list, base, {
 	 * @returns {Boolean}
 	 */
 	onDblClickRow: function(index, rowData){
-    	context.openTab("请假单", "oa/leave/detail/"+ rowData.leaveId +".htm");
+		var url = "oa/leave/detail/candidate/"+ rowData.leaveId +".htm?taskId=" + rowData.taskId;
+    	context.openTab("请假单("+ rowData.taskId +")", url);
     },
 	formatMenu: function(value, row, index) {
 		return value;

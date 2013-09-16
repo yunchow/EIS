@@ -47,7 +47,7 @@ jQuery.define(context, {
 	blockUI: function(message) {
 		$.blockUI({css:{
 			border: 'none', 
-            padding: '10px 0px', 
+            padding: '8px 0px', 
             width: '15%',
             left: '42%',
             '-webkit-border-radius': '5px', 
@@ -169,9 +169,66 @@ jQuery.define(context, {
 	echo: function() {
 		alert(this.getCopyright());
 	},
+	
+	/**
+	 * 打开一个新的TAB，默认图标为表格
+	 * @param title
+	 * @param url
+	 */
 	openTab: function(title, url) {
 		context.addTab(title, url, "table");
 	},
+	
+	/**
+	 * 根据名字查找TAB
+	 * @param title
+	 * @returns
+	 */
+	getTab: function(title) {
+		return $('#homeTabBar').tabs("getTab", title);
+	},
+	
+	/**
+	 * 得到当前选中的TAB
+	 * @returns
+	 */
+	getSelectedTab: function() {
+		return $('#homeTabBar').tabs("getSelected");
+	},
+	
+	/**
+	 * 使指定的TAB重新加载指定的URL，
+	 * 如果没有参数则默认为当前TAB，和原有的URL
+	 * @param title
+	 * @param url
+	 */
+	reloadTab: function(title, url) {
+		var tab;
+		if (title) {
+			tab = this.getTab(title);
+		}
+		else {
+			tab = this.getSelectedTab();
+		}
+		if (url) {
+			tab.panel("refresh", url);
+		}
+		else {
+			tab.panel("refresh");
+		}
+	},
+	
+	/**
+	 * 关闭指定tab，如果title为空则关闭当前tab
+	 * @param title
+	 */
+	closeTab: function(title) {
+		if (!title) {
+			title = $('#homeTabBar').tabs("getTabIndex", this.getSelectedTab());
+		}
+		$('#homeTabBar').tabs("close", title);
+	},
+	
 	/**
 	 * create new tab
 	 * @param subtitle
@@ -179,39 +236,31 @@ jQuery.define(context, {
 	 * @param icon
 	 */
 	addTab: function(subtitle, url, icon) {
-		if (!$('#homeTabBar').tabs('exists', subtitle)) {
-			if(url.indexOf('if') != -1){
-				$('#homeTabBar').tabs('add', {
-					title : subtitle,
-					content : '<iframe src="' + url + '" frameborder="0" style="border:0;width:100%;height:99.4%;"></iframe>',
-					closable : true,
-					icon : icon
-				});			
-			} else {
-				$('#homeTabBar').tabs('add', {
-					title : subtitle,
-					href : url,
-					closable : true,
-					icon : icon
-				});			
-			}
-		} else {
+		if ($('#homeTabBar').tabs('exists', subtitle)) {
 			$('#homeTabBar').tabs('select', subtitle);
+			return;
 		}
+		$('#homeTabBar').tabs('add', {
+			title : subtitle,
+			href : url,
+			closable : true,
+			icon : icon
+		});
 		this.enableHomeTabRightClickMenue();
 	},
 	
 	openTabIframe: function(subtitle, url, icon) {
-		if (!$('#homeTabBar').tabs('exists', subtitle)) {
-			$('#homeTabBar').tabs('add', {
-				title : subtitle,
-				content : '<iframe src="' + url + '" frameborder="0" style="border:0;width:100%;height:99.4%;"></iframe>',
-				closable : true,
-				icon : icon
-			});
-		} else {
+		if ($('#homeTabBar').tabs('exists', subtitle)) {
 			$('#homeTabBar').tabs('select', subtitle);
+			return;
 		}
+		$('#homeTabBar').tabs('add', {
+			title : subtitle,
+			content : '<iframe src="' + url + '" frameborder="0" style="border:0;width:100%;height:99.4%;"></iframe>',
+			closable : true,
+			icon : icon
+		});
+		this.enableHomeTabRightClickMenue();
 	},
 	
 	/**
