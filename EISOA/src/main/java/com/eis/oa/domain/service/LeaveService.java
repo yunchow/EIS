@@ -211,6 +211,7 @@ public class LeaveService extends ActivitiAwareSupport {
 			LeaveFormDTO dto = new LeaveFormDTO();
 			BeanUtils.copyProperties(entity, dto);
 			dto.setLeaveId(entity.getId());
+			dto.setProcessInstanceId(entity.getProcessInstanceKey());
 			leaveDtoList.add(dto);
 		}
 		logger.info("returned leaveDtoList = {}", leaveDtoList);

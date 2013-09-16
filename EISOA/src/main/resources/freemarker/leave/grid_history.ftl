@@ -8,8 +8,11 @@
     <th data-options="field:'processInstanceId',width:80">流程实例编号</th>
 </@datagrid>
 
-<@toolbar id="historyLeaveToolbar" ns="oa.leave.history" menu="#historyLeaveSearchBoxMenu"/>
-
+<div id="historyLeaveToolbar" style="height:auto;">
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'text',plain:true" onclick="oa.leave.history.viewDetail()">查看明细</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="oa.leave.history.reload()">刷新</a>
+	<input class="easyui-searchbox" data-options="prompt:'请输入关键字',searcher:oa.leave.history.doSearch,menu:'#historyLeaveSearchBoxMenu'" style="width:300px;float:right;"></input>
+</div>
 <div id="historyLeaveSearchBoxMenu" style="width:auto">
     <div data-options="name:'status'">角色名称</div>
 </div>

@@ -21,8 +21,6 @@
 
 <div id="claimedLeaveToolbar" style="height:auto;">
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'text',plain:true" onclick="oa.leave.claimed.viewDetail()">查看明细</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true" onclick="oa.leave.claimed.suspend()">挂起</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="oa.leave.claimed.active()">激活</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="oa.leave.claimed.reload()">刷新</a>
 	<input class="easyui-searchbox" data-options="prompt:'请输入关键字',searcher:oa.leave.claimed.doSearch,menu:'#claimedLeaveSearchBoxMenu'" style="width:300px;float:right;"></input>
 </div>
