@@ -18,6 +18,8 @@ import org.activiti.engine.ActivitiObjectNotFoundException;
 import org.activiti.engine.ActivitiTaskAlreadyClaimedException;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator;
+import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.apache.commons.io.IOUtils;
@@ -94,9 +96,9 @@ public class LeaveController extends ActivitiAwareSupport {
 		ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(executionId).singleResult();
 		BpmnModel bpmnModel = repositoryService.getBpmnModel(processInstance.getProcessDefinitionId());
 		List<String> activeActivityIds = runtimeService.getActiveActivityIds(executionId);
-		//if (processEngineConfiguration instanceof ProcessEngineConfigurationImpl) {
-			//Context.setProcessEngineConfiguration((ProcessEngineConfigurationImpl)processEngineConfiguration);
-		//}
+		if (processEngineConfiguration instanceof ProcessEngineConfigurationImpl) {
+			Context.setProcessEngineConfiguration((ProcessEngineConfigurationImpl)processEngineConfiguration);
+		}
 		InputStream is = ProcessDiagramGenerator.generateDiagram(bpmnModel, "png", activeActivityIds);
 		IOUtils.copy(is, response.getOutputStream());
 	}

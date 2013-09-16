@@ -45,6 +45,9 @@ jQuery.define(context, {
 		$("link:first").prop('href', 'resources/plugins/jquery-easyui-1.3.4/themes/'+ theme +'/easyui.css');
 	},
 	blockUI: function(message) {
+		if (!message) {
+			message = "正在处理，请稍候";
+		}
 		$.blockUI({css:{
 			border: 'none', 
             padding: '8px 0px', 

@@ -25,8 +25,10 @@ jQuery.define(oa.leave.form, {
 	 * @param taskId
 	 */
 	doClaim: function() {
+		context.blockUI();
 		var me = this;
 		$.post("oa/leave/task/claim/"+ this.taskId +".htm", function(data) {
+			context.unblockUI();
 			var r = eval("("+ data +")");
 			if (r.result) {
 				me.onClaimSuccess(r);

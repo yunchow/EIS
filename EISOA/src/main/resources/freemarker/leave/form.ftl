@@ -26,6 +26,7 @@
     		</#if>
     		-->
 		    <a href="javascript:;" onclick="javascript:oa.leave.form.doClose();" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true">关闭</a>
+		    <a href="javascript:void(0)" onclick="javascript:context.reloadTab();" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true">刷新</a>
 		</div>
     </div>
     <div data-options="region:'center',border:false" style="padding:5px;margin:0px;">
