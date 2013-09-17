@@ -93,6 +93,7 @@ public class LeaveController extends ActivitiAwareSupport {
 		LeaveFormEntity entity = leaveRepository.findById(leaveId);
 		model.addAttribute("leaveForm", entity);
 		//model.addAttribute("status", status);
+		String executionId;
 		
 		if ("history".equals(status)) {
 			//HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceBusinessKey(leaveId).singleResult();
@@ -101,16 +102,23 @@ public class LeaveController extends ActivitiAwareSupport {
 			HistoricTaskInstance  historicTaskInstance = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
 			model.addAttribute("task", historicTaskInstance);
 			model.addAttribute("execution", historicTaskInstance);
+			executionId = historicTaskInstance.getExecutionId();
 		} else if ("list".equals(status)) {
 			HistoricProcessInstance procInstance = historyService.createHistoricProcessInstanceQuery().processInstanceBusinessKey(leaveId).singleResult();
 			model.addAttribute("execution", procInstance);
+			executionId = procInstance.getId(); // 这里有可能会有问题，应该为executionId才能保证一定正确吧？但正常情况下，二者却是相等，考虑子流程情况。。。
 		} else {
 			Execution execution = createExecutionQuery().processInstanceBusinessKey(leaveId).singleResult();
 			model.addAttribute("execution", execution);
 			
 			Task task = createTaskQuery().processInstanceBusinessKey(leaveId).singleResult();
 			model.addAttribute("task", task);
+			executionId = execution.getId();
 		}
+		List<HistoricTaskInstance> historyTasks = historyService.createHistoricTaskInstanceQuery().processInstanceBusinessKey(leaveId).orderByHistoricTaskInstanceEndTime().desc().list();
+		model.addAttribute("historyTasks", historyTasks);
+		List<HistoricActivityInstance> activityHistoyList = historyService.createHistoricActivityInstanceQuery().executionId(executionId).list();
+		model.addAttribute("activityHistoyList", activityHistoyList);
 		return "leave/form.ftl";
 	}
 

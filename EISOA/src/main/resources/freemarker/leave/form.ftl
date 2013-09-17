@@ -108,6 +108,24 @@
 					<div>&nbsp;</div>
 			</fieldset>
 			<#-- 
+			<fieldset>
+			    <legend>活动日志</legend>
+				<#list historyTasks as historyTask>
+					<div style="padding:3px;">${historyTask.assignee}&nbsp;在&nbsp;${historyTask.endTime?datetime}&nbsp;处理任务&nbsp;${historyTask.name}</div>
+				</#list>
+			</fieldset>
+			-->
+			<fieldset>
+			    <legend>活动日志</legend>
+				<#list activityHistoyList as activityHistoy>
+					<#if !activityHistoy.endTime??>
+						<div style="padding:3px;">${activityHistoy.startTime?datetime}&nbsp;${activityHistoy.assignee!'系统'}开始处理任务&nbsp;[${activityHistoy.activityName}]</div>
+					<#else>
+						<div style="padding:3px;">${activityHistoy.endTime?datetime}&nbsp;${activityHistoy.assignee!'系统'}完成任务&nbsp;[${activityHistoy.activityName}]</div>
+					</#if>
+				</#list>
+			</fieldset>
+			<#-- 
 			<div style="width:98%;padding:0px;margin:0px;margin-top:10px;height:auto;">
 				<div class="easyui-panel" title="请假时间明细" data-options="collapsible:true">
 					<@toolbar id="leaveDateTimeDetailToolbar" ns="oa.leave.form" reload=false searchbox=false save=false>
@@ -134,14 +152,6 @@
 				</div>
 			</div>
 			-->
-			
-			<fieldset>
-			    <legend>变动日志</legend>
-			    <div style="padding:10px;">
-					<div>部门经理于9-10号审批通过，审批意见：同意</div>
-					<div>人事专员于9-12号审批通过，审批意见：已确认</div>
-				</div>
-			</fieldset>
 			
 			<#--
 			<fieldset>
