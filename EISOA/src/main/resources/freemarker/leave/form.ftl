@@ -3,9 +3,9 @@
 <div class="easyui-layout" data-options="fit:true">
     <div data-options="region:'north',fit:false,border:false">
     	<div class="datagrid-toolbar">
-    		<#if task?? && !task.assignee?? && status != 'list'>
+    		<#if task?? && !task.assignee??>
     			<a href="javascript:;" onclick="javascript:oa.leave.form.doClaim('${task.id}');" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">签收</a>
-    		<#elseif (task.assignee)?? && status != 'history' && status != 'list'>
+    		<#elseif (task.assignee)?? && status != 'history'>
     			<a href="javascript:;" onclick="javascript:oa.leave.form.doCompleteTask('${task.id}', true);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">批准</a>
     			<a href="javascript:;" onclick="javascript:oa.leave.form.doCompleteTask('${task.id}', false);" class="easyui-linkbutton" data-options="iconCls:'icon-back',plain:true">拒绝</a>
     		<#elseif status == 'new'>
@@ -64,6 +64,11 @@
 				<fieldset>
 				    <legend>流程进度</legend>
 					<img src="oa/leave/runtime/image/${task.executionId}.htm">	
+				</fieldset>
+			<#elseif execution??>
+				<fieldset>
+				    <legend>流程进度</legend>
+					<img src="oa/leave/runtime/image/${execution.id}.htm">	
 				</fieldset>
 			</#if>
 			<fieldset>

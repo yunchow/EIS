@@ -19,6 +19,7 @@ import org.activiti.engine.ActivitiObjectNotFoundException;
 import org.activiti.engine.ActivitiTaskAlreadyClaimedException;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
@@ -95,11 +96,14 @@ public class LeaveController extends ActivitiAwareSupport {
 		
 		if ("history".equals(status)) {
 			//HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceBusinessKey(leaveId).singleResult();
-			HistoricActivityInstance historicActivityInstance = historyService.createHistoricActivityInstanceQuery().executionId(taskId).singleResult();
-			model.addAttribute("execution", historicActivityInstance);
+			//HistoricActivityInstance historicActivityInstance = historyService.createHistoricActivityInstanceQuery().executionId(taskId).singleResult();
+			//model.addAttribute("execution", historicActivityInstance);
 			HistoricTaskInstance  historicTaskInstance = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
 			model.addAttribute("task", historicTaskInstance);
 			model.addAttribute("execution", historicTaskInstance);
+		} else if ("list".equals(status)) {
+			HistoricProcessInstance procInstance = historyService.createHistoricProcessInstanceQuery().processInstanceBusinessKey(leaveId).singleResult();
+			model.addAttribute("execution", procInstance);
 		} else {
 			Execution execution = createExecutionQuery().processInstanceBusinessKey(leaveId).singleResult();
 			model.addAttribute("execution", execution);
