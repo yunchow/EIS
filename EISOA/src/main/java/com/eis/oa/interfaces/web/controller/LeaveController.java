@@ -7,6 +7,7 @@
 package com.eis.oa.interfaces.web.controller;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,6 @@ import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.runtime.Execution;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,11 +99,12 @@ public class LeaveController extends ActivitiAwareSupport {
 			model.addAttribute("execution", historicActivityInstance);
 			HistoricTaskInstance  historicTaskInstance = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
 			model.addAttribute("task", historicTaskInstance);
+			model.addAttribute("execution", historicTaskInstance);
 		} else {
 			Execution execution = createExecutionQuery().processInstanceBusinessKey(leaveId).singleResult();
 			model.addAttribute("execution", execution);
 			
-			Task task = createTaskQuery().taskId(taskId).singleResult();
+			Task task = createTaskQuery().processInstanceBusinessKey(leaveId).singleResult();
 			model.addAttribute("task", task);
 		}
 		return "leave/form.ftl";
@@ -129,20 +130,29 @@ public class LeaveController extends ActivitiAwareSupport {
 	
 	@RequestMapping("/runtime/image/{executionId}")
 	public void readResource(@PathVariable("executionId") String executionId, HttpServletResponse response) throws Exception {
-		String defid = null;
-		ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(executionId).singleResult();
+		String defid = historyService.createHistoricProcessInstanceQuery().processInstanceId(executionId).singleResult().getProcessDefinitionId();
+		/*ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(executionId).singleResult();
 		if (processInstance == null) {
 			defid = historyService.createHistoricProcessInstanceQuery().processInstanceId(executionId).singleResult().getProcessDefinitionId();
 		}
 		else {
 			defid = processInstance.getProcessDefinitionId();
-		}
+		}*/
 		BpmnModel bpmnModel = repositoryService.getBpmnModel(defid);
-		List<String> activeActivityIds = runtimeService.getActiveActivityIds(executionId);
+		/*try {
+			activityIds = runtimeService.getActiveActivityIds(executionId);
+		} catch (ActivitiObjectNotFoundException e) {
+			logger.info(e.getMessage(), e);
+		}*/
+		List<HistoricActivityInstance> activitys = historyService.createHistoricActivityInstanceQuery().executionId(executionId).list();
+		List<String> activityIds = new ArrayList<String>(activitys.size());
+		for (HistoricActivityInstance activity : activitys) {
+			activityIds.add(activity.getActivityId());
+		}
 		if (processEngineConfiguration instanceof ProcessEngineConfigurationImpl) {
 			Context.setProcessEngineConfiguration((ProcessEngineConfigurationImpl)processEngineConfiguration);
 		}
-		InputStream is = ProcessDiagramGenerator.generateDiagram(bpmnModel, "png", activeActivityIds);
+		InputStream is = ProcessDiagramGenerator.generateDiagram(bpmnModel, "png", activityIds);
 		IOUtils.copy(is, response.getOutputStream());
 	}
 	
