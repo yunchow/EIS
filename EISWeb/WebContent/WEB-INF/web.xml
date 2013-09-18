@@ -46,7 +46,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	    <init-param>
 	        <!-- Application class name -->
 	        <param-name>org.restlet.application</param-name>
-	        <param-value>com.eis.platform.activiti.ExplorerRestApplication</param-value>
+	        <param-value>com.eis.core.activiti.ExplorerRestApplication</param-value>
 	    </init-param>
 	</servlet>
 	 

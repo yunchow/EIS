@@ -8,20 +8,32 @@ package com.eis.base.web.controller.flowmanage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
+import org.activiti.bpmn.converter.BpmnXMLConverter;
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.editor.constants.ModelDataJsonConstants;
+import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiObjectNotFoundException;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +64,42 @@ public class ProcessdefController {
 	@RequestMapping("/grid")
 	public String prepare() {
 		return "flowmanage/processdef_grid.ftl";
+	}
+	
+	/**
+	 * 将流程定义转换为模型
+	 * @param processDefinitionId
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws XMLStreamException
+	 */
+	@RequestMapping(value = "/convert2/model/{processDefinitionId}")
+	@ResponseBody
+	public String convertToModel(@PathVariable String processDefinitionId) throws UnsupportedEncodingException, XMLStreamException {
+		ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).singleResult();
+		InputStream bpmnStream = repositoryService.getResourceAsStream(processDefinition.getDeploymentId(), processDefinition.getResourceName());
+		XMLInputFactory xif = XMLInputFactory.newInstance();
+		InputStreamReader in = new InputStreamReader(bpmnStream, "UTF-8");
+		XMLStreamReader xtr = xif.createXMLStreamReader(in);
+		BpmnModel bpmnModel = new BpmnXMLConverter().convertToBpmnModel(xtr);
+
+		BpmnJsonConverter converter = new BpmnJsonConverter();
+		ObjectNode modelNode = converter.convertToJson(bpmnModel);
+		
+		Model modelData = repositoryService.newModel();
+		modelData.setKey(processDefinition.getKey());
+		modelData.setName(processDefinition.getResourceName());
+		modelData.setCategory(processDefinition.getDeploymentId());
+
+		ObjectNode modelObjectNode = new ObjectMapper().createObjectNode();
+		modelObjectNode.put(ModelDataJsonConstants.MODEL_NAME, processDefinition.getName());
+		modelObjectNode.put(ModelDataJsonConstants.MODEL_REVISION, 1);
+		modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, processDefinition.getDescription());
+		modelData.setMetaInfo(modelObjectNode.toString());
+
+		repositoryService.saveModel(modelData);
+		repositoryService.addModelEditorSource(modelData.getId(), modelNode.toString().getBytes("utf-8"));
+		return "ok";
 	}
 	
 	@RequestMapping(value = "/{resourceType}/{pdid}")

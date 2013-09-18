@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiObjectNotFoundException;
 import org.activiti.engine.ActivitiTaskAlreadyClaimedException;
 import org.activiti.engine.TaskService;
@@ -224,10 +225,15 @@ public class LeaveController extends ActivitiAwareSupport {
 	public Map<String, Object> doApplyLeaveForm(LeaveFormDTO leaveDto, @ModelAttribute("user") String userId) {
 		leaveDto.setApplicant(userId);
 		Map<String, Object> result = new HashMap<String, Object>();
-		Task task = leaveManager.doLeaveFor(leaveDto);
-		result.put("result", true);
-		result.put("nextTaskName", task.getName());
-		result.put("nextAssignee", task.getAssignee());
+		try {
+			Task task = leaveManager.doLeaveFor(leaveDto);
+			result.put("result", true);
+			result.put("nextTaskName", task.getName());
+			result.put("nextAssignee", task.getAssignee());
+		} catch (ActivitiException e) {
+			result.put("result", false);
+			result.put("message", "流程已被挂起，联系管理员");
+		}
 		return result;
 	}
 	

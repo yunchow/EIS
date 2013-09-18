@@ -14,7 +14,6 @@ jQuery.define(flowmanage.processdef, base, {
 	
 	onClickRow: function(index){
 		var row = this.$dg.datagrid('getSelected');
-		context.log(row);
 		if (row.suspend) {
 			$("#activate").show();
 			$("#suspend").hide();
@@ -23,6 +22,16 @@ jQuery.define(flowmanage.processdef, base, {
 			$("#suspend").show();
 			$("#activate").hide();
 		}
+    },
+    
+    convertToModel: function() {
+    	var row = this.$dg.datagrid('getSelected');
+    	if (!row) {
+    		context.warn("请选择要转换的流程定义");
+    	}
+    	$.post("flowmanage/processdef/convert2/model/"+ row.id +".htm", function(data) {
+    		context.info("转换成功，你可以在模型管理里查看或者编辑该模型");
+    	});
     },
 	
 	formatSuspend: function(value, row, index) {
@@ -47,6 +56,8 @@ jQuery.define(flowmanage.processdef, base, {
 			}
 			else {
 				me.reload();
+				$("#suspend").hide();
+				$("#activate").hide();
 			}
 		})
 	},
@@ -63,6 +74,8 @@ jQuery.define(flowmanage.processdef, base, {
 			}
 			else {
 				me.reload();
+				$("#suspend").hide();
+				$("#activate").hide();
 			}
 		})
 	},

@@ -17,6 +17,7 @@
 
 <@toolbar id="processdefToolbar" ns="flowmanage.processdef" delete=false update=false cancel=false save=false add=false menu="#processdefSearchBoxMenu">
 	<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="flowmanage.processdef.viewFlowPicture()">查看流程图</a>
+	<a id="convertToModel" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="flowmanage.processdef.convertToModel()">转换为模型</a>
 	<a id="suspend" style="display:none;" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="flowmanage.processdef.suspend()">挂起</a>
 	<a id="activate" style="display:none;" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="flowmanage.processdef.activate()">激活</a>
 </@toolbar>

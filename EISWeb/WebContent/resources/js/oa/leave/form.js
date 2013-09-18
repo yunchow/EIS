@@ -102,7 +102,7 @@ jQuery.define(oa.leave.form, {
 				context.info("请假申请单提交成功，请等待" + r.nextTaskName);
 			}
 			else {
-				context.error("请假申请单提交失败，请重试！");
+				context.error(r.message);
 			}
 		});
 	}
