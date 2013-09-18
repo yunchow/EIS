@@ -358,11 +358,11 @@ public class ProcessDiagramGenerator {
 	 * @return
 	 */
 	public static InputStream generateDiagramFor(BpmnModel bpmnModel, String imageType, List<HistoricActivityInstance> highLightedActivities) {
-		ProcessDiagramCanvas canvas = generateDiagramFor(bpmnModel, highLightedActivities, Collections.<String> emptyList());
+		ProcessDiagramCanvas canvas = generateDiagramFor(bpmnModel, highLightedActivities);
 		return canvas.generateImage(imageType);
 	}
 	
-	protected static ProcessDiagramCanvas generateDiagramFor(BpmnModel bpmnModel, List<HistoricActivityInstance> highLightedActivities, List<String> highLightedFlows) {
+	protected static ProcessDiagramCanvas generateDiagramFor(BpmnModel bpmnModel, List<HistoricActivityInstance> highLightedActivities) {
 		ProcessDiagramCanvasExt processDiagramCanvas = initProcessDiagramCanvasExt(bpmnModel);
 
 		// // Draw pool shape, if process is participant in collaboration
@@ -381,16 +381,29 @@ public class ProcessDiagramGenerator {
 			}
 		}
 
+		// Highlight sequence flows
+		Map<String, String> highLightedActivityMap = new HashMap<String, String>();
+		for (HistoricActivityInstance activity : highLightedActivities) {
+			highLightedActivityMap.put(activity.getActivityId(), activity.getActivityId());
+		}
+		
+		List<String> highLightedFlowList = new ArrayList<String>();
+		
+		for (SequenceFlow sequenceFlow : bpmnModel.getProcesses().get(0).findFlowElementsOfType(SequenceFlow.class)) {
+			if (highLightedActivityMap.containsKey(sequenceFlow.getSourceRef()) && highLightedActivityMap.containsKey(sequenceFlow.getTargetRef())) {
+				highLightedFlowList.add(sequenceFlow.getId());
+			}
+		}
+
 		// Draw activities and their sequence-flows
 		for (FlowNode flowNode : bpmnModel.getProcesses().get(0).findFlowElementsOfType(FlowNode.class)) {
-			drawActivityFor(processDiagramCanvas, bpmnModel, flowNode, highLightedActivities, highLightedFlows);
+			drawActivityFor(processDiagramCanvas, bpmnModel, flowNode, highLightedActivities, highLightedFlowList);
 		}
 		return processDiagramCanvas;
 	}
 	
-	protected static void drawActivityFor(ProcessDiagramCanvasExt processDiagramCanvas, BpmnModel bpmnModel, FlowNode flowNode, List<HistoricActivityInstance> highLightedActivities,
-			List<String> highLightedFlows) {
-
+	protected static void drawActivityFor(ProcessDiagramCanvasExt processDiagramCanvas, BpmnModel bpmnModel, FlowNode flowNode, 
+			List<HistoricActivityInstance> highLightedActivities, List<String> highLightedFlows) {
 		ActivityDrawInstruction drawInstruction = activityDrawInstructions.get(flowNode.getClass());
 		if (drawInstruction != null) {
 
@@ -422,14 +435,10 @@ public class ProcessDiagramGenerator {
 			// Draw highlighted activities
 
 			for (HistoricActivityInstance activity : highLightedActivities) {
-				System.out.println("activityId:" + activity.getActivityId());
-				System.out.println("flowNodeId:" + flowNode.getId());
-				System.out.println(StringUtils.equals(activity.getActivityId(), flowNode.getId()));
 				if (StringUtils.equals(activity.getActivityId(), flowNode.getId())) {
 					drawHighLightFor(activity, processDiagramCanvas, bpmnModel.getGraphicInfo(flowNode.getId()));
 				}
 			}
-			System.out.println("----------------------------------------");
 		}
 
 		// Outgoing transitions of activity
@@ -440,7 +449,7 @@ public class ProcessDiagramGenerator {
 
 				GraphicInfo graphicInfo = graphicInfoList.get(i);
 				GraphicInfo previousGraphicInfo = graphicInfoList.get(i - 1);
-
+				
 				boolean highLighted = (highLightedFlows.contains(sequenceFlow.getId()));
 				boolean drawConditionalIndicator = (i == 1) && sequenceFlow.getConditionExpression() != null && !(flowNode instanceof Gateway);
 
@@ -703,37 +712,6 @@ public class ProcessDiagramGenerator {
 				}
 			}
 		}
-
-		// TODO: curvy parameter
-
-		// Outgoing transitions of activity
-		// for (PvmTransition sequenceFlow : activity.getOutgoingTransitions())
-		// {
-		// boolean highLighted =
-		// (highLightedFlows.contains(sequenceFlow.getId()));
-		// boolean drawConditionalIndicator =
-		// sequenceFlow.getProperty(BpmnParse.PROPERTYNAME_CONDITION) != null
-		// && !((String)
-		// activity.getProperty("type")).toLowerCase().contains("gateway");
-		// boolean isDefault =
-		// sequenceFlow.getId().equals(activity.getProperty("default"))
-		// && ((String)
-		// activity.getProperty("type")).toLowerCase().contains("gateway");
-		//
-		// List<Integer> waypoints = ((TransitionImpl)
-		// sequenceFlow).getWaypoints();
-		// int xPoints[]= new int[waypoints.size()/2];
-		// int yPoints[]= new int[waypoints.size()/2];
-		// for (int i=0, j=0; i < waypoints.size(); i+=2, j++) { //
-		// waypoints.size()
-		// // minimally 4: x1, y1,
-		// // x2, y2
-		// xPoints[j] = waypoints.get(i);
-		// yPoints[j] = waypoints.get(i+1);
-		// }
-		// processDiagramCanvas.drawSequenceflow(xPoints, yPoints,
-		// drawConditionalIndicator, isDefault, highLighted);
-		// }
 
 		// Nested elements
 		if (flowNode instanceof FlowElementsContainer) {

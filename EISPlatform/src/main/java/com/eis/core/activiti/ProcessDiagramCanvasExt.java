@@ -8,6 +8,7 @@ package com.eis.core.activiti;
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Stroke;
+import java.awt.geom.Line2D;
 import java.awt.geom.RoundRectangle2D;
 
 import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramCanvas;
@@ -21,7 +22,7 @@ import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramCanvas;
  */
 public class ProcessDiagramCanvasExt extends ProcessDiagramCanvas {
 	protected static Color GREEN_COLOR = Color.GREEN;
-	
+
 	/**
 	 * @param width
 	 * @param height
@@ -33,7 +34,7 @@ public class ProcessDiagramCanvasExt extends ProcessDiagramCanvas {
 	public ProcessDiagramCanvasExt(int width, int height, int minX, int minY) {
 		super(width, height, minX, minY);
 	}
-	
+
 	public void drawGreenHighLight(int x, int y, int width, int height) {
 		Paint originalPaint = g.getPaint();
 		Stroke originalStroke = g.getStroke();
@@ -60,6 +61,39 @@ public class ProcessDiagramCanvasExt extends ProcessDiagramCanvas {
 
 		g.setPaint(originalPaint);
 		g.setStroke(originalStroke);
+	}
+
+	public void drawSequenceflow(int srcX, int srcY, int targetX, int targetY, boolean conditional, boolean highLighted) {
+		Paint originalPaint = g.getPaint();
+		if (highLighted)
+			g.setPaint(GREEN_COLOR);
+
+		Line2D.Double line = new Line2D.Double(srcX, srcY, targetX, targetY);
+		g.draw(line);
+		drawArrowHead(line);
+
+		if (conditional) {
+			drawConditionalSequenceFlowIndicator(line);
+		}
+
+		if (highLighted)
+			g.setPaint(originalPaint);
+	}
+
+	public void drawSequenceflowWithoutArrow(int srcX, int srcY, int targetX, int targetY, boolean conditional, boolean highLighted) {
+		Paint originalPaint = g.getPaint();
+		if (highLighted)
+			g.setPaint(GREEN_COLOR);
+
+		Line2D.Double line = new Line2D.Double(srcX, srcY, targetX, targetY);
+		g.draw(line);
+
+		if (conditional) {
+			drawConditionalSequenceFlowIndicator(line);
+		}
+
+		if (highLighted)
+			g.setPaint(originalPaint);
 	}
 
 }
