@@ -63,12 +63,12 @@
 			<#if task??>
 				<fieldset>
 				    <legend>流程进度</legend>
-					<img src="oa/leave/runtime/image/${task.executionId}.htm">	
+					<img src="oa/leave/proc/diagram/${task.executionId}.htm">	
 				</fieldset>
 			<#elseif execution??>
 				<fieldset>
 				    <legend>流程进度</legend>
-					<img src="oa/leave/runtime/image/${execution.id}.htm">	
+					<img src="oa/leave/proc/diagram/${execution.id}.htm">	
 				</fieldset>
 			</#if>
 			<fieldset>

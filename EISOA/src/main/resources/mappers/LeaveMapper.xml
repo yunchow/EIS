@@ -10,8 +10,8 @@
 	</select>
 	
 	<insert id="save" parameterType="com.eis.oa.domain.model.leave.LeaveFormEntity">
-		insert into oa_leave(id, type, reason, applicant, startTime, endTime, createTime) 
-		values(#{id}, #{type}, #{reason}, #{applicant}, #{startTime}, #{endTime}, #{createTime})
+		insert into oa_leave(id, type, reason, applicant, startTime, endTime, createTime, procKey) 
+		values(#{id}, #{type}, #{reason}, #{applicant}, #{startTime}, #{endTime}, #{createTime}, #{procKey})
 	</insert>
 	
 	<select id="findLeaveByPage" parameterType="hashmap" resultMap="leaveFormResult">

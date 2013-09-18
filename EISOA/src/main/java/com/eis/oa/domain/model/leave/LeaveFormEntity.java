@@ -34,20 +34,21 @@ public class LeaveFormEntity extends EntitySupport<LeaveFormEntity> implements E
 	
 	private String applicant;
 	
-	private String processInstanceKey;
+	private String procKey;
 	
 	private Date startTime;
 	private Date endTime;
 	private Date createTime;
 	
+	
 	public LeaveFormEntity() {
 		
 	}
 	
-	public LeaveFormEntity(String id, String processInstanceKey, LeaveFormDTO leaveDto) {
+	public LeaveFormEntity(String id, String procKey, LeaveFormDTO leaveDto) {
 		this.createTime = new Date();
 		this.id = id;
-		this.processInstanceKey = processInstanceKey;
+		this.procKey = procKey;
 		applicant = leaveDto.getApplicant();
 		type = leaveDto.getType();
 		reason = leaveDto.getReason();
@@ -74,8 +75,8 @@ public class LeaveFormEntity extends EntitySupport<LeaveFormEntity> implements E
 		return applicant;
 	}
 
-	public String getProcessInstanceKey() {
-		return processInstanceKey;
+	public String getProcKey() {
+		return procKey;
 	}
 
 	public Date getStartTime() {

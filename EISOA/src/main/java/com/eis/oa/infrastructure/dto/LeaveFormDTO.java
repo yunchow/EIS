@@ -37,6 +37,10 @@ public class LeaveFormDTO extends PageDTO implements Serializable {
 	private Date startTime;
 	private Date endTime;
 	private Date createTime;
+	/**
+	 * 流程Key
+	 */
+	private String procKey;
 
 	/**
 	 * 流程开始和结束时间，与业务时间不同，只有历史流程才会有这2个字段
@@ -59,6 +63,14 @@ public class LeaveFormDTO extends PageDTO implements Serializable {
 	private boolean suspend;
 	
 	private double leaveDays;
+
+	public String getProcKey() {
+		return procKey;
+	}
+
+	public void setProcKey(String procKey) {
+		this.procKey = procKey;
+	}
 
 	public double getLeaveDays() {
 		return leaveDays;

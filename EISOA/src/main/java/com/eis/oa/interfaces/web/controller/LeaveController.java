@@ -7,7 +7,6 @@
 package com.eis.oa.interfaces.web.controller;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +20,6 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.runtime.Execution;
@@ -37,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.eis.core.activiti.ProcessDiagramGenerator;
 import com.eis.core.context.ActivitiAwareSupport;
 import com.eis.oa.application.LeaveManager;
 import com.eis.oa.domain.model.leave.LeaveFormEntity;
@@ -140,8 +139,8 @@ public class LeaveController extends ActivitiAwareSupport {
 		return map;
 	}
 	
-	@RequestMapping("/runtime/image/{executionId}")
-	public void readResource(@PathVariable("executionId") String executionId, HttpServletResponse response) throws Exception {
+	@RequestMapping("/proc/diagram/{executionId}")
+	public void generateProcessDiagram(@PathVariable("executionId") String executionId, HttpServletResponse response) throws Exception {
 		String defid = historyService.createHistoricProcessInstanceQuery().processInstanceId(executionId).singleResult().getProcessDefinitionId();
 		/*ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(executionId).singleResult();
 		if (processInstance == null) {
@@ -157,14 +156,14 @@ public class LeaveController extends ActivitiAwareSupport {
 			logger.info(e.getMessage(), e);
 		}*/
 		List<HistoricActivityInstance> activitys = historyService.createHistoricActivityInstanceQuery().executionId(executionId).list();
-		List<String> activityIds = new ArrayList<String>(activitys.size());
+		/*List<String> activityIds = new ArrayList<String>(activitys.size());
 		for (HistoricActivityInstance activity : activitys) {
 			activityIds.add(activity.getActivityId());
-		}
+		}*/
 		if (processEngineConfiguration instanceof ProcessEngineConfigurationImpl) {
 			Context.setProcessEngineConfiguration((ProcessEngineConfigurationImpl)processEngineConfiguration);
 		}
-		InputStream is = ProcessDiagramGenerator.generateDiagram(bpmnModel, "png", activityIds);
+		InputStream is = ProcessDiagramGenerator.generatePngDiagramFor(bpmnModel, activitys);
 		IOUtils.copy(is, response.getOutputStream());
 	}
 	
