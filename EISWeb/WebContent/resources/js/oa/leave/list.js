@@ -19,7 +19,7 @@ jQuery.define(oa.leave.list, base, {
 	 */
 	onDblClickRow: function(index, rowData){
 		var url = "oa/leave/detail/list/"+ rowData.leaveId +".htm?taskId=" + rowData.taskId;
-    	context.openTab("请假单("+ rowData.processInstanceId +")", url);
+    	context.openTab("我的请假单("+ rowData.processInstanceId +")", url);
     },
     
     /**
@@ -31,7 +31,8 @@ jQuery.define(oa.leave.list, base, {
     		context.warn("请选择你要查看的记录");
     		return;
     	}
-    	context.openTab("我的请假单("+ row.processInstanceId +")", "oa/leave/detail/list/"+ row.leaveId +".htm");
+    	var url = "oa/leave/detail/list/"+ row.leaveId +".htm?taskId=" + row.taskId;
+    	context.openTab("我的请假单("+ row.processInstanceId +")", url);
     },
     
 	formatMenu: function(value, row, index) {

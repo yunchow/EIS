@@ -13,7 +13,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiObjectNotFoundException;
 import org.activiti.engine.ActivitiTaskAlreadyClaimedException;
@@ -96,28 +95,27 @@ public class LeaveController extends ActivitiAwareSupport {
 		String executionId;
 		
 		if ("history".equals(status)) {
-			//HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceBusinessKey(leaveId).singleResult();
-			//HistoricActivityInstance historicActivityInstance = historyService.createHistoricActivityInstanceQuery().executionId(taskId).singleResult();
-			//model.addAttribute("execution", historicActivityInstance);
-			HistoricTaskInstance  historicTaskInstance = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
+			HistoricTaskInstance  historicTaskInstance = getHistoricTaskInstanceByTaskId(taskId);
 			model.addAttribute("task", historicTaskInstance);
 			model.addAttribute("execution", historicTaskInstance);
 			executionId = historicTaskInstance.getExecutionId();
 		} else if ("list".equals(status)) {
-			HistoricProcessInstance procInstance = historyService.createHistoricProcessInstanceQuery().processInstanceBusinessKey(leaveId).singleResult();
+			HistoricProcessInstance procInstance = getHistoricProcessInstanceByBusinessKey(leaveId);
 			model.addAttribute("execution", procInstance);
 			executionId = procInstance.getId(); // 这里有可能会有问题，应该为executionId才能保证一定正确吧？但正常情况下，二者却是相等，考虑子流程情况。。。
 		} else {
-			Execution execution = createExecutionQuery().processInstanceBusinessKey(leaveId).singleResult();
+			Execution execution = getExecutionBusinessKey(leaveId);
 			model.addAttribute("execution", execution);
 			
-			Task task = createTaskQuery().processInstanceBusinessKey(leaveId).singleResult();
+			Task task = getTaskByBusinessKey(leaveId);
 			model.addAttribute("task", task);
 			executionId = execution.getId();
 		}
-		List<HistoricTaskInstance> historyTasks = historyService.createHistoricTaskInstanceQuery().processInstanceBusinessKey(leaveId).orderByHistoricTaskInstanceEndTime().desc().list();
+		
+		List<HistoricTaskInstance> historyTasks = createHistoricTaskInstanceQueryByBusinessKey(leaveId).orderByHistoricTaskInstanceEndTime().desc().list();
 		model.addAttribute("historyTasks", historyTasks);
-		List<HistoricActivityInstance> activityHistoyList = historyService.createHistoricActivityInstanceQuery().executionId(executionId).list();
+		
+		List<HistoricActivityInstance> activityHistoyList = createHistoricActivityInstanceQuery().processInstanceId(executionId).list();
 		model.addAttribute("activityHistoyList", activityHistoyList);
 		return "leave/form.ftl";
 	}
@@ -140,31 +138,14 @@ public class LeaveController extends ActivitiAwareSupport {
 		return map;
 	}
 	
-	@RequestMapping("/proc/diagram/{executionId}")
-	public void generateProcessDiagram(@PathVariable("executionId") String executionId, HttpServletResponse response) throws Exception {
-		String defid = historyService.createHistoricProcessInstanceQuery().processInstanceId(executionId).singleResult().getProcessDefinitionId();
-		/*ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(executionId).singleResult();
-		if (processInstance == null) {
-			defid = historyService.createHistoricProcessInstanceQuery().processInstanceId(executionId).singleResult().getProcessDefinitionId();
-		}
-		else {
-			defid = processInstance.getProcessDefinitionId();
-		}*/
-		BpmnModel bpmnModel = repositoryService.getBpmnModel(defid);
-		/*try {
-			activityIds = runtimeService.getActiveActivityIds(executionId);
-		} catch (ActivitiObjectNotFoundException e) {
-			logger.info(e.getMessage(), e);
-		}*/
-		List<HistoricActivityInstance> activitys = historyService.createHistoricActivityInstanceQuery().executionId(executionId).list();
-		/*List<String> activityIds = new ArrayList<String>(activitys.size());
-		for (HistoricActivityInstance activity : activitys) {
-			activityIds.add(activity.getActivityId());
-		}*/
+	@RequestMapping("/proc/diagram/{processInstanceId}")
+	public void generateProcessDiagram(@PathVariable String processInstanceId, HttpServletResponse response) throws Exception {
+		String defid = getHistoricProcessInstanceById(processInstanceId).getProcessDefinitionId();
+		List<HistoricActivityInstance> activitys = getHistoricActivitiesByProcessInstanceId(processInstanceId);
 		if (processEngineConfiguration instanceof ProcessEngineConfigurationImpl) {
 			Context.setProcessEngineConfiguration((ProcessEngineConfigurationImpl)processEngineConfiguration);
 		}
-		InputStream is = ProcessDiagramGenerator.generatePngDiagramFor(bpmnModel, activitys);
+		InputStream is = ProcessDiagramGenerator.generatePngDiagramFor(getBpmnModelByProcessDefinitionId(defid), activitys);
 		IOUtils.copy(is, response.getOutputStream());
 	}
 	

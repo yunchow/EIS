@@ -51,9 +51,9 @@ public class LeaveService extends ActivitiAwareSupport {
 		logger.info("leaveDto = {}", leaveDto);
 		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
 
-		long count = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).count();
+		long count = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).count();
 		leaveDto.setTotal(count);
-		List<Task> tasks = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant())
+		List<Task> tasks = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant())
 				.includeProcessVariables().orderByTaskPriority().desc().orderByTaskCreateTime().desc().listPage(leaveDto.getOffset(), leaveDto.getRows());
 		
 		ArrayList<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(tasks.size());
@@ -76,9 +76,9 @@ public class LeaveService extends ActivitiAwareSupport {
 		logger.info("leaveDto = {}", leaveDto);
 		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
 
-		long count = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskAssignee(leaveDto.getApplicant()).count();
+		long count = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskAssignee(leaveDto.getApplicant()).count();
 		leaveDto.setTotal(count);
-		List<Task> tasks = taskService.createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskAssignee(leaveDto.getApplicant())
+		List<Task> tasks = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskAssignee(leaveDto.getApplicant())
 				.includeProcessVariables().orderByTaskPriority().desc().orderByTaskCreateTime().desc().listPage(leaveDto.getOffset(), leaveDto.getRows());
 		
 		ArrayList<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(tasks.size());
@@ -112,7 +112,7 @@ public class LeaveService extends ActivitiAwareSupport {
 		}
 		
 		// N + 1 查询问题，有空再优化
-		String leaveId = runtimeService.createProcessInstanceQuery()
+		String leaveId = createProcessInstanceQuery()
 				.processInstanceId(task.getProcessInstanceId()).singleResult().getBusinessKey();
 		dto.setLeaveId(leaveId);
 		
@@ -177,7 +177,7 @@ public class LeaveService extends ActivitiAwareSupport {
 		logger.info("leaveDto = {}", leaveDto);
 		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
 		
-		HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery().finished()
+		HistoricTaskInstanceQuery historicTaskInstanceQuery = createHistoricTaskInstanceQuery().finished()
 				.taskInvolvedUser(leaveDto.getApplicant()).processDefinitionKey(LEAVE_PROCESS_KEY).includeProcessVariables();
 		
 		leaveDto.setTotal(historicTaskInstanceQuery.count());
@@ -197,7 +197,7 @@ public class LeaveService extends ActivitiAwareSupport {
 			dto.setDueDate(task.getDueDate());
 			
 			// N + 1 查询问题，有空再优化
-			String leaveId = historyService.createHistoricProcessInstanceQuery()
+			String leaveId = createHistoricProcessInstanceQuery()
 					.processInstanceId(task.getProcessInstanceId()).singleResult().getBusinessKey();
 			dto.setLeaveId(leaveId);
 			
