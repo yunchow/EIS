@@ -15,6 +15,19 @@ jQuery.define(sysmanage.group, base, {
 		context.log("sysmanage.group is ready");
 	},
 	
+	/**
+     * 新增行
+     */
+    append: function(){
+        if (!this.isEditing()){
+        	var row = {add_add___ : true};
+            this.$dg.datagrid('appendRow', row);
+            this.editIndex = this.$dg.datagrid('getRows').length-1;
+            this.$dg.datagrid('selectRow', this.editIndex)
+                    .datagrid('beginEdit', this.editIndex);
+        }
+    },
+    
 	formatUsers: function(value, row, index) {
 		return sysmanage.group.formatUsersFor(tools.joinArrayIf(value), row, index);
 	},

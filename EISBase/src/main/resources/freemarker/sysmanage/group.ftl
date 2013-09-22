@@ -3,7 +3,14 @@
 		   id="groupGrid"
 		   toolbar="#groupToolbar" 
 		   url="sysmanage/group/list.htm">
-	<#--<th data-options="field:'id',width:120">ID</th>-->
+	<th data-options="field:'id',width:40,
+    	editor:{
+    		type:'validatebox',
+    		options:{
+    			required:true,
+                validType: 'length[1, 32]'
+    		}
+    	}">标识</th>
     <th data-options="field:'name',width:40,
     	editor:{
     		type:'validatebox',
