@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.identity.User;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,11 +37,23 @@ public class UserController extends BaseController {
 	
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private IdentityService identityService;
 	
 	@Override
 	protected void onSave(Map<String, Object> model) {
 		String id = (String) model.get("id");
+		User user = identityService.newUser(id);
+		identityService.saveUser(user);
+		this.onUpdate(model);
+	}
+
+	@Override
+	protected void onUpdate(Map<String, Object> model) {
+		String id = (String) model.get("id");
 		String rolemenu = (String) model.get("userroles");
+		
 		if (rolemenu == null || rolemenu.length() == 0) {
 			return;
 		}
@@ -56,15 +70,11 @@ public class UserController extends BaseController {
 		userRepository.deleteUserRole(id);
 		userRepository.saveUserRole(params);
 	}
-
-	@Override
-	protected void onUpdate(Map<String, Object> model) {
-		onSave(model);
-	}
 	
 	@Override
 	protected void onDelete(String id) {
 		userRepository.deleteUserRole(id);
+		identityService.deleteUser(id);
 	}
 	
 	@Override

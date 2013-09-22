@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Ubuntu</title>
+    <title>${Session.user}您好，欢迎使用</title>
     <link rel="stylesheet" type="text/css" href="resources/plugins/jquery-easyui-1.3.4/themes/${theme!'default'}/easyui.css">
     <link rel="stylesheet" type="text/css" href="resources/plugins/jquery-easyui-1.3.4/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="resources/plugins/fine-uploader-3.8.2/fineuploader.css">

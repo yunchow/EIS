@@ -1,7 +1,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.eis.base.domain.repository.UserRepository">
-	<cache></cache>
 	<resultMap type="hashmap" id="resultMap">
 		<id property="id" column="id"/>
 		<result column="name" property="name"/>
@@ -23,6 +22,16 @@
 		<id column="name" property="name"/>
 		<id column="name" property="text"/>
 	</resultMap>
+	
+	<resultMap type="hashmap" id="allUsersMap">
+		<id column="id" property="id"/>
+		<id column="true_name" property="name"/>
+		<id column="true_name" property="text"/>
+	</resultMap>
+	
+	<select id="findAllUser" resultMap="allUsersMap">
+		select id, true_name from sys_user 
+	</select>
 	
 	<delete id="deleteUserRole" parameterType="string">
 		delete from sys_userrole where user_id = #{id}

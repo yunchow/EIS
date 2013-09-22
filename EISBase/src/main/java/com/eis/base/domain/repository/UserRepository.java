@@ -24,6 +24,8 @@ import com.eis.core.model.repository.BaseRepository;
 @Repository
 public interface UserRepository extends BaseRepository {
 	
+	List<Map<String, String>> findAllUser();
+	
 	List<Map<String, String>> findAllRole();
 	
 	void deleteUserRole(String id);

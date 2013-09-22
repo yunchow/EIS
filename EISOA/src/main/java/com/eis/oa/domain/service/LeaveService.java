@@ -169,7 +169,7 @@ public class LeaveService extends ActivitiAwareSupport {
 	}
 	
 	/**
-	 * 我参与过的流程
+	 * 已办任务
 	 * @return
 	 */
 	public List<LeaveFormDTO> findInvolvedHistoryLeave(LeaveFormDTO leaveDto) {
@@ -178,10 +178,11 @@ public class LeaveService extends ActivitiAwareSupport {
 		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
 		
 		HistoricTaskInstanceQuery historicTaskInstanceQuery = createHistoricTaskInstanceQuery().finished()
-				.taskInvolvedUser(leaveDto.getApplicant()).processDefinitionKey(LEAVE_PROCESS_KEY).includeProcessVariables();
+				.taskInvolvedUser(leaveDto.getApplicant()).processDefinitionKey(LEAVE_PROCESS_KEY);
 		
 		leaveDto.setTotal(historicTaskInstanceQuery.count());
-		List<HistoricTaskInstance> historyTasks = historicTaskInstanceQuery.listPage(leaveDto.getOffset(), leaveDto.getRows());
+		List<HistoricTaskInstance> historyTasks = historicTaskInstanceQuery.includeProcessVariables()
+				.orderByHistoricTaskInstanceStartTime().asc().listPage(leaveDto.getStart(), leaveDto.getEnd());
 		List<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(historyTasks.size());
 		
 		for (HistoricTaskInstance task : historyTasks) {
@@ -212,24 +213,6 @@ public class LeaveService extends ActivitiAwareSupport {
 			}				
 			resultList.add(dto);
 		}
-		/*HistoricProcessInstanceQuery historicProcessInstanceQuery = historyService.createHistoricProcessInstanceQuery()
-				.processDefinitionKey(LEAVE_PROCESS_KEY).involvedUser(leaveDto.getApplicant());
-		
-		leaveDto.setTotal(historicProcessInstanceQuery.count());
-		List<HistoricProcessInstance> processInstances = historicProcessInstanceQuery.listPage(leaveDto.getOffset(), leaveDto.getRows());
-		ArrayList<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(processInstances.size());
-		
-		for (HistoricProcessInstance processInstance : processInstances) {
-			LeaveFormDTO dto = new LeaveFormDTO();
-			String leaveId = processInstance.getBusinessKey();
-			dto.setLeaveId(leaveId);
-			dto.setStartTime(processInstance.getStartTime());
-			dto.setEndTime(processInstance.getEndTime());
-			dto.setProcessDefinitionId(processInstance.getProcessDefinitionId());
-			Map<String, Object> processVariables = processInstance.getProcessVariables();
-			dto.setApplicant((String) processVariables.get("starter"));
-			resultList.add(dto);
-		}*/
 		logger.info("returned resultList = {}", resultList);
 		logger.info("Exit LeaveService.findInvolvedHistoryLeaveForm");
 		return resultList;

@@ -24,8 +24,8 @@ jQuery.define(context, {
 		$.ajaxSetup({
 			global: true,
 			error: function (xhr, textStatus, errorThrown) {
-				context.log(xhr);
-				var msg = "<p>"+ xhr.response.responseText +"</p>"
+				var r = eval("("+ xhr.responseText +")");
+				var msg = "<p>"+ r.message +"</p>";
 				jQuery.messager.alert("系统消息", "服务器内部错误！" + msg, "error");
 			}
 		});

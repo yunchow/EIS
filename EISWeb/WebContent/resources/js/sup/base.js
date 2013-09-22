@@ -10,8 +10,6 @@ jQuery.define(base, {
     updateUrl: undefined,
     
     init: function() {
-    	store.initMenuTreeStore();
-    	store.initRoleStore();
     	context.log("base module init");
     },
     
@@ -156,16 +154,17 @@ jQuery.define(base, {
      */
     onRemove: function(row) {
     	var row = this.$dg.datagrid('getSelected');
+    	var me = this;
     	if (!row.add) {
     		$.post(this.deleteUrl + row.id + ".htm", function() {
     			if (config.showScuessfullMessageBox) {
     				context.info("删除成功！");
     			}
+    			var index = me.$dg.datagrid("getRowIndex", row);
+    	    	me.$dg.datagrid('deleteRow', index);
+    	    	me.editIndex = undefined;
     		});
     	}
-    	var index = this.$dg.datagrid("getRowIndex", row);
-    	this.$dg.datagrid('deleteRow', index);
-    	this.editIndex = undefined;
     },
     /**
      * 保存编辑的行

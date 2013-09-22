@@ -32,22 +32,25 @@ public class JsonExceptionResolver implements HandlerExceptionResolver {
 
 	@Override
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+		logger.error("Server Internal Error: " + ex.getMessage(), ex);
 		StringWriter sw = new StringWriter();
 		ex.printStackTrace(new PrintWriter(sw));
 		Map<String, Object> map = new HashMap<String, Object>(2);
 		map.put("error", true);
-		map.put("message", sw.toString());
+		map.put("message", ex.toString());
+		map.put("detail", sw.toString());
 		map.put("time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis()));
 		ObjectMapper objectMapper = new ObjectMapper();
 		response.setContentType("text/html;charset=UTF-8");
 		
 		try {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			objectMapper.writeValue(response.getOutputStream(), map);
+			response.flushBuffer();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
-		return null;
+		return new ModelAndView();
 	}
 
 }

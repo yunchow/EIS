@@ -13,6 +13,31 @@ store = {
 	 * 系统中所有角色
 	 */
 	roleListStore: undefined,
+	/**
+	 * 所有用户
+	 */
+	userListStore: undefined,
+	
+	/////////////////////////////////////////////////////////////////
+	// 初始化
+	/////////////////////////////////////////////////////////////////
+	
+	init: function() {
+		this.initMenuTreeStore();
+		this.initRoleStore();
+    	this.initUserStore();
+	},
+	
+	initUserStore: function() {
+		if (this.userListStore != undefined) {
+			return;
+		}
+		var me = this;
+		$.post("sysmanage/group/users.htm", function(data) {
+			me.userListStore = $.parseJSON(data);
+			context.log("init user list store correctly");
+		});
+	},
 	
 	initRoleStore: function() {
 		if (this.roleStore != undefined) {
@@ -35,5 +60,7 @@ store = {
 			context.log("init menu tree store correctly");
 		});
 	}
-	
 }
+$(function() {
+	store.init();
+});
