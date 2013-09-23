@@ -103,7 +103,7 @@ jQuery.define(flowmanage.processdef, base, {
             message: $('<p style="color:red;text-align:left;margin-left:5px;">点击流程图可关闭<p><img style="cursor:pointer;" onclick="$.unblockUI();" src=flowmanage/processdef/img/'+ pdid +'.htm>'), 
             css: { 
                 top:  '100px', 
-                left: ($(window).width() - 400) /2 + 'px', 
+                left: '100px', 
                 width: 'auto' 
             } 
         });

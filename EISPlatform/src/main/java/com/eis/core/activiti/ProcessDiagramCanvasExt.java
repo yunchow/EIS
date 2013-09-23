@@ -34,7 +34,7 @@ public class ProcessDiagramCanvasExt extends ProcessDiagramCanvas {
 	public ProcessDiagramCanvasExt(int width, int height, int minX, int minY) {
 		super(width, height, minX, minY);
 	}
-
+	
 	public void drawGreenHighLight(int x, int y, int width, int height) {
 		Paint originalPaint = g.getPaint();
 		Stroke originalStroke = g.getStroke();
