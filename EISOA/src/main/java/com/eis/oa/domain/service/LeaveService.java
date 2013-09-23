@@ -6,6 +6,7 @@
 package com.eis.oa.domain.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -139,8 +140,9 @@ public class LeaveService extends ActivitiAwareSupport {
 		logger.info("Enter LeaveService.findPendingLeaveFormByUser");
 		logger.info("leaveDto = {}", leaveDto);
 		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
-
-		TaskQuery taskQuery = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskInvolvedUser(leaveDto.getApplicant());
+		
+		List<String> candidateGroups = Arrays.asList("manager1");
+		TaskQuery taskQuery = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskInvolvedUser("nick");
 		leaveDto.setTotal(taskQuery.count());
 		List<Task> tasks = taskQuery.orderByTaskPriority().desc().orderByTaskCreateTime().desc()
 				.includeProcessVariables().listPage(leaveDto.getOffset(), leaveDto.getRows());

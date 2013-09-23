@@ -17,6 +17,12 @@ jQuery.define(context, {
 		$("#mmCenterMainTab").bind('contextmenu',function(e){
             e.preventDefault();
         });
+		jQuery.extend($.fn.validatebox.defaults, {
+			tipPosition : "top"
+		});
+		jQuery.extend($.fn.combotree.defaults, {
+			tipPosition : "top"
+		});
 		this.enableHomeTabRightClickMenue();
 		this.bindHomeTabsMenueRightEvent();
 	},

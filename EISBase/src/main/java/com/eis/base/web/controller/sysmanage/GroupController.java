@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eis.base.domain.repository.UserRepository;
-import com.eis.core.helper.UUIDHelper;
 
 /**
  * <p>
@@ -54,8 +53,8 @@ public class GroupController {
 	@RequestMapping("/save")
 	@ResponseBody
 	@Transactional
-	public int save(@RequestParam String name, @RequestParam String userIds) {
-		Group group = identityService.newGroup(UUIDHelper.uuid());
+	public int save(@RequestParam String id, @RequestParam String name, @RequestParam String userIds) {
+		Group group = identityService.newGroup(id);
 		group.setName(name);
 		identityService.saveGroup(group);
 		

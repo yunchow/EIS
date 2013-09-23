@@ -28,6 +28,38 @@ jQuery.define(sysmanage.group, base, {
         }
     },
     
+    destroyIdField: function(index) {
+    	// get the datebox editor and change its value
+    	var ed = this.$dg.datagrid('getEditor', {index:index,field:'id'});
+    	//$(ed.target).validatebox('disableValidation');
+    	//$(ed.target).validatebox('destroy');
+    	context.log(ed.target[0]);
+    	$(ed.target[0]).prop("disabled", true);
+    },
+    
+    edit: function(){
+    	if (this.isEditing()){
+            return;
+        }
+        var row = this.$dg.datagrid('getSelected');
+        if (row){
+        	var index = this.$dg.datagrid('getRowIndex', row)
+        	this.editIndex = index
+            this.$dg.datagrid('beginEdit', index);
+        	this.destroyIdField(index);
+        } else {
+        	context.alert("请选择你要编辑的记录");
+        }
+    },
+    onDblClickRow: function(index, rowData){
+    	if (this.isEditing()){
+            return false;
+        }
+    	this.editIndex = index;
+    	this.$dg.datagrid('beginEdit', index);
+    	this.destroyIdField(index);
+    },
+    
 	formatUsers: function(value, row, index) {
 		return sysmanage.group.formatUsersFor(tools.joinArrayIf(value), row, index);
 	},
