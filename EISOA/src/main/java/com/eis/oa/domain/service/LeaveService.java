@@ -142,7 +142,8 @@ public class LeaveService extends ActivitiAwareSupport {
 		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
 		
 		List<String> candidateGroups = Arrays.asList("manager1");
-		TaskQuery taskQuery = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskInvolvedUser("nick");
+		TaskQuery taskQuery = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY)
+				.taskInvolvedUser(leaveDto.getApplicant()).taskCandidateGroupIn(candidateGroups);
 		leaveDto.setTotal(taskQuery.count());
 		List<Task> tasks = taskQuery.orderByTaskPriority().desc().orderByTaskCreateTime().desc()
 				.includeProcessVariables().listPage(leaveDto.getOffset(), leaveDto.getRows());
