@@ -5,11 +5,11 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <wb-resource deploy-path="/" source-path="/WebContent"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/base_java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/platform_resources"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/platform_java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/base_resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/oa_resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/oa_java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/bos_java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/bos_resources"/>
         <property name="context-root" value="EISWeb"/>
         <property name="java-output-path" value="/EISWeb/build/classes"/>
     </wb-module>

@@ -29,6 +29,30 @@
 		<id column="true_name" property="text"/>
 	</resultMap>
 	
+	<resultMap type="com.eis.base.dto.User" id="userGroupResult">
+		<id property="id" column="id"/>
+		<result column="name" property="name"/>
+		<result column="true_name" property="trueName"/>
+		<result column="password" property="password"/>
+		<collection property="groups" ofType="org.activiti.engine.impl.persistence.entity.GroupEntity" javaType="ArrayList">
+			<id column="id_" property="id"/>
+			<id column="name_" property="name"/>
+		</collection>
+	</resultMap>
+	
+	<select id="findUserByNameAndPassword" parameterType="com.eis.base.dto.User" resultMap="userGroupResult">
+		select * from sys_user u 
+		left outer join act_id_membership m on m.user_id_ = u.id
+		left outer join act_id_group g on g.id_ = m.group_id_
+		where u.name = #{name}
+	</select>
+	
+	<select id="findGroupsByUser" parameterType="String" resultType="org.activiti.engine.impl.persistence.entity.GroupEntity">
+		select g.id_ id, g.name_ name from act_id_group g 
+		inner join act_id_membership m on m.group_id_ = g.id_ 
+		where  m.user_id_ = #{userId}
+	</select>
+	
 	<select id="findAllUser" resultMap="allUsersMap">
 		select id, true_name from sys_user 
 	</select>

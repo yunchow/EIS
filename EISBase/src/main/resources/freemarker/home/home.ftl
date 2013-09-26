@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>${Session.user}您好，欢迎使用</title>
+    <title>${Session.user.trueName}您好，欢迎使用</title>
     <link rel="stylesheet" type="text/css" href="resources/plugins/jquery-easyui-1.3.4/themes/${theme!'default'}/easyui.css">
     <link rel="stylesheet" type="text/css" href="resources/plugins/jquery-easyui-1.3.4/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="resources/plugins/fine-uploader-3.8.2/fineuploader.css">
@@ -34,7 +34,7 @@
     	<div style="float:right;padding-right:10px;">
     		<dl>
     			<dd>
-    				<span style="color: #369">当前用户:</span><span style="color: #333;font-weight:bold;">&nbsp;&nbsp;${Session.user}&nbsp;&nbsp;</span>
+    				<span style="color: #369">当前用户:</span><span style="color: #333;font-weight:bold;">&nbsp;&nbsp;${Session.user.trueName}&nbsp;&nbsp;</span>
     				<a href="logout.htm" class="easyui-linkbutton" data-options="plain:true" iconCls="icon-back">注销</a>
     				<span style="color: #369">主题</span>:
     				<select class="easyui-combobox" data-options="editable:false,panelHeight:'auto',onChange:context.onChangeTheme">

@@ -14,7 +14,14 @@
 		<property name="activityFontName" value="微软雅黑"></property>
 		<property name="labelFontName" value="微软雅黑"></property>
 		<property name="mybatisMappingFile" value="com/eis/core/activiti/mapper/mappings.xml"></property>
+		<property name="beans">
+			<map>
+				<entry key="action" value-ref="action"></entry>
+			</map>
+		</property>
 	</bean>
+	
+	<bean id="action" class="com.eis.core.activiti.ActivitiAction"></bean>
 
 	<bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
 		<property name="processEngineConfiguration" ref="processEngineConfiguration" />

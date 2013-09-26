@@ -28,13 +28,13 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.eis.base.util.CurrentUserUtil;
 import com.eis.core.activiti.ProcessDiagramGenerator;
 import com.eis.core.context.ActivitiAwareSupport;
 import com.eis.oa.application.LeaveManager;
@@ -151,10 +151,10 @@ public class LeaveController extends ActivitiAwareSupport {
 	
 	@RequestMapping("/task/claim/{taskId}")
 	@ResponseBody
-	public Map<String, Object> claimTaskBy(@PathVariable String taskId, @ModelAttribute("user") String userId) {
+	public Map<String, Object> claimTaskBy(@PathVariable String taskId) {
 		Map<String, Object> map = new HashMap<String, Object>(2);
 		try {
-			taskService.claim(taskId, userId);
+			taskService.claim(taskId, CurrentUserUtil.getUserId());
 			map.put("result", true);
 		} catch (ActivitiObjectNotFoundException e) {
 			map.put("result", false);
@@ -168,43 +168,43 @@ public class LeaveController extends ActivitiAwareSupport {
 	
 	@RequestMapping("/my/pending")
 	@ResponseBody
-	public Map<String, Object> findPendingLeaveFormByUser(LeaveFormDTO leaveDto, @ModelAttribute("user") String userId) {
-		leaveDto.setApplicant(userId);
+	public Map<String, Object> findPendingLeaveFormByUser(LeaveFormDTO leaveDto) {
+		
 		return LeaveMapAssembler.asMap(leaveDto, leaveService.findPendingLeaveFormByUser(leaveDto));
 	}
 	
 	@RequestMapping("/claimed/task")
 	@ResponseBody
-	public Map<String, Object> findClaimedLeaveTasks(LeaveFormDTO leaveDto, @ModelAttribute("user") String userId) {
-		leaveDto.setApplicant(userId);
+	public Map<String, Object> findClaimedLeaveTasks(LeaveFormDTO leaveDto) {
+		
 		return LeaveMapAssembler.asMap(leaveDto, leaveService.findClaimedLeaveTasks(leaveDto));
 	}
 	
 	@RequestMapping("/candidate/task")
 	@ResponseBody
-	public Map<String, Object> findCandidateLeaveTasks(LeaveFormDTO leaveDto, @ModelAttribute("user") String userId) {
-		leaveDto.setApplicant(userId);
+	public Map<String, Object> findCandidateLeaveTasks(LeaveFormDTO leaveDto) {
+		
 		return LeaveMapAssembler.asMap(leaveDto, leaveService.findCandidateLeaveTasks(leaveDto));
 	}
 	
 	@RequestMapping("/my/history")
 	@ResponseBody
-	public Map<String, Object> findHistoryLeaveFormByUser(LeaveFormDTO leaveDto, @ModelAttribute("user") String userId) {
-		leaveDto.setApplicant(userId);
+	public Map<String, Object> findHistoryLeaveFormByUser(LeaveFormDTO leaveDto) {
+		
 		return LeaveMapAssembler.asMap(leaveDto, leaveService.findInvolvedHistoryLeave(leaveDto));
 	}
 	
 	@RequestMapping("/my/list")
 	@ResponseBody
-	public Map<String, Object> findMyApplingLeaveList(LeaveFormDTO leaveDto, @ModelAttribute("user") String userId) {
-		leaveDto.setApplicant(userId);
+	public Map<String, Object> findMyApplingLeaveList(LeaveFormDTO leaveDto) {
+		
 		return LeaveMapAssembler.asMap(leaveDto, leaveService.findMyApplyLeaveList(leaveDto));
 	}
 	
 	@RequestMapping("/do/apply")
 	@ResponseBody
-	public Map<String, Object> doApplyLeaveForm(LeaveFormDTO leaveDto, @ModelAttribute("user") String userId) {
-		leaveDto.setApplicant(userId);
+	public Map<String, Object> doApplyLeaveForm(LeaveFormDTO leaveDto) {
+		
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			Task task = leaveManager.doLeaveFor(leaveDto);

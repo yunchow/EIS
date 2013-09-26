@@ -130,6 +130,10 @@
 			<groupId>com.eis.bos</groupId>
 			<artifactId>EISBOS</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.eis.base</groupId>
+			<artifactId>EISBase</artifactId>
+		</dependency>
 	</dependencies>	
 	<build>
 		<defaultGoal>compile</defaultGoal>
@@ -139,6 +143,11 @@
 			<dependency>
 				<groupId>com.eis.bos</groupId>
 				<artifactId>EISBOS</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.eis.base</groupId>
+				<artifactId>EISBase</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 		</dependencies>

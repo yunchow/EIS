@@ -31,8 +31,12 @@ jQuery.define(context, {
 			global: true,
 			error: function (xhr, textStatus, errorThrown) {
 				var r = eval("("+ xhr.responseText +")");
-				var msg = "<p>"+ r.message +"</p>";
-				jQuery.messager.alert("系统消息", "服务器内部错误！" + msg, "error");
+				if (r.timeout) {
+					location.href = "index.html";
+				} else {
+					var msg = "<p>"+ r.message +"</p>";
+					jQuery.messager.alert("系统消息", "服务器内部错误！" + msg, "error");
+				}
 			}
 		});
 		/*$("body").bind("dblclick", function(e) {

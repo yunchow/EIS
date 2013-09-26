@@ -12,7 +12,7 @@ See here for more details: http://gordondickens.com/wordpress/2013/03/27/sawing-
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger[36] - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{0} - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -20,6 +20,9 @@ See here for more details: http://gordondickens.com/wordpress/2013/03/27/sawing-
     <!-- Uncomment and add your logger here:
     <logger name="org.springframework.samples.service.service" level="debug"/> -->
     <logger name="com.eis" level="debug"/>
+    
+    <logger name="com.eis" level="debug"/>
+    <logger name="org.activiti.engine.impl.persistence.entity" level="debug"/>
          
     <root level="info">
         <appender-ref ref="console"/>

@@ -391,7 +391,9 @@ public class ProcessDiagramGenerator {
 		
 		for (SequenceFlow sequenceFlow : bpmnModel.getProcesses().get(0).findFlowElementsOfType(SequenceFlow.class)) {
 			if (highLightedActivityMap.containsKey(sequenceFlow.getSourceRef()) && highLightedActivityMap.containsKey(sequenceFlow.getTargetRef())) {
-				highLightedFlowList.add(sequenceFlow.getId());
+				if (sequenceFlow.getConditionExpression() == null) {
+					highLightedFlowList.add(sequenceFlow.getId());
+				}
 			}
 		}
 

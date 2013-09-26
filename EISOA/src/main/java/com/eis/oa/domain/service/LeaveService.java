@@ -6,13 +6,13 @@
 package com.eis.oa.domain.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
+import org.activiti.engine.identity.Group;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import com.eis.base.util.CurrentUserUtil;
 import com.eis.core.context.ActivitiAwareSupport;
 import com.eis.core.helper.UUIDHelper;
 import com.eis.oa.domain.model.leave.LeaveFormEntity;
@@ -52,7 +53,7 @@ public class LeaveService extends ActivitiAwareSupport {
 		logger.info("leaveDto = {}", leaveDto);
 		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
 
-		long count = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant()).count();
+		long count = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(CurrentUserUtil.getUserId()).count();
 		leaveDto.setTotal(count);
 		List<Task> tasks = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskCandidateUser(leaveDto.getApplicant())
 				.includeProcessVariables().orderByTaskPriority().desc().orderByTaskCreateTime().desc().listPage(leaveDto.getOffset(), leaveDto.getRows());
@@ -77,7 +78,7 @@ public class LeaveService extends ActivitiAwareSupport {
 		logger.info("leaveDto = {}", leaveDto);
 		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
 
-		long count = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskAssignee(leaveDto.getApplicant()).count();
+		long count = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskAssignee(CurrentUserUtil.getUserId()).count();
 		leaveDto.setTotal(count);
 		List<Task> tasks = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY).taskAssignee(leaveDto.getApplicant())
 				.includeProcessVariables().orderByTaskPriority().desc().orderByTaskCreateTime().desc().listPage(leaveDto.getOffset(), leaveDto.getRows());
@@ -129,7 +130,7 @@ public class LeaveService extends ActivitiAwareSupport {
 		dto.setSuspend(task.isSuspended());
 		return dto;
 	}
-	
+
 	/**
 	 * 我的请假待办，包括未签收和已签收但未处理的申请单
 	 * 
@@ -141,24 +142,17 @@ public class LeaveService extends ActivitiAwareSupport {
 		logger.info("leaveDto = {}", leaveDto);
 		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
 		
-		List<String> candidateGroups = Arrays.asList("manager1");
+		List<Group> groups = CurrentUserUtil.getUser().getGroups();
+		List<String> candidateGroups = new ArrayList<String>(groups.size());
+		for (Group group : groups) {
+			candidateGroups.add(group.getId());
+		}
+		
 		TaskQuery taskQuery = createTaskQuery().processDefinitionKey(LEAVE_PROCESS_KEY)
-				.taskInvolvedUser(leaveDto.getApplicant()).taskCandidateGroupIn(candidateGroups);
+				.taskInvolvedUser(CurrentUserUtil.getUserName()).taskCandidateGroupIn(candidateGroups);
 		leaveDto.setTotal(taskQuery.count());
 		List<Task> tasks = taskQuery.orderByTaskPriority().desc().orderByTaskCreateTime().desc()
 				.includeProcessVariables().listPage(leaveDto.getOffset(), leaveDto.getRows());
-		
-		/*final String sql = "from " + managementService.getTableName(Task.class) + " t left outer join act_ru_variable v on v.PROC_INST_ID_ = t.PROC_INST_ID_ where (OWNER_=#{applicant} or ASSIGNEE_=#{applicant}) and PROC_DEF_ID_ like #{processDefKey}";
-		logger.info("sql = {}", sql);
-		
-		NativeTaskQuery nativeTaskQueryCount = taskService.createNativeTaskQuery().sql("select count(*) " + sql)
-				.parameter("applicant", leaveDto.getApplicant())
-				.parameter("processDefKey", LEAVE_PROCESS_KEY +"%");
-		NativeTaskQuery nativeTaskQueryList = taskService.createNativeTaskQuery().sql("select t.*, v.* " + sql + " order by PRIORITY_ desc, CREATE_TIME_ desc")
-				.parameter("applicant", leaveDto.getApplicant())
-				.parameter("processDefKey", LEAVE_PROCESS_KEY +"%");
-		leaveDto.setTotal(nativeTaskQueryCount.count());
-		List<Task> tasks = nativeTaskQueryList.listPage(leaveDto.getOffset(), leaveDto.getRows());*/
 		
 		ArrayList<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(tasks.size());
 
@@ -181,11 +175,10 @@ public class LeaveService extends ActivitiAwareSupport {
 		Assert.notNull(leaveDto, "LeaveFormDTO must not be null");
 		
 		HistoricTaskInstanceQuery historicTaskInstanceQuery = createHistoricTaskInstanceQuery().finished()
-				.taskInvolvedUser(leaveDto.getApplicant()).processDefinitionKey(LEAVE_PROCESS_KEY);
-		
+				.taskInvolvedUser(CurrentUserUtil.getUserId()).processDefinitionKey(LEAVE_PROCESS_KEY);
 		leaveDto.setTotal(historicTaskInstanceQuery.count());
-		List<HistoricTaskInstance> historyTasks = historicTaskInstanceQuery.includeProcessVariables()
-				.orderByHistoricTaskInstanceStartTime().asc().listPage(leaveDto.getStart(), leaveDto.getEnd());
+		List<HistoricTaskInstance> historyTasks = historicTaskInstanceQuery
+				.orderByHistoricTaskInstanceStartTime().desc().listPage(leaveDto.getOffset(), leaveDto.getRows());
 		List<LeaveFormDTO> resultList = new ArrayList<LeaveFormDTO>(historyTasks.size());
 		
 		for (HistoricTaskInstance task : historyTasks) {
@@ -201,9 +194,9 @@ public class LeaveService extends ActivitiAwareSupport {
 			dto.setDueDate(task.getDueDate());
 			
 			// N + 1 查询问题，有空再优化
-			String leaveId = createHistoricProcessInstanceQuery()
+			/*String leaveId = createHistoricProcessInstanceQuery()
 					.processInstanceId(task.getProcessInstanceId()).singleResult().getBusinessKey();
-			dto.setLeaveId(leaveId);
+			dto.setLeaveId(leaveId);*/
 			
 			Map<String, Object> processVariables = task.getProcessVariables();
 			dto.setApplicant((String) processVariables.get("starter"));
@@ -256,7 +249,7 @@ public class LeaveService extends ActivitiAwareSupport {
 		double days = (end - start) / 1000 / 3600 / 24;
 		
 		Map<String, Object> variables = new HashMap<String, Object>(2);
-		variables.put("starter", leaveDto.getApplicant());
+		variables.put("starter", CurrentUserUtil.getUserId());
 		variables.put("leaveDays", days);
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(LEAVE_PROCESS_KEY, id, variables);
 		

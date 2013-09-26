@@ -9,8 +9,10 @@ package com.eis.base.domain.repository;
 import java.util.List;
 import java.util.Map;
 
+import org.activiti.engine.identity.Group;
 import org.springframework.stereotype.Repository;
 
+import com.eis.base.dto.User;
 import com.eis.core.model.repository.BaseRepository;
 /**
  * Title: UserRepository.java
@@ -23,6 +25,10 @@ import com.eis.core.model.repository.BaseRepository;
  */
 @Repository
 public interface UserRepository extends BaseRepository {
+	
+	User findUserByNameAndPassword(User user);
+	
+	List<Group> findGroupsByUser(String userId);
 	
 	List<Map<String, String>> findAllUser();
 	

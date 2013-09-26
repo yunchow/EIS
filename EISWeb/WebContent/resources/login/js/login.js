@@ -80,10 +80,9 @@ function Login() {
 	setCookie();
 	var actionurl=$('form').attr('action');//提交路径
 	var checkurl=$('form').attr('check');//验证路径
-	 var formData = new Object();
-	var data=$(":input").each(function() {
-		 formData[this.name] =$("#"+this.name ).val();
-	});
+	var formData = new Object();
+	formData["name"] =$("#userName").val();
+	formData["password"] =$("#password").val();
 	$.ajax({
 		async : false,
 		cache : false,
